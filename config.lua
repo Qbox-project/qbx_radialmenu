@@ -705,6 +705,54 @@ Config.JobInteractions = {
     }
 }
 
+Config.GangInteractions = {
+    ["lostmc"] = {
+        {
+            id = 'handcuff',
+            title = 'Handcuff',
+            icon = 'handcuffs',
+            type = 'client',
+            event = 'police:client:CuffPlayerSoft',
+            shouldClose = true
+        },{
+            id = 'playerinvehicle',
+            title = 'Put In Vehicle',
+            icon = 'car-side',
+            type = 'client',
+            event = 'police:client:PutPlayerInVehicle',
+            shouldClose = true
+        }, {
+            id = 'playeroutvehicle',
+            title = 'Take Out Vehicle',
+            icon = 'car-side',
+            type = 'client',
+            event = 'police:client:SetPlayerOutVehicle',
+            shouldClose = true
+        }, {
+            id = 'stealplayer',
+            title = 'Steal',
+            icon = 'mask',
+            type = 'client',
+            event = 'police:client:SearchPlayer', -- If you want to use ox_inventory steal you need to register an event, put: exports.ox_inventory:openNearbyInventory() in the event. Then use the event you registered in this config.
+            shouldClose = true
+        }, {
+            id = 'escort',
+            title = 'Kidnap',
+            icon = 'user-group',
+            type = 'client',
+            event = 'police:client:KidnapPlayer',
+            shouldClose = true
+        }, {
+            id = 'escort2',
+            title = 'Escort',
+            icon = 'user-group',
+            type = 'client',
+            event = 'police:client:EscortPlayer',
+            shouldClose = true
+        }
+    }
+}
+
 Config.TrunkClasses = {
     [0] = {allowed = true, x = 0.0, y = -1.5, z = 0.0}, -- Coupes
     [1] = {allowed = true, x = 0.0, y = -2.0, z = 0.0}, -- Sedans
