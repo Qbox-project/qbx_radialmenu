@@ -3,6 +3,7 @@ PlayerData = QBCore.Functions.GetPlayerData() -- Setting this for when you resta
 local inRadialMenu = false
 
 local jobIndex = nil
+local gangIndex = nil
 local vehicleIndex = nil
 
 local DynamicMenuItems = {}
@@ -61,8 +62,19 @@ local function SetupJobMenu()
         icon = 'briefcase',
         items = {}
     }
+
+    local GangMenu = {
+        id = 'ganginteractions',
+        title = 'Gang',
+        icon = 'skull-crossbones',
+        items = {}
+    }
     if Config.JobInteractions[PlayerData.job.name] and next(Config.JobInteractions[PlayerData.job.name]) and PlayerData.job.onduty then
         JobMenu.items = Config.JobInteractions[PlayerData.job.name]
+    end
+
+    if Config.GangInteractions[PlayerData.gang.name] and next(Config.GangInteractions[PlayerData.gang.name]) then
+        GangMenu.items = Config.GangInteractions[PlayerData.gang.name]
     end
 
     if #JobMenu.items == 0 then
@@ -72,6 +84,15 @@ local function SetupJobMenu()
         end
     else
         jobIndex = AddOption(JobMenu, jobIndex)
+    end
+
+    if #GangMenu.items == 0 then
+        if gangIndex then
+            RemoveOption(gangIndex)
+            gangIndex = nil
+        end
+    else
+        gangIndex = AddOption(GangMenu, gangIndex)
     end
 end
 
