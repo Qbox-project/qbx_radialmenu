@@ -15,7 +15,7 @@ div.info * {
 
 #icons {
     display: none;
-    filter:url(#drop-shadow);
+    filter: url(#drop-shadow);
 }
 
 .container {
@@ -61,16 +61,16 @@ svg.menu.outer {
     visibility: hidden;
 }
 
-svg.menu > g > path {
-    fill: rgb(23 23 23 / 80%);
+svg.menu>g>path {
+    fill: #141517f2;
 }
 
-svg.menu > g.sector > path {
+svg.menu>g.sector>path {
     cursor: pointer;
 }
 
-svg.menu > g.sector > text,
-svg.menu > g.sector > use {
+svg.menu>g.sector>text,
+svg.menu>g.sector>use {
     font-family: 'Poppins', sans-serif;
     margin-top: 5px;
     font-size: 2.8px;
@@ -80,22 +80,22 @@ svg.menu > g.sector > use {
     fill: white;
 }
 
-svg.menu > g.sector:hover > path {
-    fill: #dc143c;
+svg.menu>g.sector:hover>path {
+    fill: #F1E542a6;
 
 }
 
-svg.menu > g.center:hover > circle {
-    fill:#dc143c;
+svg.menu>g.center:hover>circle {
+    fill: #F1E542a6;
 }
 
-svg.menu > g.center > circle {
+svg.menu>g.center>circle {
     cursor: pointer;
-    fill: rgb(23 23 23 / 80%);
+    fill: #141517f2;
 }
 
-svg.menu > g.center > text,
-svg.menu > g.center > use {
+svg.menu>g.center>text,
+svg.menu>g.center>use {
     margin-top: 5px;
     font-size: 2.5px;
     cursor: pointer;
