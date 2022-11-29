@@ -38,16 +38,19 @@ local function deepcopy(orig) -- modified the deep copy function from http://lua
 end
 
 local function getNearestVeh()
-    local pos = GetEntityCoords(PlayerPedId())
-    local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
+    local pos = GetEntityCoords(cache.ped)
+    local entityWorld = GetOffsetFromEntityInWorldCoords(cache.ped, 0.0, 20.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, cache.ped, 0)
     local _, _, _, _, vehicleHandle = GetRaycastResult(rayHandle)
+
     return vehicleHandle
 end
 
 local function AddOption(data, id)
-    local menuID = id ~= nil and id or (#DynamicMenuItems + 1)
+    local menuID = id or (#DynamicMenuItems + 1)
+
     DynamicMenuItems[menuID] = deepcopy(data)
+
     return menuID
 end
 
@@ -104,14 +107,17 @@ local function SetupVehicleMenu()
         items = {}
     }
 
-    local ped = PlayerPedId()
-    local Vehicle = GetVehiclePedIsIn(ped) ~= 0 and GetVehiclePedIsIn(ped) or getNearestVeh()
+    local Vehicle = GetVehiclePedIsIn(cache.ped) ~= 0 and GetVehiclePedIsIn(cache.ped) or getNearestVeh()
+
     if Vehicle ~= 0 then
-        VehicleMenu.items[#VehicleMenu.items+1] = Config.VehicleDoors
-        if Config.EnableExtraMenu then VehicleMenu.items[#VehicleMenu.items+1] = Config.VehicleExtras end
-        
+        VehicleMenu.items[#VehicleMenu.items + 1] = Config.VehicleDoors
+
+        if Config.EnableExtraMenu then
+            VehicleMenu.items[#VehicleMenu.items + 1] = Config.VehicleExtras
+        end
+
         if not IsVehicleOnAllWheels(Vehicle) then
-            VehicleMenu.items[#VehicleMenu.items+1] = {
+            VehicleMenu.items[#VehicleMenu.items + 1] = {
                 id = 'vehicle-flip',
                 title = 'Flip Vehicle',
                 icon = 'car-burst',
@@ -121,27 +127,29 @@ local function SetupVehicleMenu()
             }
         end
 
-        if IsPedInAnyVehicle(ped) then
-            local seatIndex = #VehicleMenu.items+1
+        if IsPedInAnyVehicle(cache.ped) then
+            local seatIndex = #VehicleMenu.items + 1
+
             VehicleMenu.items[seatIndex] = deepcopy(Config.VehicleSeats)
 
             local seatTable = {
                 [1] = Lang:t("options.driver_seat"),
                 [2] = Lang:t("options.passenger_seat"),
                 [3] = Lang:t("options.rear_left_seat"),
-                [4] = Lang:t("options.rear_right_seat"),
+                [4] = Lang:t("options.rear_right_seat")
             }
-
             local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(Vehicle))
+
             for i = 1, AmountOfSeats do
-                local newIndex = #VehicleMenu.items[seatIndex].items+1
+                local newIndex = #VehicleMenu.items[seatIndex].items + 1
+
                 VehicleMenu.items[seatIndex].items[newIndex] = {
                     id = i - 2,
                     title = seatTable[i] or Lang:t("options.other_seats"),
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
-                    shouldClose = false,
+                    shouldClose = false
                 }
             end
         end
@@ -150,6 +158,7 @@ local function SetupVehicleMenu()
     if #VehicleMenu.items == 0 then
         if vehicleIndex then
             RemoveOption(vehicleIndex)
+
             vehicleIndex = nil
         end
     else
@@ -166,58 +175,65 @@ local function selectOption(t, t2)
     for _, v in pairs(t) do
         if v.items then
             local found, hasAction, val = selectOption(v.items, t2)
-            if found then return true, hasAction, val end
+
+            if found then
+                return true, hasAction, val
+            end
         else
             if v.id == t2.id and ((v.event and v.event == t2.event) or v.action) and (not v.canOpen or v.canOpen()) then
                 return true, v.action, v
             end
         end
     end
+
     return false
 end
 
 local function IsPoliceOrEMS()
-    return (PlayerData.job.name == "police" or PlayerData.job.name == "ambulance")
+    return PlayerData.job.name == "police" or PlayerData.job.name == "ambulance"
 end
 
 local function IsDowned()
-    return (PlayerData.metadata["isdead"] or PlayerData.metadata["inlaststand"])
+    return PlayerData.metadata.isdead or PlayerData.metadata.inlaststand
 end
 
 local function SetupRadialMenu()
     FinalMenuItems = {}
-    if (IsDowned() and IsPoliceOrEMS()) then
-            FinalMenuItems = {
-                [1] = {
-                    id = 'emergencybutton2',
-                    title = Lang:t("options.emergency_button"),
-                    icon = 'circle-exclamation',
-                    type = 'client',
-                    event = 'police:client:SendPoliceEmergencyAlert',
-                    shouldClose = true,
-                },
+
+    if IsDowned() and IsPoliceOrEMS() then
+        FinalMenuItems = {
+            [1] = {
+                id = 'emergencybutton2',
+                title = Lang:t("options.emergency_button"),
+                icon = 'circle-exclamation',
+                type = 'client',
+                event = 'police:client:SendPoliceEmergencyAlert',
+                shouldClose = true
             }
+        }
     else
         SetupSubItems()
-        FinalMenuItems = deepcopy(Config.MenuItems)
-        for _, v in pairs(DynamicMenuItems) do
-            FinalMenuItems[#FinalMenuItems+1] = v
-        end
 
+        FinalMenuItems = deepcopy(Config.MenuItems)
+
+        for _, v in pairs(DynamicMenuItems) do
+            FinalMenuItems[#FinalMenuItems + 1] = v
+        end
     end
 end
 
 local function setRadialState(bool, sendMessage, delay)
     -- Menuitems have to be added only once
-
     if bool then
         TriggerEvent('qb-radialmenu:client:onRadialmenuOpen')
+
         SetupRadialMenu()
     else
         TriggerEvent('qb-radialmenu:client:onRadialmenuClose')
     end
 
     SetNuiFocus(bool, bool)
+
     if sendMessage then
         SendNUIMessage({
             action = "ui",
@@ -225,20 +241,27 @@ local function setRadialState(bool, sendMessage, delay)
             items = FinalMenuItems
         })
     end
-    if delay then Wait(500) end
+
+    if delay then
+        Wait(500)
+    end
+
     inRadialMenu = bool
 end
 
 -- Command
+lib.addKeybind({
+    name = 'radialmenu',
+    description = Lang:t("general.command_description"),
+    defaultKey = 'F1',
+    onPressed = function(_)
+        if ((IsDowned() and IsPoliceOrEMS()) or not IsDowned()) and not PlayerData.metadata.ishandcuffed and not IsPauseMenuActive() and not inRadialMenu then
+            setRadialState(true, true)
 
-RegisterCommand('radialmenu', function()
-    if ((IsDowned() and IsPoliceOrEMS()) or not IsDowned()) and not PlayerData.metadata["ishandcuffed"] and not IsPauseMenuActive() and not inRadialMenu then
-        setRadialState(true, true)
-        SetCursorLocation(0.5, 0.5)
+            SetCursorLocation(0.5, 0.5)
+        end
     end
-end)
-
-RegisterKeyMapping('radialmenu', Lang:t("general.command_description"), 'keyboard', 'F1')
+})
 
 -- Events
 
@@ -265,11 +288,12 @@ RegisterNetEvent('qb-radialmenu:client:openDoor', function(data)
     local string = data.id
     local replace = string:gsub("door", "")
     local door = tonumber(replace)
-    local ped = PlayerPedId()
-    local closestVehicle = GetVehiclePedIsIn(ped) ~= 0 and GetVehiclePedIsIn(ped) or getNearestVeh()
+    local closestVehicle = GetVehiclePedIsIn(cache.ped) ~= 0 and GetVehiclePedIsIn(cache.ped) or getNearestVeh()
+
     if closestVehicle ~= 0 then
-        if closestVehicle ~= GetVehiclePedIsIn(ped) then
+        if closestVehicle ~= GetVehiclePedIsIn(cache.ped) then
             local plate = QBCore.Functions.GetPlate(closestVehicle)
+
             if GetVehicleDoorAngleRatio(closestVehicle, door) > 0.0 then
                 if not IsVehicleSeatFree(closestVehicle, -1) then
                     TriggerServerEvent('qb-radialmenu:trunk:server:Door', false, plate, door)
@@ -299,17 +323,20 @@ RegisterNetEvent('qb-radialmenu:client:setExtra', function(data)
     local string = data.id
     local replace = string:gsub("extra", "")
     local extra = tonumber(replace)
-    local ped = PlayerPedId()
-    local veh = GetVehiclePedIsIn(ped)
-    if veh ~= nil then
-        if GetPedInVehicleSeat(veh, -1) == ped then
+    local veh = GetVehiclePedIsIn(cache.ped)
+
+    if veh then
+        if GetPedInVehicleSeat(veh, -1) == cache.ped then
             SetVehicleAutoRepairDisabled(veh, true) -- Forces Auto Repair off when Toggling Extra [GTA 5 Niche Issue]
+
             if DoesExtraExist(veh, extra) then
                 if IsVehicleExtraTurnedOn(veh, extra) then
                     SetVehicleExtra(veh, extra, 1)
+
                     QBCore.Functions.Notify(Lang:t("error.extra_deactivated", {extra = extra}), 'error', 2500)
                 else
                     SetVehicleExtra(veh, extra, 0)
+
                     QBCore.Functions.Notify(Lang:t("success.extra_activated", {extra = extra}), 'success', 2500)
                 end
             else
@@ -322,9 +349,11 @@ RegisterNetEvent('qb-radialmenu:client:setExtra', function(data)
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
-    local veh = GetVehiclePedIsIn(PlayerPedId())
+    local veh = GetVehiclePedIsIn(cache.ped)
+
     if veh ~= 0 then
         local pl = QBCore.Functions.GetPlate(veh)
+
         if pl == plate then
             if open then
                 SetVehicleDoorOpen(veh, door, false, false)
@@ -336,15 +365,18 @@ RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
 end)
 
 RegisterNetEvent('qb-radialmenu:client:ChangeSeat', function(data)
-    local Veh = GetVehiclePedIsIn(PlayerPedId())
+    local Veh = GetVehiclePedIsIn(cache.ped)
     local IsSeatFree = IsVehicleSeatFree(Veh, data.id)
     local speed = GetEntitySpeed(Veh)
     local HasHarnass = exports['qb-smallresources']:HasHarness()
+
     if not HasHarnass then
         local kmh = speed * 3.6
+
         if IsSeatFree then
             if kmh <= 100.0 then
-                SetPedIntoVehicle(PlayerPedId(), Veh, data.id)
+                SetPedIntoVehicle(cache.ped, Veh, data.id)
+
                 QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = data.title}))
             else
                 QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
@@ -359,6 +391,7 @@ end)
 
 RegisterNetEvent('qb-radialmenu:flipVehicle', function()
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+
     QBCore.Functions.Progressbar("pick_grape", Lang:t("progress.flipping_car"), Config.Fliptime, false, true, {
         disableMovement = true,
         disableCarMovement = true,
@@ -366,24 +399,28 @@ RegisterNetEvent('qb-radialmenu:flipVehicle', function()
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
         local vehicle = getNearestVeh()
+
         SetVehicleOnGroundProperly(vehicle)
+
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
     end, function() -- Cancel
         QBCore.Functions.Notify(Lang:t("task.cancel_task"), "error")
+
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
     end)
 end)
 
 -- NUI Callbacks
-
 RegisterNUICallback('closeRadial', function(data, cb)
     setRadialState(false, false, data.delay)
+
     cb('ok')
 end)
 
 RegisterNUICallback('selectItem', function(inData, cb)
     local itemData = inData.itemData
     local found, action, data = selectOption(FinalMenuItems, itemData)
+
     if data and found then
         if action then
             action(data)
@@ -397,6 +434,7 @@ RegisterNUICallback('selectItem', function(inData, cb)
             TriggerServerEvent('QBCore:CallCommand', data.event, data)
         end
     end
+
     cb('ok')
 end)
 

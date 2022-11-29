@@ -1,4 +1,4 @@
-Config = {}
+Config = Config or {}
 
 Config.EnableExtraMenu = true
 Config.Fliptime = 15000
@@ -16,28 +16,32 @@ Config.MenuItems = {
                 type = 'client',
                 event = 'qb-phone:client:GiveContactDetails',
                 shouldClose = true
-            }, {
+            },
+            {
                 id = 'getintrunk',
                 title = 'Get In Trunk',
                 icon = 'car',
                 type = 'client',
                 event = 'qb-trunk:client:GetIn',
                 shouldClose = true
-            }, {
+            },
+            {
                 id = 'cornerselling',
                 title = 'Corner Selling',
                 icon = 'cannabis',
                 type = 'client',
                 event = 'qb-drugs:client:cornerselling',
                 shouldClose = true
-            }, {
+            },
+            {
                 id = 'togglehotdogsell',
                 title = 'Hotdog Selling',
                 icon = 'hotdog',
                 type = 'client',
                 event = 'qb-hotdogjob:client:ToggleSell',
                 shouldClose = true
-            }, {
+            },
+            {
                 id = 'interactions',
                 title = 'Interaction',
                 icon = 'triangle-exclamation',
@@ -49,42 +53,48 @@ Config.MenuItems = {
                         type = 'client',
                         event = 'police:client:CuffPlayerSoft',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'playerinvehicle',
                         title = 'Put In Vehicle',
                         icon = 'car-side',
                         type = 'client',
                         event = 'police:client:PutPlayerInVehicle',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'playeroutvehicle',
                         title = 'Take Out Of Vehicle',
                         icon = 'car-side',
                         type = 'client',
                         event = 'police:client:SetPlayerOutVehicle',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'stealplayer',
                         title = 'Rob',
                         icon = 'mask',
                         type = 'client',
                         event = 'police:client:RobPlayer',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'escort',
                         title = 'Kidnap',
                         icon = 'user-group',
                         type = 'client',
                         event = 'police:client:KidnapPlayer',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'escort2',
                         title = 'Escort',
                         icon = 'user-group',
                         type = 'client',
                         event = 'police:client:EscortPlayer',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'escort554',
                         title = 'Hostage',
                         icon = 'child',
@@ -113,28 +123,32 @@ Config.MenuItems = {
                         type = 'client',
                         event = 'qb-houses:client:giveHouseKey',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'removehousekey',
                         title = 'Remove House Keys',
                         icon = 'key',
                         type = 'client',
                         event = 'qb-houses:client:removeHouseKey',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'togglelock',
                         title = 'Toggle Doorlock',
                         icon = 'door-closed',
                         type = 'client',
                         event = 'qb-houses:client:toggleDoorlock',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'decoratehouse',
                         title = 'Decorate House',
                         icon = 'box',
                         type = 'client',
                         event = 'qb-houses:client:decorate',
                         shouldClose = true
-                    }, {
+                    },
+                    {
                         id = 'houseLocations',
                         title = 'Interaction Locations',
                         icon = 'house',
@@ -146,14 +160,16 @@ Config.MenuItems = {
                                 type = 'client',
                                 event = 'qb-houses:client:setLocation',
                                 shouldClose = true
-                            }, {
+                            },
+                            {
                                 id = 'setoutift',
                                 title = 'Set Wardrobe',
                                 icon = 'shirt',
                                 type = 'client',
                                 event = 'qb-houses:client:setLocation',
                                 shouldClose = true
-                            }, {
+                            },
+                            {
                                 id = 'setlogout',
                                 title = 'Set Logout',
                                 icon = 'door-open',
@@ -164,7 +180,8 @@ Config.MenuItems = {
                         }
                     }
                 }
-            }, {
+            },
+            {
                 id = 'clothesmenu',
                 title = 'Clothing',
                 icon = 'shirt',
@@ -644,36 +661,41 @@ Config.JobInteractions = {
                     id = 'spawnpion',
                     title = 'Cone',
                     icon = 'triangle-exclamation',
-                    type = 'client',
-                    event = 'police:client:spawnCone',
+                    action = function(_)
+                        TriggerEvent('police:client:spawnPObj', 'cone')
+                    end,
                     shouldClose = false
                 }, {
                     id = 'spawnhek',
                     title = 'Gate',
                     icon = 'torii-gate',
-                    type = 'client',
-                    event = 'police:client:spawnBarrier',
+                    action = function(_)
+                        TriggerEvent('police:client:spawnPObj', 'barrier')
+                    end,
                     shouldClose = false
                 }, {
                     id = 'spawnschotten',
                     title = 'Speed Limit Sign',
                     icon = 'sign-hanging',
-                    type = 'client',
-                    event = 'police:client:spawnRoadSign',
+                    action = function(_)
+                        TriggerEvent('police:client:spawnPObj', 'roadsign')
+                    end,
                     shouldClose = false
                 }, {
                     id = 'spawntent',
                     title = 'Tent',
                     icon = 'campground',
-                    type = 'client',
-                    event = 'police:client:spawnTent',
+                    action = function(_)
+                        TriggerEvent('police:client:spawnPObj', 'tent')
+                    end,
                     shouldClose = false
                 }, {
                     id = 'spawnverlichting',
                     title = 'Lighting',
                     icon = 'lightbulb',
-                    type = 'client',
-                    event = 'police:client:spawnLight',
+                    action = function(_)
+                        TriggerEvent('police:client:spawnPObj', 'light')
+                    end,
                     shouldClose = false
                 }, {
                     id = 'spikestrip',
@@ -894,7 +916,9 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["shirt"] = {
-        Func = function() ToggleClothing("Shirt", true) end,
+        Func = function()
+            ToggleClothing("Shirt", true)
+        end,
         Sprite = "shirt",
         Desc = "Take your shirt off/on",
         Name = "shirt",
@@ -915,11 +939,14 @@ Config.ExtraCommands = {
         Rotate = true
     },
     ["bagoff"] = {
-        Func = function() ToggleClothing("Bagoff", true) end,
+        Func = function()
+            ToggleClothing("Bagoff", true)
+        end,
         Sprite = "bagoff",
         SpriteFunc = function()
-            local Bag = GetPedDrawableVariation(PlayerPedId(), 5)
+            local Bag = GetPedDrawableVariation(cache.ped, 5)
             local BagOff = LastEquipped["Bagoff"]
+
             if LastEquipped["Bagoff"] then
                 if bags[BagOff.Drawable] then
                     return "bagoff"
@@ -927,6 +954,7 @@ Config.ExtraCommands = {
                     return "paraoff"
                 end
             end
+
             if Bag ~= 0 then
                 if bags[Bag] then
                     return "bagoff"

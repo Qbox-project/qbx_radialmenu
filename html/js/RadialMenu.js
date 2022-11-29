@@ -1,29 +1,29 @@
 'use strict';
 
 var DEFAULT_SIZE = 150;
-var MIN_SECTORS  = 3;
+var MIN_SECTORS = 3;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function RadialMenu(params) {
     var self = this;
 
-    self.parent  = params.parent  || [];
+    self.parent = params.parent || [];
 
-    self.size      = params.size    || DEFAULT_SIZE;
-    self.onClick   = params.onClick || null;
-    self.menuItems = params.menuItems ? params.menuItems : [{id: 'one', title: 'One'}, {id: 'two', title: 'Two'}];
+    self.size = params.size || DEFAULT_SIZE;
+    self.onClick = params.onClick || null;
+    self.menuItems = params.menuItems ? params.menuItems : [{ id: 'one', title: 'One' }, { id: 'two', title: 'Two' }];
 
-    self.radius      = 55;
+    self.radius = 55;
     self.innerRadius = 18;
     self.sectorSpace = 3.5;
     self.sectorCount = Math.max(self.menuItems.length, MIN_SECTORS);
     self.closeOnClick = params.closeOnClick !== undefined ? !!params.closeOnClick : false;
 
-    self.scale       = 1;
-    self.holder      = null;
-    self.parentMenu  = [];
+    self.scale = 1;
+    self.holder = null;
+    self.parentMenu = [];
     self.parentItems = [];
-    self.levelItems  = null;
+    self.levelItems = null;
 
     self.createHolder();
     //self.addIconSymbols();
@@ -51,7 +51,7 @@ RadialMenu.prototype.close = function (bool) {
     var self = this;
 
     if (self.currentMenu) {
-        $.post(`https://qb-radialmenu/closeRadial`, JSON.stringify({ delay: bool }) );
+        $.post(`https://qb-radialmenu/closeRadial`, JSON.stringify({ delay: bool }));
         var parentMenu;
         while (parentMenu = self.parentMenu.pop()) {
             parentMenu.remove();
@@ -83,7 +83,7 @@ RadialMenu.prototype.createHolder = function () {
 
     self.holder = document.createElement('div');
     self.holder.className = 'menuHolder';
-    self.holder.style.width  = self.size + 'px';
+    self.holder.style.width = self.size + 'px';
     self.holder.style.height = self.size + 'px';
 
     self.parent.appendChild(self.holder);
@@ -158,12 +158,12 @@ RadialMenu.prototype.createCenter = function (svg, title, icon, size) {
     var centerCircle = self.createCircle(0, 0, self.innerRadius - self.sectorSpace);
     g.appendChild(centerCircle);
     if (text) {
-        var text = self.createText(0,0, title);
+        var text = self.createText(0, 0, title);
         g.appendChild(text);
     }
 
     if (icon) {
-        var use = self.createUseTag(0,0, icon, g, true);
+        var use = self.createUseTag(0, 0, icon, g, true);
         use.setAttribute('width', size);
         use.setAttribute('height', size);
         use.setAttribute('transform', 'translate(-' + RadialMenu.numberToString(size / 2) + ',-' + RadialMenu.numberToString(size / 2) + ')');
@@ -202,7 +202,7 @@ RadialMenu.prototype.createMenu = function (classValue, levelItems, nested) {
     self.levelItems = levelItems;
 
     self.sectorCount = Math.max(self.levelItems.length, MIN_SECTORS);
-    self.scale       = self.calcScale();
+    self.scale = self.calcScale();
 
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', classValue);
@@ -210,10 +210,10 @@ RadialMenu.prototype.createMenu = function (classValue, levelItems, nested) {
     svg.setAttribute('width', self.size);
     svg.setAttribute('height', self.size);
 
-    var angleStep   = 360 / self.sectorCount;
+    var angleStep = 360 / self.sectorCount;
     var angleShift
 
-    for(i = 1; i < self.levelItems.length; i++) {
+    for (i = 1; i < self.levelItems.length; i++) {
         menuItems = i
     }
 
@@ -239,7 +239,7 @@ RadialMenu.prototype.createMenu = function (classValue, levelItems, nested) {
 
     for (var i = 0; i < self.sectorCount; ++i) {
         var startAngle = angleShift + angleStep * i;
-        var endAngle   = angleShift + angleStep * (i + 0.99);
+        var endAngle = angleShift + angleStep * (i + 0.99);
 
         var itemIndex = RadialMenu.resolveLoopIndex(self.sectorCount - i + indexOffset, self.sectorCount);
         var item;
@@ -368,7 +368,7 @@ RadialMenu.prototype.getSelectedIndex = function () {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RadialMenu.prototype.setSelectedIndex = function (index) {
     var self = this;
-    if (index >=0 && index < self.levelItems.length) {
+    if (index >= 0 && index < self.levelItems.length) {
         var items = self.currentMenu.querySelectorAll('g[data-index="' + index + '"]');
         if (items.length > 0) {
             var itemToSelect = items[0];
@@ -423,7 +423,7 @@ RadialMenu.prototype.appendSectorPath = function (startAngleDeg, endAngleDeg, sv
     };
 
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('transform','translate(' +translate.x + ' ,' + translate.y + ') scale(' + self.scale + ')');
+    g.setAttribute('transform', 'translate(' + translate.x + ' ,' + translate.y + ') scale(' + self.scale + ')');
 
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', self.createSectorCmds(startAngleDeg, endAngleDeg));
@@ -501,9 +501,9 @@ RadialMenu.prototype.createText = function (x, y, title) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RadialMenu.prototype.createCircle = function (x, y, r) {
     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx',RadialMenu.numberToString(x));
-    circle.setAttribute('cy',RadialMenu.numberToString(y));
-    circle.setAttribute('r',r);
+    circle.setAttribute('cx', RadialMenu.numberToString(x));
+    circle.setAttribute('cy', RadialMenu.numberToString(y));
+    circle.setAttribute('r', r);
     return circle;
 };
 
@@ -532,7 +532,7 @@ RadialMenu.prototype.addIconSymbols = function () {
     var returnSymbol = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');
     returnSymbol.setAttribute('id', 'return');
     returnSymbol.setAttribute('viewBox', '0 0 489.394 489.394');
-    var returnPath =   document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    var returnPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     returnPath.setAttribute('d', "M375.789,92.867H166.864l17.507-42.795c3.724-9.132,1-19.574-6.691-25.744c-7.701-6.166-18.538-6.508-26.639-0.879" +
         "L9.574,121.71c-6.197,4.304-9.795,11.457-9.563,18.995c0.231,7.533,4.261,14.446,10.71,18.359l147.925,89.823" +
         "c8.417,5.108,19.18,4.093,26.481-2.499c7.312-6.591,9.427-17.312,5.219-26.202l-19.443-41.132h204.886" +
