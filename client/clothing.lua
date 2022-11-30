@@ -177,7 +177,7 @@ local variations = {
             [191] = 184,
             [192] = 184,
             [193] = 184,
-            [194] = 184,
+            [194] = 184
         },
         female = {
             [16] = 11,
@@ -395,13 +395,14 @@ local variations = {
             [236] = 229,
             [237] = 229,
             [238] = 229,
-            [239] = 229,
+            [239] = 229
         }
     }
 }
 
 local function addNewVariation(which, gender, one, two, single)
     local where = variations[which][gender]
+
     if not single then
         where[one] = two
         where[two] = one
@@ -648,7 +649,6 @@ CreateThread(function()
     addNewVariation("jackets", "female", 372, 373)
     addNewVariation("jackets", "female", 378, 379)
 end)
-
 local drawables = {
     ["Top"] = {
         Drawable = 11,
@@ -693,7 +693,6 @@ local drawables = {
         Emote = {Dict = "clothingtie", Anim = "check_out_a", Move = 51, Dur = 2000}
     },
 }
-
 local Extras = {
     ["Shirt"] = {
         Drawable = 11,
@@ -716,9 +715,8 @@ local Extras = {
         Drawable = 5,
         Table = {Standalone = true, male = 0, female = 0},
         Emote = {Dict = "clothingtie", Anim = "try_tie_negative_a", Move = 51, Dur = 1200}
-    },
+    }
 }
-
 local Props = {
     ["visor"] = {
         Prop = 0,
@@ -762,7 +760,7 @@ local Props = {
             On = {Dict = "nmt_3_rcm-10", Anim = "cs_nigel_dual-10", Move = 51, Dur = 1200},
             Off = {Dict = "nmt_3_rcm-10", Anim = "cs_nigel_dual-10", Move = 51, Dur = 1200}
         }
-    },
+    }
 }
 
 LastEquipped = {}
@@ -816,7 +814,6 @@ function ResetClothing(anim)
 
     LastEquipped = {}
 end
-
 RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
 
 function ToggleClothing(whic, extra)
@@ -846,7 +843,11 @@ function ToggleClothing(whic, extra)
     local Gender = IsMpPed(cache.ped)
 
     if which ~= "Mask" then
-        if not Gender then Notify(Lang:t("info.wrong_ped"))
+        if not Gender then
+            lib.notify({
+                description = Lang:t("info.wrong_ped")
+            })
+
             return false
         end -- We cancel the command here if the person is not using a multiplayer model.
     end
@@ -857,44 +858,80 @@ function ToggleClothing(whic, extra)
         for k, v in pairs(Table) do
             if not Toggle.Remember then
                 if k == Cur.Drawable then
-                    PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+                    PlayToggleEmote(Toggle.Emote, function()
+                        SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0)
+                    end)
+
+                    return true
                 end
             else
                 if not LastEquipped[which] then
                     if k == Cur.Drawable then
-                        PlayToggleEmote(Toggle.Emote, function() LastEquipped[which] = Cur SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+                        PlayToggleEmote(Toggle.Emote, function()
+                            LastEquipped[which] = Cur
+
+                            SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0)
+                        end)
+
+                        return true
                     end
                 else
                     local Last = LastEquipped[which]
-                    PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(cache.ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0) LastEquipped[which] = false end) return true
+
+                    PlayToggleEmote(Toggle.Emote, function()
+                        SetPedComponentVariation(cache.ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0)
+
+                        LastEquipped[which] = false
+                    end)
+
+                    return true
                 end
             end
         end
-        Notify(Lang:t("info.no_variants")) return
+
+        lib.notify({
+            description = Lang:t("info.no_variants")
+        })
+
+        return
     else
         if not LastEquipped[which] then
             if Cur.Drawable ~= Table then
                 PlayToggleEmote(Toggle.Emote, function()
                     LastEquipped[which] = Cur
+
                     SetPedComponentVariation(cache.ped, Toggle.Drawable, Table, 0, 0)
+
                     if Toggle.Table.Extra then
                         local extraToggled = Toggle.Table.Extra
+
                         for _, v in pairs(extraToggled) do
-                            local ExtraCur = {Drawable = GetPedDrawableVariation(cache.ped, v.Drawable),  Texture = GetPedTextureVariation(cache.ped, v.Drawable), Id = v.Drawable}
+                            local ExtraCur = {
+                                Drawable = GetPedDrawableVariation(cache.ped, v.Drawable),
+                                Texture = GetPedTextureVariation(cache.ped, v.Drawable),
+                                Id = v.Drawable
+                            }
+
                             SetPedComponentVariation(cache.ped, v.Drawable, v.Id, v.Tex, 0)
+
                             LastEquipped[v.Name] = ExtraCur
                         end
                     end
                 end)
+
                 return true
             end
         else
             local Last = LastEquipped[which]
+
             PlayToggleEmote(Toggle.Emote, function()
                 SetPedComponentVariation(cache.ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0)
+
                 LastEquipped[which] = false
+
                 if Toggle.Table.Extra then
                     local extraToggled = Toggle.Table.Extra
+
                     for _, v in pairs(extraToggled) do
                         if LastEquipped[v.Name] then
                             Last = LastEquipped[v.Name]
@@ -907,16 +944,23 @@ function ToggleClothing(whic, extra)
             return true
         end
     end
-    Notify(Lang:t("info.already_wearing")) return false
+
+    lib.notify({
+        description = Lang:t("info.already_wearing")
+    })
+
+    return false
 end
 
 RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
 function ToggleProps(whic)
     local which = whic
+
     if type(whic) == "table" then
         which = tostring(whic.id)
     end
+
     Wait(50)
 
     if Cooldown then
@@ -971,7 +1015,7 @@ function ToggleProps(whic)
         end
 
         lib.notify({
-            title = Lang:t("info.no_variants")
+            description = Lang:t("info.no_variants")
         })
 
         return false
