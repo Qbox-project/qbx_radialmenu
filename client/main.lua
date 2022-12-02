@@ -388,7 +388,7 @@ RegisterNUICallback('selectItem', function(inData, cb)
         if action then
             action(data)
         elseif data.type == 'client' then
-            TriggerEvent(data.event, data)
+            TriggerEvent(data.event, data.arg)
         elseif data.type == 'server' then
             TriggerServerEvent(data.event, data)
         elseif data.type == 'command' then

@@ -42,9 +42,8 @@ local function setClosestStretcher()
     local ped = PlayerPedId()
     local coords = GetEntityCoords(ped)
     local object = GetClosestObjectOfType(coords.x, coords.y, coords.z, 10.0, `prop_ld_binbag_01`, false, false, false)
-    if object ~= 0 then
-        stretcherObject = object
-    end
+    if object == 0 then return end
+    stretcherObject = object
 end
 
 local function loadAnim(dict)
