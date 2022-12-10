@@ -645,35 +645,40 @@ Config.JobInteractions = {
                     title = 'Cone',
                     icon = 'triangle-exclamation',
                     type = 'client',
-                    event = 'police:client:spawnCone',
+                    event = 'police:client:spawnPObj',
+                    arg = 'cone',
                     shouldClose = false
                 }, {
                     id = 'spawnhek',
                     title = 'Gate',
                     icon = 'torii-gate',
                     type = 'client',
-                    event = 'police:client:spawnBarrier',
+                    event = 'police:client:spawnPObj',
+                    arg = 'barrier',
                     shouldClose = false
                 }, {
                     id = 'spawnschotten',
                     title = 'Speed Limit Sign',
                     icon = 'sign-hanging',
                     type = 'client',
-                    event = 'police:client:spawnRoadSign',
+                    event = 'police:client:spawnPObj',
+                    arg = 'roadsign',
                     shouldClose = false
                 }, {
                     id = 'spawntent',
                     title = 'Tent',
                     icon = 'campground',
                     type = 'client',
-                    event = 'police:client:spawnTent',
+                    event = 'police:client:spawnPObj',
+                    arg = 'tent',
                     shouldClose = false
                 }, {
                     id = 'spawnverlichting',
                     title = 'Lighting',
                     icon = 'lightbulb',
                     type = 'client',
-                    event = 'police:client:spawnLight',
+                    event = 'police:client:spawnPObj',
+                    arg = 'light',
                     shouldClose = false
                 }, {
                     id = 'spikestrip',
