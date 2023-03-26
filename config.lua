@@ -448,9 +448,9 @@ Config.VehicleExtras = {
 
 Config.VehicleSeats = {
     id = 'vehicleseats',
-    title = 'Vehicle Seats',
+    label = 'Vehicle Seats',
     icon = 'chair',
-    items = {}
+    menu = 'vehicleseatsmenu'
 }
 
 Config.JobInteractions = {

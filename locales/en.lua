@@ -46,6 +46,8 @@ local Translations = {
         putintrunk_command_desc = "Put Player In Trunk"
     },
     options = {
+        flip = 'Flip vehicle',
+        vehicle = 'Vehicle',
         emergency_button = "Emergency Button",
         driver_seat = "Drivers Seat",
         passenger_seat = "Passenger Seat",

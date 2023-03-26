@@ -39,14 +39,79 @@ local function convert(table)
 end
 
 local function getNearestVeh()
-    local pos = GetEntityCoords(PlayerPedId())
-    local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
+    local pos = GetEntityCoords(cache.ped)
+    local entityWorld = GetOffsetFromEntityInWorldCoords(cache.ped, 0.0, 20.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, cache.ped, 0)
     local _, _, _, _, vehicleHandle = GetRaycastResult(rayHandle)
     return vehicleHandle
 end
 
 local function SetupRadialMenu()
+    local VehicleMenu = {
+        id = 'vehicle',
+        label = Lang:t(options.vehicle),
+        icon = 'car',
+        menu = 'vehiclemenu'
+    }
+
+    local vehicleitems = {{
+        id = 'vehicle-flip',
+        title = Lang:t(options.flip),
+        icon = 'car-burst',
+        onSelect = function()
+            TriggerEvent('qb-radialmenu:flipVehicle')
+            lib.hideRadial()
+        end,
+    }}
+
+    vehicleitems[#vehicleitems+1] = convert(Config.VehicleDoors)
+    if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
+
+    if Config.VehicleSeats then
+        vehicleitems[#vehicleitems+1] = Config.VehicleSeats
+
+        CreateThread(function()
+            while true do
+                Wait(50)
+                if IsControlJustReleased(0, 23) and not GetVehiclePedIsIn(cache.ped, false) then
+                    local vehicle = getNearestVeh()
+                    if vehicle then
+                        local vehicleseats = {}
+                        local seatTable = {
+                            [1] = Lang:t("options.driver_seat"),
+                            [2] = Lang:t("options.passenger_seat"),
+                            [3] = Lang:t("options.rear_left_seat"),
+                            [4] = Lang:t("options.rear_right_seat"),
+                        }
+                
+                        local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+                        for i = 1, AmountOfSeats do
+                            vehicleseats[#vehicleseats+1] = {
+                                id = 'vehicleseat'..i,
+                                label = seatTable[i] or Lang:t("options.other_seats"),
+                                icon = 'caret-up',
+                                onSelect = function()
+                                    TriggerEvent('qb-radialmenu:client:ChangeSeat')
+                                    lib.hideRadial()
+                                end,
+                            }
+                        end
+                        lib.registerRadial({
+                            id = 'vehicleseatsmenu',
+                            items = vehicleseats
+                        })
+                    end
+                end
+            end
+        end)
+    end
+
+    lib.registerRadial({
+        id = 'vehiclemenu',
+        items = vehicleitems
+    })
+    lib.addRadialItem(VehicleMenu)
+
     for _, v in pairs(Config.MenuItems) do
         lib.addRadialItem(convert(v))
     end
@@ -104,7 +169,7 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
 end)
 
 RegisterNetEvent('qb-radialmenu:client:ChangeSeat', function(data)
-    local Veh = GetVehiclePedIsIn(PlayerPedId())
+    local Veh = GetVehiclePedIsIn(cache.ped)
     local IsSeatFree = IsVehicleSeatFree(Veh, data.id)
     local speed = GetEntitySpeed(Veh)
     local HasHarnass = exports['qb-smallresources']:HasHarness()
@@ -112,7 +177,7 @@ RegisterNetEvent('qb-radialmenu:client:ChangeSeat', function(data)
         local kmh = speed * 3.6
         if IsSeatFree then
             if kmh <= 100.0 then
-                SetPedIntoVehicle(PlayerPedId(), Veh, data.id)
+                SetPedIntoVehicle(cache.ped, Veh, data.id)
                 QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = data.title}))
             else
                 QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
@@ -126,7 +191,7 @@ RegisterNetEvent('qb-radialmenu:client:ChangeSeat', function(data)
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
-    local veh = GetVehiclePedIsIn(PlayerPedId())
+    local veh = GetVehiclePedIsIn(cache.ped)
     if veh ~= 0 then
         local pl = QBCore.Functions.GetPlate(veh)
         if pl == plate then
@@ -147,10 +212,9 @@ RegisterNetEvent('qb-radialmenu:client:openDoor', function(data)
     local string = data.id
     local replace = string:gsub("door", "")
     local door = tonumber(replace)
-    local ped = PlayerPedId()
-    local closestVehicle = GetVehiclePedIsIn(ped) ~= 0 and GetVehiclePedIsIn(ped) or getNearestVeh()
+    local closestVehicle = GetVehiclePedIsIn(cache.ped) ~= 0 and GetVehiclePedIsIn(cache.ped) or getNearestVeh()
     if closestVehicle ~= 0 then
-        if closestVehicle ~= GetVehiclePedIsIn(ped) then
+        if closestVehicle ~= GetVehiclePedIsIn(cache.ped) then
             local plate = QBCore.Functions.GetPlate(closestVehicle)
             if GetVehicleDoorAngleRatio(closestVehicle, door) > 0.0 then
                 if not IsVehicleSeatFree(closestVehicle, -1) then
@@ -181,10 +245,9 @@ RegisterNetEvent('qb-radialmenu:client:setExtra', function(data)
     local string = data.id
     local replace = string:gsub("extra", "")
     local extra = tonumber(replace)
-    local ped = PlayerPedId()
-    local veh = GetVehiclePedIsIn(ped)
+    local veh = GetVehiclePedIsIn(cache.ped)
     if veh ~= nil then
-        if GetPedInVehicleSeat(veh, -1) == ped then
+        if GetPedInVehicleSeat(veh, -1) == cache.ped then
             SetVehicleAutoRepairDisabled(veh, true) -- Forces Auto Repair off when Toggling Extra [GTA 5 Niche Issue]
             if DoesExtraExist(veh, extra) then
                 if IsVehicleExtraTurnedOn(veh, extra) then

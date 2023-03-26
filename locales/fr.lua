@@ -43,6 +43,8 @@ local Translations = {
         putintrunk_command_desc = "Mettre le Joueur dans le Coffre"
     },
     options = {
+        flip = 'Retourner le Véhicule',
+        vehicle = 'Véhicule',
         emergency_button = "Le Bouton d'Urgence",
         driver_seat = "Le Siège du Conducteur",
         passenger_seat = "Le Siège Passager",
