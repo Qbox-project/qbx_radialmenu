@@ -275,7 +275,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
         end
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
     end, function() -- Cancel
-        QBCore.Functions.Notify(Lang:t("task.cancel_task"), "error")
+        QBCore.Functions.Notify(Lang:t("error.cancel_task"), "error")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
     end)
 end)
