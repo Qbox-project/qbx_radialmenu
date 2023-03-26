@@ -2,8 +2,8 @@ local Translations = {
     error = {
         no_people_nearby = "Aucun joueur n'est à proximité.",
         no_vehicle_found = "Aucun véhicule n'a été retrouvé.",
-        extra_deactivated = "%{extra} supplémentaires ont été désactivés.",
-        extra_not_present = "%{extra} supplémentaires ne sont pas présents sur ce véhicule.",
+        extra_deactivated = "L'extra %{extra} ont été désactivés.",
+        extra_not_present = "L'extra %{extra} ne sont pas présents sur ce véhicule.",
         not_driver = "Tu n'es pas le conducteur de véhicule.",
         vehicle_driving_fast = "Ce véhicule va trop vite.",
         seat_occupied = "Ce siège est occupé.",
@@ -18,8 +18,11 @@ local Translations = {
         already_in_trunk = "Tu es déjà dans le coffre.",
         someone_in_trunk = "Quelqu'un est déjà dans le coffre."
     },
+    progress = {
+        flipping_car = "Retourne le véhicule.."
+    },
     success = {
-        extra_activated = "%{extra} supplémentaires ont été activés.",
+        extra_activated = "L'extra %{extra} ont été activés.",
         entered_trunk = "Tu es dans le coffre."
     },
     info = {
