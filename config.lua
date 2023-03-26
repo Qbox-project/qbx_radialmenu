@@ -940,7 +940,7 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["reset"] = {
-        Func{ = f}unction()
+        Func = function()
             if not ResetClothing(true) then
                 Notify('Nothing To Reset', 'error')
             end
