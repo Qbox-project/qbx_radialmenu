@@ -779,7 +779,7 @@ local function PlayToggleEmote(e, cb)
 	cb()
 end
 
-function ResetClothing(anim)
+RegisterNetEvent('qb-radialmenu:ResetClothing', function(anim)
 	if type(anim) == "table" then
 		anim = true
 	end
@@ -793,17 +793,11 @@ function ResetClothing(anim)
 		end
 	end
 	LastEquipped = {}
-end
+end)
 
-RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
-
-function ToggleClothing(whic, extra)
-	local which = whic
-	if type(whic) == "table" then
-		which = tostring(whic.id)
-	end
-	Wait(50)
-
+RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
+	local which = data.id
+	local extra = data.extra
     if which == "Shirt" or which == "Pants" or which == "Bagoff" then
         extra = true
     end
@@ -876,19 +870,11 @@ function ToggleClothing(whic, extra)
 		end
 	end
 	Notify(Lang:t("info.already_wearing")) return false
-end
+end)
 
-RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
-
-function ToggleProps(whic)
-	local which = whic
-	if type(whic) == "table" then
-		which = tostring(whic.id)
-	end
-	Wait(50)
-
+RegisterNetEvent('qb-radialmenu:ToggleProps', function(id)
 	if Cooldown then return end
-	local Prop = Props[which]
+	local Prop = Props[id]
 	local Ped = PlayerPedId()
 	local Cur = { -- Lets get out currently equipped prop.
 		Id = Prop.Prop,
@@ -898,11 +884,11 @@ function ToggleProps(whic)
 	}
 	if not Prop.Variants then
 		if Cur.Prop ~= -1 then -- If we currently are wearing this prop, remove it and save the one we were wearing into the LastEquipped table.
-			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[which] = Cur ClearPedProp(Ped, Prop.Prop) end) return true
+			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[id] = Cur ClearPedProp(Ped, Prop.Prop) end) return true
 		else
-			local Last = LastEquipped[which] -- Detect that we have already taken our prop off, lets put it back on.
+			local Last = LastEquipped[id] -- Detect that we have already taken our prop off, lets put it back on.
 			if Last then
-				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[which] = false return true
+				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[id] = false return true
 			end
 		end
 		Notify(Lang:t("info.nothing_to_remove")) return false
@@ -917,9 +903,7 @@ function ToggleProps(whic)
 		end
 		Notify(Lang:t("info.no_variants")) return false
 	end
-end
-
-RegisterNetEvent('qb-radialmenu:ToggleProps', ToggleProps)
+end)
 
 for k,v in pairs(Config.Commands) do
 	RegisterCommand(k, v.Func)

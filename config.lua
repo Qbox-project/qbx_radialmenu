@@ -175,6 +175,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Hair', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Ear',
@@ -182,6 +183,7 @@ Config.MenuItems = {
                         icon = 'ear-deaf',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleProps',
+                        arg = 'Ear',
                         shouldClose = true
                     }, {
                         id = 'Neck',
@@ -189,6 +191,7 @@ Config.MenuItems = {
                         icon = 'user-tie',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Neck', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Top',
@@ -196,6 +199,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Top', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Shirt',
@@ -203,6 +207,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Shirt', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Pants',
@@ -210,6 +215,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Pants', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Shoes',
@@ -217,6 +223,7 @@ Config.MenuItems = {
                         icon = 'shoe-prints',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Shoes', extra = false},
                         shouldClose = true
                     }, {
                         id = 'meer',
@@ -229,6 +236,7 @@ Config.MenuItems = {
                                 icon = 'hat-cowboy-side',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Hat',
                                 shouldClose = true
                             }, {
                                 id = 'Glasses',
@@ -236,6 +244,7 @@ Config.MenuItems = {
                                 icon = 'glasses',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Glasses',
                                 shouldClose = true
                             }, {
                                 id = 'Visor',
@@ -243,6 +252,7 @@ Config.MenuItems = {
                                 icon = 'hat-cowboy-side',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Visor',
                                 shouldClose = true
                             }, {
                                 id = 'Mask',
@@ -250,6 +260,7 @@ Config.MenuItems = {
                                 icon = 'masks-theater',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Mask', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Vest',
@@ -257,6 +268,7 @@ Config.MenuItems = {
                                 icon = 'vest',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Vest', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Bag',
@@ -264,6 +276,7 @@ Config.MenuItems = {
                                 icon = 'bag-shopping',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Bag', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Bracelet',
@@ -271,6 +284,7 @@ Config.MenuItems = {
                                 icon = 'user',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Bracelet',
                                 shouldClose = true
                             }, {
                                 id = 'Watch',
@@ -278,6 +292,7 @@ Config.MenuItems = {
                                 icon = 'stopwatch',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Watch',
                                 shouldClose = true
                             }, {
                                 id = 'Gloves',
@@ -285,6 +300,7 @@ Config.MenuItems = {
                                 icon = 'mitten',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Gloves', extra = true},
                                 shouldClose = true
                             }
                         }
@@ -305,7 +321,7 @@ Config.VehicleDoors = {
             title = 'Drivers door',
             icon = 'car-side',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 0,
             shouldClose = false
         }, {
@@ -313,7 +329,7 @@ Config.VehicleDoors = {
             title = 'Hood',
             icon = 'car',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 4,
             shouldClose = false
         }, {
@@ -321,7 +337,7 @@ Config.VehicleDoors = {
             title = 'Passengers door',
             icon = 'car-side',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 1,
             shouldClose = false
         }, {
@@ -329,7 +345,7 @@ Config.VehicleDoors = {
             title = 'Right rear',
             icon = 'car-side',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 3,
             shouldClose = false
         }, {
@@ -337,7 +353,7 @@ Config.VehicleDoors = {
             title = 'Trunk',
             icon = 'car',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 5,
             shouldClose = false
         }, {
@@ -345,7 +361,7 @@ Config.VehicleDoors = {
             title = 'Left rear',
             icon = 'car-side',
             type = 'client',
-            event = 'radialmenu:client:openDoor',
+            event = 'qb-radialmenu:client:openDoor',
             arg = 2,
             shouldClose = false
         }
