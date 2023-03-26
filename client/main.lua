@@ -49,14 +49,14 @@ end
 local function SetupRadialMenu()
     local VehicleMenu = {
         id = 'vehicle',
-        label = Lang:t(options.vehicle),
+        label = Lang:t("options.vehicle"),
         icon = 'car',
         menu = 'vehiclemenu'
     }
 
     local vehicleitems = {{
         id = 'vehicle-flip',
-        title = Lang:t(options.flip),
+        title = Lang:t("options.flip"),
         icon = 'car-burst',
         onSelect = function()
             TriggerEvent('qb-radialmenu:flipVehicle')
@@ -68,7 +68,6 @@ local function SetupRadialMenu()
     if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
 
     if Config.VehicleSeats then
-        vehicleitems[#vehicleitems+1] = Config.VehicleSeats
 
         CreateThread(function()
             while true do
@@ -83,7 +82,7 @@ local function SetupRadialMenu()
                             [3] = Lang:t("options.rear_left_seat"),
                             [4] = Lang:t("options.rear_right_seat"),
                         }
-                
+
                         local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
                         for i = 1, AmountOfSeats do
                             vehicleseats[#vehicleseats+1] = {
@@ -104,6 +103,7 @@ local function SetupRadialMenu()
                 end
             end
         end)
+        vehicleitems[#vehicleitems+1] = Config.VehicleSeats
     end
 
     lib.registerRadial({
@@ -164,6 +164,8 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
             end
         })
     else
+        lib.clearRadialItems()
+        SetupRadialMenu()
         lib.disableRadial(false)
     end
 end)
