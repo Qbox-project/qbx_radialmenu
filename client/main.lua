@@ -26,7 +26,7 @@ local function convert(table)
     end
     if table.command then
         if table.type == 'command' then
-            action = function() ExecuteCommand(v.event) end
+            action = function() ExecuteCommand(table.event) end
         elseif table.type == 'qbcommand' then
             action = function() TriggerServerEvent('QBCore:CallCommand', table.event, table.arg or nil) end
         end
@@ -65,7 +65,7 @@ local function SetupRadialMenu()
             while true do
                 Wait(50)
                 if IsControlJustPressed(0, 23) and not IsPedInAnyVehicle(cache.ped, false) then
-                    local vehicle, _ = QBCore.Functions.GetClosestVehicle(coords)
+                    local vehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
                     if vehicle then
                         local vehicleseats = {}
                         local seatTable = {
@@ -208,7 +208,7 @@ end)
 
 RegisterNetEvent('qb-radialmenu:client:openDoor', function(id)
     local door = id
-    local closestVehicle = GetVehiclePedIsIn(cache.ped, false) ~= 0 and GetVehiclePedIsIn(cache.ped, false) or QBCore.Functions.GetClosestVehicle(coords)
+    local closestVehicle = GetVehiclePedIsIn(cache.ped, false) ~= 0 and GetVehiclePedIsIn(cache.ped, false) or QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
     if closestVehicle ~= 0 then
         if closestVehicle ~= GetVehiclePedIsIn(cache.ped, false) then
             local plate = QBCore.Functions.GetPlate(closestVehicle)
@@ -269,7 +269,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        local vehicle, distance = QBCore.Functions.GetClosestVehicle(coords)
+        local vehicle, distance = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
         if distance <= 15 then
             SetVehicleOnGroundProperly(vehicle)
         end
