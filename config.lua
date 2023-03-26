@@ -820,84 +820,84 @@ Config.TrunkClasses = {
 
 Config.Commands = {
     ["top"] = {
-        Func = function() ToggleClothing("Top") end,
+        Func = function() ToggleClothing({"Top"}) end,
         Sprite = "top",
         Desc = "Take your shirt off/on",
         Button = 1,
         Name = "Torso"
     },
     ["gloves"] = {
-        Func = function() ToggleClothing("gloves") end,
+        Func = function() ToggleClothing({"gloves"}) end,
         Sprite = "gloves",
         Desc = "Take your gloves off/on",
         Button = 2,
         Name = "Gloves"
     },
     ["visor"] = {
-        Func = function() ToggleProps("visor") end,
+        Func = function() ToggleProps({"visor"}) end,
         Sprite = "visor",
         Desc = "Toggle hat variation",
         Button = 3,
         Name = "Visor"
     },
     ["bag"] = {
-        Func = function() ToggleClothing("Bag") end,
+        Func = function() ToggleClothing({"Bag"}) end,
         Sprite = "bag",
         Desc = "Opens or closes your bag",
         Button = 8,
         Name = "Bag"
     },
     ["shoes"] = {
-        Func = function() ToggleClothing("Shoes") end,
+        Func = function() ToggleClothing({"Shoes"}) end,
         Sprite = "shoes",
         Desc = "Take your shoes off/on",
         Button = 5,
         Name = "Shoes"
     },
     ["vest"] = {
-        Func = function() ToggleClothing("Vest") end,
+        Func = function() ToggleClothing({"Vest"}) end,
         Sprite = "vest",
         Desc = "Take your vest off/on",
         Button = 14,
         Name = "Vest"
     },
     ["hair"] = {
-        Func = function() ToggleClothing("hair") end,
+        Func = function() ToggleClothing({"hair"}) end,
         Sprite = "hair",
         Desc = "Put your hair up/down/in a bun/ponytail.",
         Button = 7,
         Name = "Hair"
     },
     ["hat"] = {
-        Func = function() ToggleProps("Hat") end,
+        Func = function() ToggleProps({"Hat"}) end,
         Sprite = "hat",
         Desc = "Take your hat off/on",
         Button = 4,
         Name = "Hat"
     },
     ["glasses"] = {
-        Func = function() ToggleProps("Glasses") end,
+        Func = function() ToggleProps({"Glasses"}) end,
         Sprite = "glasses",
         Desc = "Take your glasses off/on",
         Button = 9,
         Name = "Glasses"
     },
     ["ear"] = {
-        Func = function() ToggleProps("Ear") end,
+        Func = function() ToggleProps({"Ear"}) end,
         Sprite = "ear",
         Desc = "Take your ear accessory off/on",
         Button = 10,
         Name = "Ear"
     },
     ["neck"] = {
-        Func = function() ToggleClothing("Neck") end,
+        Func = function() ToggleClothing({"Neck"}) end,
         Sprite = "neck",
         Desc = "Take your neck accessory off/on",
         Button = 11,
         Name = "Neck"
     },
     ["watch"] = {
-        Func = function() ToggleProps("Watch") end,
+        Func = function() ToggleProps({"Watch"}) end,
         Sprite = "watch",
         Desc = "Take your watch off/on",
         Button = 12,
@@ -905,14 +905,14 @@ Config.Commands = {
         Rotation = 5.0
     },
     ["bracelet"] = {
-        Func = function() ToggleProps("Bracelet") end,
+        Func = function() ToggleProps({"Bracelet"}) end,
         Sprite = "bracelet",
         Desc = "Take your bracelet off/on",
         Button = 13,
         Name = "Bracelet"
     },
     ["mask"] = {
-        Func = function() ToggleClothing("Mask") end,
+        Func = function() ToggleClothing({"Mask"}) end,
         Sprite = "mask",
         Desc = "Take your mask off/on",
         Button = 6,
@@ -924,7 +924,7 @@ local bags = {[40] = true, [41] = true, [44] = true, [45] = true}
 
 Config.ExtraCommands = {
     ["pants"] = {
-        Func = function() ToggleClothing("Pants", true) end,
+        Func = function() ToggleClothing("Pant{s", t}rue) end,
         Sprite = "pants",
         Desc = "Take your pants off/on",
         Name = "Pants",
@@ -932,7 +932,7 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["shirt"] = {
-        Func = function() ToggleClothing("Shirt", true) end,
+        Func = function() ToggleClothing("Shir{t", t}rue) end,
         Sprite = "shirt",
         Desc = "Take your shirt off/on",
         Name = "shirt",
@@ -940,7 +940,7 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["reset"] = {
-        Func = function()
+        Func{ = f}unction()
             if not ResetClothing(true) then
                 Notify('Nothing To Reset', 'error')
             end
@@ -953,9 +953,9 @@ Config.ExtraCommands = {
         Rotate = true
     },
     ["bagoff"] = {
-        Func = function() ToggleClothing("Bagoff", true) end,
+        Func = function() ToggleClothing("Bagof{f", t}rue) end,
         Sprite = "bagoff",
-        SpriteFunc = function()
+        SpriteFunc ={ function(})
             local Bag = GetPedDrawableVariation(PlayerPedId(), 5)
             local BagOff = LastEquipped["Bagoff"]
             if LastEquipped["Bagoff"] then
