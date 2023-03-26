@@ -797,7 +797,7 @@ end
 
 RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
 
-function ToggleClothing(whic, extra)
+function ToggleClothing(data)
 	local which = data.id
 	local extra = data.extra
     if which == "Shirt" or which == "Pants" or which == "Bagoff" then
@@ -876,7 +876,7 @@ end
 
 RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
-function ToggleProps(whic)
+function ToggleProps(id)
 	if Cooldown then return end
 	local Prop = Props[id]
 	local Ped = PlayerPedId()
