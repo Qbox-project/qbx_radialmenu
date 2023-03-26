@@ -779,7 +779,7 @@ local function PlayToggleEmote(e, cb)
 	cb()
 end
 
-RegisterNetEvent('qb-radialmenu:ResetClothing', function(anim)
+local function ResetClothing(anim)
 	if type(anim) == "table" then
 		anim = true
 	end
@@ -794,8 +794,9 @@ RegisterNetEvent('qb-radialmenu:ResetClothing', function(anim)
 	end
 	LastEquipped = {}
 end)
+RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing) 
 
-RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
+function ToggleClothing(data)
 	local which = data.id
 	local extra = data.extra
     if which == "Shirt" or which == "Pants" or which == "Bagoff" then
@@ -805,26 +806,26 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
 	local Toggle = drawables[which] if extra then Toggle = Extras[which] end
 	local Ped = PlayerPedId()
 	local Cur = { -- Lets check what we are currently wearing.
-		Drawable = GetPedDrawableVariation(Ped, Toggle.Drawable),
-		Id = Toggle.Drawable,
-		Ped = Ped,
-		Texture = GetPedTextureVariation(Ped, Toggle.Drawable),
-	}
-	local Gender = IsMpPed(Ped)
-	if which ~= "Mask" then
-		if not Gender then Notify(Lang:t("info.wrong_ped")) return false end -- We cancel the command here if the person is not using a multiplayer model.
-	end
-	local Table = Toggle.Table[Gender]
-	if not Toggle.Table.Standalone then -- "Standalone" is for things that dont require a variant, like the shoes just need to be switched to a specific drawable. Looking back at this i should have planned ahead, but it all works so, meh!
-		for k,v in pairs(Table) do
-			if not Toggle.Remember then
+	Drawable = GetPedDrawableVariation(Ped, Toggle.Drawable),
+	Id = Toggle.Drawable,
+	Ped = Ped,
+	Texture = GetPedTextureVariation(Ped, Toggle.Drawable),
+}
+local Gender = IsMpPed(Ped)
+if which ~= "Mask" then
+	if not Gender then Notify(Lang:t("info.wrong_ped")) return false end -- We cancel the command here if the person is not using a multiplayer model.
+end
+local Table = Toggle.Table[Gender]
+if not Toggle.Table.Standalone then -- "Standalone" is for things that dont require a variant, like the shoes just need to be switched to a specific drawable. Looking back at this i should have planned ahead, but it all works so, meh!
+	for k,v in pairs(Table) do
+		if not Toggle.Remember then
+			if k == Cur.Drawable then
+				PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+			end
+		else
+			if not LastEquipped[which] then
 				if k == Cur.Drawable then
-					PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
-				end
-			else
-				if not LastEquipped[which] then
-					if k == Cur.Drawable then
-						PlayToggleEmote(Toggle.Emote, function() LastEquipped[which] = Cur SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+					PlayToggleEmote(Toggle.Emote, function() LastEquipped[which] = Cur SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
 					end
 				else
 					local Last = LastEquipped[which]
@@ -871,8 +872,9 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
 	end
 	Notify(Lang:t("info.already_wearing")) return false
 end)
+RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
-RegisterNetEvent('qb-radialmenu:ToggleProps', function(id)
+function ToggleProps(id)
 	if Cooldown then return end
 	local Prop = Props[id]
 	local Ped = PlayerPedId()
@@ -904,6 +906,7 @@ RegisterNetEvent('qb-radialmenu:ToggleProps', function(id)
 		Notify(Lang:t("info.no_variants")) return false
 	end
 end)
+RegisterNetEvent('qb-radialmenu:ToggleProps', ToggleProps) 
 
 for k,v in pairs(Config.Commands) do
 	RegisterCommand(k, v.Func)
