@@ -39,17 +39,8 @@ local function DrawText3Ds(x, y, z, text)
     ClearDrawOrigin()
 end
 
-local function getNearestVeh()
-    local pos = GetEntityCoords(PlayerPedId())
-    local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
-
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
-    local _, _, _, _, vehicleHandle = GetRaycastResult(rayHandle)
-    return vehicleHandle
-end
-
 local function TrunkCam(bool)
-    local vehicle = GetEntityAttachedTo(PlayerPedId())
+    local vehicle = GetEntityAttachedTo(cache.ped)
     local drawPos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.5, 0)
     local vehHeading = GetEntityHeading(vehicle)
     if bool then
@@ -79,7 +70,7 @@ RegisterNetEvent('qb-trunk:client:KidnapTrunk', function()
     local closestPlayer, distance = QBCore.Functions.GetClosestPlayer()
     if distance ~= -1 and distance < 2 then
         if isKidnapping then
-            local closestVehicle = getNearestVeh()
+            local closestVehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
             if closestVehicle ~= 0 then
                 TriggerEvent('police:client:KidnapPlayer')
                 TriggerServerEvent("police:server:CuffPlayer", GetPlayerServerId(closestPlayer), false)
@@ -93,7 +84,6 @@ RegisterNetEvent('qb-trunk:client:KidnapTrunk', function()
 end)
 
 RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
-    local ped = PlayerPedId()
     local closestVehicle = veh
     local vehClass = GetVehicleClass(closestVehicle)
     local plate = QBCore.Functions.GetPlate(closestVehicle)
@@ -113,8 +103,8 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
                                 while not HasAnimDictLoaded("fin_ext_p1-7") do
                                     Wait(0)
                                 end
-                                TaskPlayAnim(ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
-                                AttachEntityToEntity(ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
+                                TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
+                                AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
                                 TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
                                 inTrunk = true
                                 Wait(500)
@@ -126,16 +116,16 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
                                 QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
                             end
                         else
-                            local vehicle = GetEntityAttachedTo(ped)
+                            local vehicle = GetEntityAttachedTo(cache.ped)
                             plate = QBCore.Functions.GetPlate(vehicle)
                             if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
                                 local vehCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.0, 0)
-                                DetachEntity(ped, true, true)
-                                ClearPedTasks(ped)
+                                DetachEntity(cache.ped, true, true)
+                                ClearPedTasks(cache.ped)
                                 inTrunk = false
                                 TriggerServerEvent('qb-smallresources:trunk:server:setTrunkBusy', plate, nil)
-                                SetEntityCoords(ped, vehCoords.x, vehCoords.y, vehCoords.z)
-                                SetEntityCollision(PlayerPedId(), true, true)
+                                SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z)
+                                SetEntityCollision(cache.ped, true, true)
                                 TrunkCam(false)
                             else
                                 QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
@@ -157,8 +147,7 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
 end)
 
 RegisterNetEvent('qb-trunk:client:GetIn', function()
-    local ped = PlayerPedId()
-    local closestVehicle = getNearestVeh()
+    local closestVehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
     if closestVehicle ~= 0 then
         local vehClass = GetVehicleClass(closestVehicle)
         local plate = QBCore.Functions.GetPlate(closestVehicle)
@@ -177,8 +166,8 @@ RegisterNetEvent('qb-trunk:client:GetIn', function()
                                 while not HasAnimDictLoaded("fin_ext_p1-7") do
                                     Wait(0)
                                 end
-                                TaskPlayAnim(ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
-                                AttachEntityToEntity(ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
+                                TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
+                                AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
                                 TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
                                 inTrunk = true
                                 Wait(500)
@@ -211,7 +200,7 @@ end)
 CreateThread(function()
     while true do
         local sleep = 1000
-        local vehicle = GetEntityAttachedTo(PlayerPedId())
+        local vehicle = GetEntityAttachedTo(cache.ped)
         local drawPos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.5, 0)
         local vehHeading = GetEntityHeading(vehicle)
         if cam then
@@ -228,8 +217,7 @@ CreateThread(function()
         local sleep = 1000
         if inTrunk then
             if not isKidnapped then
-                local ped = PlayerPedId()
-                local vehicle = GetEntityAttachedTo(ped)
+                local vehicle = GetEntityAttachedTo(cache.ped)
                 local drawPos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -2.5, 0)
                 local plate = QBCore.Functions.GetPlate(vehicle)
                 if DoesEntityExist(vehicle) then
@@ -238,12 +226,12 @@ CreateThread(function()
                     if IsControlJustPressed(0, 38) then
                         if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
                             local vehCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.0, 0)
-                            DetachEntity(ped, true, true)
-                            ClearPedTasks(ped)
+                            DetachEntity(cache.ped, true, true)
+                            ClearPedTasks(cache.ped)
                             inTrunk = false
                             TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, false)
-                            SetEntityCoords(ped, vehCoords.x, vehCoords.y, vehCoords.z)
-                            SetEntityCollision(ped, true, true)
+                            SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z)
+                            SetEntityCollision(cache.ped, true, true)
                             TrunkCam(false)
                         else
                             QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
