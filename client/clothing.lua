@@ -779,7 +779,7 @@ local function PlayToggleEmote(e, cb)
 	cb()
 end
 
-RegisterNetEvent('qb-radialmenu:ResetClothing', function(anim)
+function ResetClothing(anim)
 	if type(anim) == "table" then
 		anim = true
 	end
@@ -793,9 +793,11 @@ RegisterNetEvent('qb-radialmenu:ResetClothing', function(anim)
 		end
 	end
 	LastEquipped = {}
-end)
+end
 
-RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
+RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
+
+function ToggleClothing(whic, extra)
 	local which = data.id
 	local extra = data.extra
     if which == "Shirt" or which == "Pants" or which == "Bagoff" then
@@ -870,9 +872,11 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', function(data)
 		end
 	end
 	Notify(Lang:t("info.already_wearing")) return false
-end)
+end
 
-RegisterNetEvent('qb-radialmenu:ToggleProps', function(id)
+RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
+
+function ToggleProps(whic)
 	if Cooldown then return end
 	local Prop = Props[id]
 	local Ped = PlayerPedId()
@@ -903,7 +907,9 @@ RegisterNetEvent('qb-radialmenu:ToggleProps', function(id)
 		end
 		Notify(Lang:t("info.no_variants")) return false
 	end
-end)
+end
+
+RegisterNetEvent('qb-radialmenu:ToggleProps', ToggleProps)
 
 for k,v in pairs(Config.Commands) do
 	RegisterCommand(k, v.Func)
