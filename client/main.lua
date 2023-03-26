@@ -82,7 +82,11 @@ local function SetupRadialMenu()
                                 label = seatTable[i] or Lang:t("options.other_seats"),
                                 icon = 'caret-up',
                                 onSelect = function()
-                                    TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
+                                    if IsPedInAnyVehicle(cache.ped, false) then
+                                        TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
+                                    else
+                                        QBCore.Functions.Notify(Lang:t('error.not_in_vehicle'), 'error')
+                                    end
                                     lib.hideRadial()
                                 end,
                             }
@@ -163,15 +167,15 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
 end)
 
 RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
-    local Veh = GetVehiclePedIsIn(cache.ped)
-    local IsSeatFree = IsVehicleSeatFree(Veh, id)
+    local Veh = GetVehiclePedIsIn(cache.ped, false)
+    local IsSeatFree = IsVehicleSeatFree(Veh, id - 2)
     local speed = GetEntitySpeed(Veh)
-    local HasHarnass = exports['qb-smallresources']:HasHarness()
-    if not HasHarnass then
+    local HasHarness = exports['qb-smallresources']:HasHarness()
+    if not HasHarness then
         local kmh = speed * 3.6
         if IsSeatFree then
             if kmh <= 100.0 then
-                SetPedIntoVehicle(cache.ped, Veh, id)
+                SetPedIntoVehicle(cache.ped, Veh, id - 2)
                 QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = label}))
             else
                 QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
