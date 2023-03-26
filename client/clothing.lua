@@ -779,7 +779,7 @@ local function PlayToggleEmote(e, cb)
 	cb()
 end
 
-local function ResetClothing(anim)
+function ResetClothing(anim)
 	if type(anim) == "table" then
 		anim = true
 	end
