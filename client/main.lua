@@ -62,6 +62,37 @@ local function SetupRadialMenu()
     end
 end
 
+local function IsPolice()
+    return (PlayerData.job.type == "leo" and PlayerData.job.onduty == true)
+end
+
+local function IsEMS()
+    return (PlayerData.job.type == "medic" and PlayerData.job.onduty == true)
+end
+
+RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
+    if isDead then
+        local ispolice, isems = IsPolice(), IsEMS()
+        if not ispolice or isems then return lib.disableRadial(true) end
+        lib.clearRadialItems()
+        lib.addRadialItem({
+            id = 'emergencybutton2',
+            label = Lang:t("options.emergency_button"),
+            icon = 'circle-exclamation',
+            onSelect = function (_, _)
+                if ispolice then
+                    TriggerEvent('police:client:SendPoliceEmergencyAlert')
+                elseif isems then
+                    TriggerEvent('ambulance:client:SendAmbulanceEmergencyAlert')
+                end
+                lib.hideRadial()
+            end
+        })
+    else
+        lib.disableRadial(false)
+    end
+end)
+
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         SetupRadialMenu()
@@ -75,7 +106,18 @@ AddEventHandler('onResourceStop', function(resource)
 end)
 
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+    PlayerData = QBCore.Functions.GetPlayerData()
     SetupRadialMenu()
+end)
+
+-- Sets the playerdata to an empty table when the player has quit or did /logout
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+    PlayerData = {}
+end)
+
+-- This will update all the PlayerData that doesn't get updated with a specific event other than this like the metadata
+RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
+    PlayerData = val
 end)
 
 AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
@@ -105,6 +147,7 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     lib.removeRadialItem('ganginteractions')
+    PlayerData.gang = gang
     if Config.GangInteractions[gang.name] and next(Config.GangInteractions[gang.name]) then
         lib.addRadialItem(convert({
             id = 'ganginteractions',
@@ -116,8 +159,6 @@ RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
 end)
 
 exports('AddOption', function(data, id)
-    QBCore.Debug(data)
-    QBCore.Debug(id)
     data.id = data.id or id and id
     lib.addRadialItem(convert(data))
     return data.id
