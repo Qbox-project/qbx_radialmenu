@@ -924,7 +924,7 @@ local bags = {[40] = true, [41] = true, [44] = true, [45] = true}
 
 Config.ExtraCommands = {
     ["pants"] = {
-        Func = function() ToggleClothing("Pant{s", t}rue) end,
+        Func = function() ToggleClothing({"Pants", true}) end,
         Sprite = "pants",
         Desc = "Take your pants off/on",
         Name = "Pants",
@@ -932,7 +932,7 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["shirt"] = {
-        Func = function() ToggleClothing("Shir{t", t}rue) end,
+        Func = function() ToggleClothing({"Shirt", true}) end,
         Sprite = "shirt",
         Desc = "Take your shirt off/on",
         Name = "shirt",
@@ -953,7 +953,7 @@ Config.ExtraCommands = {
         Rotate = true
     },
     ["bagoff"] = {
-        Func = function() ToggleClothing("Bagof{f", t}rue) end,
+        Func = function() ToggleClothing({"Bagoff", true}) end,
         Sprite = "bagoff",
         SpriteFunc ={ function(})
             local Bag = GetPedDrawableVariation(PlayerPedId(), 5)
