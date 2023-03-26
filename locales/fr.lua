@@ -16,7 +16,7 @@ local Translations = {
         trunk_closed = "Le coffre est fermé.",
         cant_enter_trunk = "Tu ne peux pas entrer dans ce coffre.",
         already_in_trunk = "Tu es déjà dans le coffre.",
-        someone_in_trunk = "Quelqu'un est déjà dans le coffre."
+        someone_in_trunk = "Quelqu'un est déjà dans le coffre.",
         cancel_task = "Annulé",
      },
     progress = {
