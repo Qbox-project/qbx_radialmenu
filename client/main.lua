@@ -308,7 +308,7 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     PlayerData = val
 end)
 
-AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobinteractions')
     PlayerData.job = job
     if job.onduty and Config.JobInteractions[job.name] then
