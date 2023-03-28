@@ -174,21 +174,22 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
     local IsSeatFree = IsVehicleSeatFree(Veh, id - 2)
     local speed = GetEntitySpeed(Veh)
     local HasHarness = exports['qb-smallresources']:HasHarness()
-    if not HasHarness then
-        local kmh = speed * 3.6
-        if IsSeatFree then
-            if kmh <= 100.0 then
-                SetPedIntoVehicle(cache.ped, Veh, id - 2)
-                QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = label}))
-            else
-                QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
-            end
-        else
-            QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
-        end
-    else
-        QBCore.Functions.Notify(Lang:t("error.race_harness_on"), 'error')
+    if HasHarness then
+        return QBCore.Functions.Notify(Lang:t("error.race_harness_on"), 'error')
     end
+
+    if not IsSeatFree then
+        QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
+    end
+    
+    local kmh = speed * 3.6
+    
+    if kmh > 100.0 then
+        QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
+    end
+    
+    SetPedIntoVehicle(cache.ped, Veh, id - 2)
+    QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = label}))
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
