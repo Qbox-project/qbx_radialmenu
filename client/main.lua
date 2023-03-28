@@ -194,15 +194,15 @@ end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
     local veh = GetVehiclePedIsIn(cache.ped)
-    if veh ~= 0 then
-        local pl = QBCore.Functions.GetPlate(veh)
-        if pl == plate then
-            if open then
-                SetVehicleDoorOpen(veh, door, false, false)
-            else
-                SetVehicleDoorShut(veh, door, false)
-            end
-        end
+    if veh == 0 then return end
+    
+    local pl = QBCore.Functions.GetPlate(veh)
+    if pl ~= plate then return end
+    
+    if open then
+        SetVehicleDoorOpen(veh, door, false, false)
+    else
+        SetVehicleDoorShut(veh, door, false)
     end
 end)
 
