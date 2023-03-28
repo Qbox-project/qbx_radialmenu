@@ -38,14 +38,55 @@ local function convert(table)
     return { id = table.id, label = table.title or table.label, icon = table.icon, onSelect = onSelect }
 end
 
-local function SetupRadialMenu()
+local function AddVehicleSeats()
+    CreateThread(function()
+        while true do
+            Wait(50)
+            if IsControlJustPressed(0, 23) and not IsPedInAnyVehicle(cache.ped, false) then
+                local vehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
+                if vehicle then
+                    local vehicleseats = {}
+                    local seatTable = {
+                        [1] = Lang:t("options.driver_seat"),
+                        [2] = Lang:t("options.passenger_seat"),
+                        [3] = Lang:t("options.rear_left_seat"),
+                        [4] = Lang:t("options.rear_right_seat"),
+                    }
+
+                    local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+                    for i = 1, AmountOfSeats do
+                        vehicleseats[#vehicleseats+1] = {
+                            id = 'vehicleseat'..i,
+                            label = seatTable[i] or Lang:t("options.other_seats"),
+                            icon = 'caret-up',
+                            onSelect = function()
+                                if IsPedInAnyVehicle(cache.ped, false) then
+                                    TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
+                                else
+                                    QBCore.Functions.Notify(Lang:t('error.not_in_vehicle'), 'error')
+                                end
+                                lib.hideRadial()
+                            end,
+                        }
+                    end
+                    lib.registerRadial({
+                        id = 'vehicleseatsmenu',
+                        items = vehicleseats
+                    })
+                end
+            end
+        end
+    end)
+end
+
+local function SetupVehicleMenu()
     local VehicleMenu = {
         id = 'vehicle',
         label = Lang:t("options.vehicle"),
         icon = 'car',
         menu = 'vehiclemenu'
     }
-
+    
     local vehicleitems = {{
         id = 'vehicle-flip',
         label = Lang:t("options.flip"),
@@ -55,71 +96,34 @@ local function SetupRadialMenu()
             lib.hideRadial()
         end,
     }}
-
+    
     vehicleitems[#vehicleitems+1] = convert(Config.VehicleDoors)
     if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
-
+    
     if Config.VehicleSeats then
-
-        CreateThread(function()
-            while true do
-                Wait(50)
-                if IsControlJustPressed(0, 23) and not IsPedInAnyVehicle(cache.ped, false) then
-                    local vehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
-                    if vehicle then
-                        local vehicleseats = {}
-                        local seatTable = {
-                            [1] = Lang:t("options.driver_seat"),
-                            [2] = Lang:t("options.passenger_seat"),
-                            [3] = Lang:t("options.rear_left_seat"),
-                            [4] = Lang:t("options.rear_right_seat"),
-                        }
-
-                        local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
-                        for i = 1, AmountOfSeats do
-                            vehicleseats[#vehicleseats+1] = {
-                                id = 'vehicleseat'..i,
-                                label = seatTable[i] or Lang:t("options.other_seats"),
-                                icon = 'caret-up',
-                                onSelect = function()
-                                    if IsPedInAnyVehicle(cache.ped, false) then
-                                        TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
-                                    else
-                                        QBCore.Functions.Notify(Lang:t('error.not_in_vehicle'), 'error')
-                                    end
-                                    lib.hideRadial()
-                                end,
-                            }
-                        end
-                        lib.registerRadial({
-                            id = 'vehicleseatsmenu',
-                            items = vehicleseats
-                        })
-                    end
-                end
-            end
-        end)
+        AddVehicleSeats()
         vehicleitems[#vehicleitems+1] = Config.VehicleSeats
     end
-
     lib.registerRadial({
         id = 'vehiclemenu',
         items = vehicleitems
     })
     lib.addRadialItem(VehicleMenu)
+end
+
+local function SetupRadialMenu()
+    SetupVehicleMenu()
 
     for _, v in pairs(Config.MenuItems) do
         lib.addRadialItem(convert(v))
     end
-    if PlayerData.job.onduty then
-        if Config.JobInteractions[PlayerData.job.name] then
-            lib.addRadialItem(convert({
-                id = 'jobinteractions',
-                label = 'Travail',
-                icon = 'briefcase',
-                items = Config.JobInteractions[PlayerData.job.name]
-            }))
-        end
+    if PlayerData.job.onduty and Config.JobInteractions[PlayerData.job.name] then
+        lib.addRadialItem(convert({
+            id = 'jobinteractions',
+            label = 'Travail',
+            icon = 'briefcase',
+            items = Config.JobInteractions[PlayerData.job.name]
+        }))
     end
     if Config.GangInteractions[PlayerData.gang.name] then
         lib.addRadialItem(convert({
@@ -128,7 +132,6 @@ local function SetupRadialMenu()
             icon = 'skull-crossbones',
             items = Config.GangInteractions[PlayerData.gang.name]
         }))
-
     end
 end
 
