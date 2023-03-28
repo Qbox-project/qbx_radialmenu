@@ -136,11 +136,11 @@ local function SetupRadialMenu()
 end
 
 local function IsPolice()
-    return (PlayerData.job.type == "leo" and PlayerData.job.onduty == true)
+    return (PlayerData.job.type == "leo" and PlayerData.job.onduty)
 end
 
 local function IsEMS()
-    return (PlayerData.job.type == "medic" and PlayerData.job.onduty == true)
+    return (PlayerData.job.type == "medic" and PlayerData.job.onduty)
 end
 
 -- Events
