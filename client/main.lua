@@ -117,14 +117,7 @@ local function SetupRadialMenu()
     for _, v in pairs(Config.MenuItems) do
         lib.addRadialItem(convert(v))
     end
-    if PlayerData.job.onduty and Config.JobInteractions[PlayerData.job.name] then
-        lib.addRadialItem(convert({
-            id = 'jobinteractions',
-            label = 'Travail',
-            icon = 'briefcase',
-            items = Config.JobInteractions[PlayerData.job.name]
-        }))
-    end
+    
     if Config.GangInteractions[PlayerData.gang.name] then
         lib.addRadialItem(convert({
             id = 'ganginteractions',
@@ -133,6 +126,16 @@ local function SetupRadialMenu()
             items = Config.GangInteractions[PlayerData.gang.name]
         }))
     end
+
+    if not PlayerData.job.onduty then return end
+    if not Config.JobInteractions[PlayerData.job.name] then return end
+
+    lib.addRadialItem(convert({
+        id = 'jobinteractions',
+        label = 'Travail',
+        icon = 'briefcase',
+        items = Config.JobInteractions[PlayerData.job.name]
+    }))
 end
 
 local function IsPolice()
