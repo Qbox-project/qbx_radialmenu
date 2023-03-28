@@ -800,9 +800,9 @@ RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
 function ToggleClothing(data)
 	local which = data.id
 	local extra = data.extra
-    if which == "Shirt" or which == "Pants" or which == "Bagoff" then
-        extra = true
-    end
+	if which == "Shirt" or which == "Pants" or which == "Bagoff" then
+		extra = true
+	end
 	if Cooldown then return end
 	local Toggle = drawables[which] if extra then Toggle = Extras[which] end
 	local Ped = PlayerPedId()
