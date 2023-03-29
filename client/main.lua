@@ -42,7 +42,7 @@ local function AddVehicleSeats()
     CreateThread(function()
         while true do
             Wait(50)
-            if IsControlJustPressed(0, 23) and not IsPedInAnyVehicle(cache.ped, false) then
+            if IsControlJustPressed(0, 23) and not cache.vehicle then
                 local vehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
                 if vehicle then
                     local vehicleseats = {}
