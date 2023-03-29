@@ -60,7 +60,7 @@ local function AddVehicleSeats()
                             label = seatTable[i] or Lang:t("options.other_seats"),
                             icon = 'caret-up',
                             onSelect = function()
-                                if IsPedInAnyVehicle(cache.ped, false) then
+                                if cache.vehicle then
                                     TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
                                 else
                                     QBCore.Functions.Notify(Lang:t('error.not_in_vehicle'), 'error')
