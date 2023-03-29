@@ -215,7 +215,7 @@ end)
 
 RegisterNetEvent('qb-radialmenu:client:openDoor', function(id)
     local door = id
-    local closestVehicle = GetVehiclePedIsIn(cache.ped, false) ~= 0 and GetVehiclePedIsIn(cache.ped, false) or QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
+    local closestVehicle = cache.vehicle or QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
     if closestVehicle ~= 0 then
         if closestVehicle ~= GetVehiclePedIsIn(cache.ped, false) then
             local plate = QBCore.Functions.GetPlate(closestVehicle)
