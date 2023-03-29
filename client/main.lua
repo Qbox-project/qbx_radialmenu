@@ -121,7 +121,7 @@ local function SetupRadialMenu()
     if Config.GangInteractions[PlayerData.gang.name] then
         lib.addRadialItem(convert({
             id = 'ganginteractions',
-            label = 'Gang',
+            label = Lang:t("general.gang_radial"),
             icon = 'skull-crossbones',
             items = Config.GangInteractions[PlayerData.gang.name]
         }))
@@ -132,7 +132,7 @@ local function SetupRadialMenu()
 
     lib.addRadialItem(convert({
         id = 'jobinteractions',
-        label = 'Travail',
+        label = Lang:t("general.job_radial"),
         icon = 'briefcase',
         items = Config.JobInteractions[PlayerData.job.name]
     }))
@@ -321,7 +321,7 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     if job.onduty and Config.JobInteractions[job.name] then
        lib.addRadialItem(convert({
             id = 'jobinteractions',
-            label = 'Travail',
+            label = Lang:t("general.job_radial"),
             icon = 'briefcase',
             items = Config.JobInteractions[job.name]
         }))
@@ -333,7 +333,7 @@ RegisterNetEvent('QBCore:Client:SetDuty', function(onduty)
     if onduty and Config.JobInteractions[PlayerData.job.name] then
        lib.addRadialItem(convert({
             id = 'jobinteractions',
-            label = 'Travail',
+            label = Lang:t("general.job_radial"),
             icon = 'briefcase',
             items = Config.JobInteractions[PlayerData.job.name]
         }))
@@ -346,7 +346,7 @@ RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     if Config.GangInteractions[gang.name] and next(Config.GangInteractions[gang.name]) then
         lib.addRadialItem(convert({
             id = 'ganginteractions',
-            label = 'Gang',
+            label = Lang:t("general.gang_radial"),
             icon = 'skull-crossbones',
             items = Config.GangInteractions[gang.name]
         }))
