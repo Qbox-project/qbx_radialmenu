@@ -246,7 +246,7 @@ end)
 
 RegisterNetEvent('radialmenu:client:setExtra', function(id)
     local extra = id
-    local veh = GetVehiclePedIsIn(cache.ped)
+    local veh = cache.vehicle
     if veh ~= nil then
         if GetPedInVehicleSeat(veh, -1) == cache.ped then
             SetVehicleAutoRepairDisabled(veh, true) -- Forces Auto Repair off when Toggling Extra [GTA 5 Niche Issue]
