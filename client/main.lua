@@ -173,7 +173,7 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
 end)
 
 RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
-    local Veh = GetVehiclePedIsIn(cache.ped, false)
+    local Veh = cache.vehicle
     local IsSeatFree = IsVehicleSeatFree(Veh, id - 2)
     local speed = GetEntitySpeed(Veh)
     local HasHarness = exports['qb-smallresources']:HasHarness()
