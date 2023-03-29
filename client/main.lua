@@ -268,7 +268,7 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
 end)
 
 RegisterNetEvent('radialmenu:flipVehicle', function()
-    if IsPedInAnyVehicle(cache.ped, false) then return end
+    if cache.vehicle then return end
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
     QBCore.Functions.Progressbar("flipping_car", Lang:t("progress.flipping_car"), Config.Fliptime, false, true, {
         disableMovement = true,
