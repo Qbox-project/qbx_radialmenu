@@ -16,6 +16,7 @@ local Translations = {
         trunk_closed = "The trunk is closed",
         cant_enter_trunk = "You can't get in this trunk",
         already_in_trunk = "You're already in the trunk",
+        cancel_task = "cancelled",
         someone_in_trunk = "Someone is already in the trunk"
     },
     progress = {
@@ -46,6 +47,8 @@ local Translations = {
         putintrunk_command_desc = "Put Player In Trunk"
     },
     options = {
+        flip = 'Flip vehicle',
+        vehicle = 'Vehicle',
         emergency_button = "Emergency Button",
         driver_seat = "Drivers Seat",
         passenger_seat = "Passenger Seat",

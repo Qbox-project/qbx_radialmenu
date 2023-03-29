@@ -175,6 +175,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Hair', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Ear',
@@ -182,6 +183,7 @@ Config.MenuItems = {
                         icon = 'ear-deaf',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleProps',
+                        arg = 'Ear',
                         shouldClose = true
                     }, {
                         id = 'Neck',
@@ -189,6 +191,7 @@ Config.MenuItems = {
                         icon = 'user-tie',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Neck', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Top',
@@ -196,6 +199,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Top', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Shirt',
@@ -203,6 +207,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Shirt', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Pants',
@@ -210,6 +215,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Pants', extra = false},
                         shouldClose = true
                     }, {
                         id = 'Shoes',
@@ -217,6 +223,7 @@ Config.MenuItems = {
                         icon = 'shoe-prints',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
+                        arg = {id = 'Shoes', extra = false},
                         shouldClose = true
                     }, {
                         id = 'meer',
@@ -229,6 +236,7 @@ Config.MenuItems = {
                                 icon = 'hat-cowboy-side',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Hat',
                                 shouldClose = true
                             }, {
                                 id = 'Glasses',
@@ -236,6 +244,7 @@ Config.MenuItems = {
                                 icon = 'glasses',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Glasses',
                                 shouldClose = true
                             }, {
                                 id = 'Visor',
@@ -243,6 +252,7 @@ Config.MenuItems = {
                                 icon = 'hat-cowboy-side',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Visor',
                                 shouldClose = true
                             }, {
                                 id = 'Mask',
@@ -250,6 +260,7 @@ Config.MenuItems = {
                                 icon = 'masks-theater',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Mask', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Vest',
@@ -257,6 +268,7 @@ Config.MenuItems = {
                                 icon = 'vest',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Vest', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Bag',
@@ -264,6 +276,7 @@ Config.MenuItems = {
                                 icon = 'bag-shopping',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Bag', extra = true},
                                 shouldClose = true
                             }, {
                                 id = 'Bracelet',
@@ -271,6 +284,7 @@ Config.MenuItems = {
                                 icon = 'user',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Bracelet',
                                 shouldClose = true
                             }, {
                                 id = 'Watch',
@@ -278,6 +292,7 @@ Config.MenuItems = {
                                 icon = 'stopwatch',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleProps',
+                                arg = 'Watch',
                                 shouldClose = true
                             }, {
                                 id = 'Gloves',
@@ -285,6 +300,7 @@ Config.MenuItems = {
                                 icon = 'mitten',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
+                                arg = {id = 'Gloves', extra = true},
                                 shouldClose = true
                             }
                         }
@@ -306,6 +322,7 @@ Config.VehicleDoors = {
             icon = 'car-side',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 0,
             shouldClose = false
         }, {
             id = 'door4',
@@ -313,6 +330,7 @@ Config.VehicleDoors = {
             icon = 'car',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 4,
             shouldClose = false
         }, {
             id = 'door1',
@@ -320,6 +338,7 @@ Config.VehicleDoors = {
             icon = 'car-side',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 1,
             shouldClose = false
         }, {
             id = 'door3',
@@ -327,6 +346,7 @@ Config.VehicleDoors = {
             icon = 'car-side',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 3,
             shouldClose = false
         }, {
             id = 'door5',
@@ -334,6 +354,7 @@ Config.VehicleDoors = {
             icon = 'car',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 5,
             shouldClose = false
         }, {
             id = 'door2',
@@ -341,6 +362,7 @@ Config.VehicleDoors = {
             icon = 'car-side',
             type = 'client',
             event = 'qb-radialmenu:client:openDoor',
+            arg = 2,
             shouldClose = false
         }
     }
@@ -356,91 +378,104 @@ Config.VehicleExtras = {
             title = 'Extra 1',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 1,
             shouldClose = false
         }, {
             id = 'extra2',
             title = 'Extra 2',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 2,
             shouldClose = false
         }, {
             id = 'extra3',
             title = 'Extra 3',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 3,
             shouldClose = false
         }, {
             id = 'extra4',
             title = 'Extra 4',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 4,
             shouldClose = false
         }, {
             id = 'extra5',
             title = 'Extra 5',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 5,
             shouldClose = false
         }, {
             id = 'extra6',
             title = 'Extra 6',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 6,
             shouldClose = false
         }, {
             id = 'extra7',
             title = 'Extra 7',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 7,
             shouldClose = false
         }, {
             id = 'extra8',
             title = 'Extra 8',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 8,
             shouldClose = false
         }, {
             id = 'extra9',
             title = 'Extra 9',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 9,
             shouldClose = false
         }, {
             id = 'extra10',
             title = 'Extra 10',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 10,
             shouldClose = false
         }, {
             id = 'extra11',
             title = 'Extra 11',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 11,
             shouldClose = false
         }, {
             id = 'extra12',
             title = 'Extra 12',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 12,
             shouldClose = false
         }, {
             id = 'extra13',
             title = 'Extra 13',
             icon = 'box-open',
             type = 'client',
-            event = 'qb-radialmenu:client:setExtra',
+            event = 'radialmenu:client:setExtra',
+            arg = 13,
             shouldClose = false
         }
     }
@@ -448,9 +483,9 @@ Config.VehicleExtras = {
 
 Config.VehicleSeats = {
     id = 'vehicleseats',
-    title = 'Vehicle Seats',
+    label = 'Vehicle Seats',
     icon = 'chair',
-    items = {}
+    menu = 'vehicleseatsmenu'
 }
 
 Config.JobInteractions = {
@@ -783,88 +818,86 @@ Config.TrunkClasses = {
     [21] = {allowed = true, x = 0.0, y = -1.0, z = 0.25} -- Trains
 }
 
-Config.ExtrasEnabled = true
-
 Config.Commands = {
     ["top"] = {
-        Func = function() ToggleClothing("Top") end,
+        Func = function() ToggleClothing({"Top"}) end,
         Sprite = "top",
         Desc = "Take your shirt off/on",
         Button = 1,
         Name = "Torso"
     },
     ["gloves"] = {
-        Func = function() ToggleClothing("gloves") end,
+        Func = function() ToggleClothing({"gloves"}) end,
         Sprite = "gloves",
         Desc = "Take your gloves off/on",
         Button = 2,
         Name = "Gloves"
     },
     ["visor"] = {
-        Func = function() ToggleProps("visor") end,
+        Func = function() ToggleProps({"visor"}) end,
         Sprite = "visor",
         Desc = "Toggle hat variation",
         Button = 3,
         Name = "Visor"
     },
     ["bag"] = {
-        Func = function() ToggleClothing("Bag") end,
+        Func = function() ToggleClothing({"Bag"}) end,
         Sprite = "bag",
         Desc = "Opens or closes your bag",
         Button = 8,
         Name = "Bag"
     },
     ["shoes"] = {
-        Func = function() ToggleClothing("Shoes") end,
+        Func = function() ToggleClothing({"Shoes"}) end,
         Sprite = "shoes",
         Desc = "Take your shoes off/on",
         Button = 5,
         Name = "Shoes"
     },
     ["vest"] = {
-        Func = function() ToggleClothing("Vest") end,
+        Func = function() ToggleClothing({"Vest"}) end,
         Sprite = "vest",
         Desc = "Take your vest off/on",
         Button = 14,
         Name = "Vest"
     },
     ["hair"] = {
-        Func = function() ToggleClothing("hair") end,
+        Func = function() ToggleClothing({"hair"}) end,
         Sprite = "hair",
         Desc = "Put your hair up/down/in a bun/ponytail.",
         Button = 7,
         Name = "Hair"
     },
     ["hat"] = {
-        Func = function() ToggleProps("Hat") end,
+        Func = function() ToggleProps({"Hat"}) end,
         Sprite = "hat",
         Desc = "Take your hat off/on",
         Button = 4,
         Name = "Hat"
     },
     ["glasses"] = {
-        Func = function() ToggleProps("Glasses") end,
+        Func = function() ToggleProps({"Glasses"}) end,
         Sprite = "glasses",
         Desc = "Take your glasses off/on",
         Button = 9,
         Name = "Glasses"
     },
     ["ear"] = {
-        Func = function() ToggleProps("Ear") end,
+        Func = function() ToggleProps({"Ear"}) end,
         Sprite = "ear",
         Desc = "Take your ear accessory off/on",
         Button = 10,
         Name = "Ear"
     },
     ["neck"] = {
-        Func = function() ToggleClothing("Neck") end,
+        Func = function() ToggleClothing({"Neck"}) end,
         Sprite = "neck",
         Desc = "Take your neck accessory off/on",
         Button = 11,
         Name = "Neck"
     },
     ["watch"] = {
-        Func = function() ToggleProps("Watch") end,
+        Func = function() ToggleProps({"Watch"}) end,
         Sprite = "watch",
         Desc = "Take your watch off/on",
         Button = 12,
@@ -872,14 +905,14 @@ Config.Commands = {
         Rotation = 5.0
     },
     ["bracelet"] = {
-        Func = function() ToggleProps("Bracelet") end,
+        Func = function() ToggleProps({"Bracelet"}) end,
         Sprite = "bracelet",
         Desc = "Take your bracelet off/on",
         Button = 13,
         Name = "Bracelet"
     },
     ["mask"] = {
-        Func = function() ToggleClothing("Mask") end,
+        Func = function() ToggleClothing({"Mask"}) end,
         Sprite = "mask",
         Desc = "Take your mask off/on",
         Button = 6,
@@ -891,7 +924,7 @@ local bags = {[40] = true, [41] = true, [44] = true, [45] = true}
 
 Config.ExtraCommands = {
     ["pants"] = {
-        Func = function() ToggleClothing("Pants", true) end,
+        Func = function() ToggleClothing({"Pants", true}) end,
         Sprite = "pants",
         Desc = "Take your pants off/on",
         Name = "Pants",
@@ -899,7 +932,7 @@ Config.ExtraCommands = {
         OffsetY = 0.0
     },
     ["shirt"] = {
-        Func = function() ToggleClothing("Shirt", true) end,
+        Func = function() ToggleClothing({"Shirt", true}) end,
         Sprite = "shirt",
         Desc = "Take your shirt off/on",
         Name = "shirt",
@@ -920,7 +953,7 @@ Config.ExtraCommands = {
         Rotate = true
     },
     ["bagoff"] = {
-        Func = function() ToggleClothing("Bagoff", true) end,
+        Func = function() ToggleClothing({"Bagoff", true}) end,
         Sprite = "bagoff",
         SpriteFunc = function()
             local Bag = GetPedDrawableVariation(PlayerPedId(), 5)

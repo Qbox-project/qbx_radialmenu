@@ -797,16 +797,12 @@ end
 
 RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
 
-function ToggleClothing(whic, extra)
-	local which = whic
-	if type(whic) == "table" then
-		which = tostring(whic.id)
+function ToggleClothing(data)
+	local which = data.id
+	local extra = data.extra
+	if which == "Shirt" or which == "Pants" or which == "Bagoff" then
+		extra = true
 	end
-	Wait(50)
-
-    if which == "Shirt" or which == "Pants" or which == "Bagoff" then
-        extra = true
-    end
 	if Cooldown then return end
 	local Toggle = drawables[which] if extra then Toggle = Extras[which] end
 	local Ped = PlayerPedId()
@@ -880,15 +876,9 @@ end
 
 RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
-function ToggleProps(whic)
-	local which = whic
-	if type(whic) == "table" then
-		which = tostring(whic.id)
-	end
-	Wait(50)
-
+function ToggleProps(id)
 	if Cooldown then return end
-	local Prop = Props[which]
+	local Prop = Props[id]
 	local Ped = PlayerPedId()
 	local Cur = { -- Lets get out currently equipped prop.
 		Id = Prop.Prop,
@@ -898,11 +888,11 @@ function ToggleProps(whic)
 	}
 	if not Prop.Variants then
 		if Cur.Prop ~= -1 then -- If we currently are wearing this prop, remove it and save the one we were wearing into the LastEquipped table.
-			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[which] = Cur ClearPedProp(Ped, Prop.Prop) end) return true
+			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[id] = Cur ClearPedProp(Ped, Prop.Prop) end) return true
 		else
-			local Last = LastEquipped[which] -- Detect that we have already taken our prop off, lets put it back on.
+			local Last = LastEquipped[id] -- Detect that we have already taken our prop off, lets put it back on.
 			if Last then
-				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[which] = false return true
+				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[id] = false return true
 			end
 		end
 		Notify(Lang:t("info.nothing_to_remove")) return false

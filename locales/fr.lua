@@ -2,8 +2,8 @@ local Translations = {
     error = {
         no_people_nearby = "Aucun joueur n'est à proximité.",
         no_vehicle_found = "Aucun véhicule n'a été retrouvé.",
-        extra_deactivated = "%{extra} supplémentaires ont été désactivés.",
-        extra_not_present = "%{extra} supplémentaires ne sont pas présents sur ce véhicule.",
+        extra_deactivated = "L'extra %{extra} ont été désactivés.",
+        extra_not_present = "L'extra %{extra} ne sont pas présents sur ce véhicule.",
         not_driver = "Tu n'es pas le conducteur de véhicule.",
         vehicle_driving_fast = "Ce véhicule va trop vite.",
         seat_occupied = "Ce siège est occupé.",
@@ -16,10 +16,14 @@ local Translations = {
         trunk_closed = "Le coffre est fermé.",
         cant_enter_trunk = "Tu ne peux pas entrer dans ce coffre.",
         already_in_trunk = "Tu es déjà dans le coffre.",
-        someone_in_trunk = "Quelqu'un est déjà dans le coffre."
+        someone_in_trunk = "Quelqu'un est déjà dans le coffre.",
+        cancel_task = "Annulé",
+     },
+    progress = {
+        flipping_car = "Retourne le véhicule.."
     },
     success = {
-        extra_activated = "%{extra} supplémentaires ont été activés.",
+        extra_activated = "L'extra %{extra} ont été activés.",
         entered_trunk = "Tu es dans le coffre."
     },
     info = {
@@ -43,12 +47,14 @@ local Translations = {
         putintrunk_command_desc = "Mettre le Joueur dans le Coffre"
     },
     options = {
-        emergency_button = "Le Bouton d'Urgence",
-        driver_seat = "Le Siège du Conducteur",
-        passenger_seat = "Le Siège Passager",
-        other_seats = "L'Autre Siège",
-        rear_left_seat = "Le Siège Arrière Gauche",
-        rear_right_seat = "Le Siège Arrière Droit"
+        flip = 'Retourner le Véhicule',
+        vehicle = 'Véhicule',
+        emergency_button = "Bouton d'Urgence",
+        driver_seat = "Siège du Conducteur",
+        passenger_seat = "Siège Passager",
+        other_seats = "Autre Siège",
+        rear_left_seat = "Siège Arrière Gauche",
+        rear_right_seat = "Siège Arrière Droit"
     },
 }
 
