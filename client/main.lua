@@ -182,13 +182,13 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
     end
 
     if not IsSeatFree then
-        QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
+       return QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
     end
     
     local kmh = speed * 3.6
     
     if kmh > 100.0 then
-        QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
+       return QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
     end
     
     SetPedIntoVehicle(cache.ped, Veh, id - 2)
