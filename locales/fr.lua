@@ -44,7 +44,9 @@ local Translations = {
         close_trunk_button = "[G] Fermer le Coffre",
         open_trunk_button = "[G] Ouvrir le Coffre",
         getintrunk_command_desc = "Entrer dans le Coffre",
-        putintrunk_command_desc = "Mettre le Joueur dans le Coffre"
+        putintrunk_command_desc = "Mettre le Joueur dans le Coffre",
+        gang_radial = "Gang",
+        job_radial = "Travail"
     },
     options = {
         flip = 'Retourner le Véhicule',

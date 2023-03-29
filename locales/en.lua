@@ -44,7 +44,9 @@ local Translations = {
         close_trunk_button = "[G] Close the trunk",
         open_trunk_button = "[G] Open the trunk",
         getintrunk_command_desc = "Get In Trunk",
-        putintrunk_command_desc = "Put Player In Trunk"
+        putintrunk_command_desc = "Put Player In Trunk",
+        gang_radial = "Gang",
+        job_radial = "Job"
     },
     options = {
         flip = 'Flip vehicle',
