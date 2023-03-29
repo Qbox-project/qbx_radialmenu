@@ -196,8 +196,8 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
-    local veh = GetVehiclePedIsIn(cache.ped)
-    if veh == 0 then return end
+    local veh = cache.vehicle
+    if not veh then return end
     
     local pl = QBCore.Functions.GetPlate(veh)
     if pl ~= plate then return end
