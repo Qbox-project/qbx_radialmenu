@@ -18,10 +18,14 @@ QBCore.Functions.CreateCallback('qb-trunk:server:getTrunkBusy', function(_, cb, 
     cb(false)
 end)
 
-QBCore.Commands.Add("getintrunk", Lang:t("general.getintrunk_command_desc"), {}, false, function(source)
+lib.addCommand('getintrunk', {
+    help = Lang:t("general.getintrunk_command_desc"),
+}, function(source, args, raw)
     TriggerClientEvent('qb-trunk:client:GetIn', source)
 end)
 
-QBCore.Commands.Add("putintrunk", Lang:t("general.putintrunk_command_desc"), {}, false, function(source)
+lib.addCommand('putintrunk', {
+    help = Lang:t("general.putintrunk_command_desc"),
+}, function(source, args, raw)
     TriggerClientEvent('qb-trunk:server:KidnapTrunk', source)
 end)
