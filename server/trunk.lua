@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local trunkBusy = {}
 
 RegisterNetEvent('qb-radialmenu:trunk:server:Door', function(open, plate, door)
