@@ -769,10 +769,9 @@ LastEquipped = {}
 Cooldown = false
 
 local function PlayToggleEmote(e, cb)
-	local Ped = PlayerPedId()
 	while not HasAnimDictLoaded(e.Dict) do RequestAnimDict(e.Dict) Wait(100) end
-	if IsPedInAnyVehicle(Ped) then e.Move = 51 end
-	TaskPlayAnim(Ped, e.Dict, e.Anim, 3.0, 3.0, e.Dur, e.Move, 0, false, false, false)
+	if IsPedInAnyVehicle(cache.ped) then e.Move = 51 end
+	TaskPlayAnim(cache.ped, e.Dict, e.Anim, 3.0, 3.0, e.Dur, e.Move, 0, false, false, false)
 	local Pause = e.Dur-500 if Pause < 500 then Pause = 500 end
 	IncurCooldown(Pause)
 	Wait(Pause) -- Lets wait for the emote to play for a bit then do the callback.
@@ -783,13 +782,12 @@ function ResetClothing(anim)
 	if type(anim) == "table" then
 		anim = true
 	end
-	local Ped = PlayerPedId()
 	local e = drawables.Top.Emote
-	if anim then TaskPlayAnim(Ped, e.Dict, e.Anim, 3.0, 3.0, 3000, e.Move, 0, false, false, false) end
+	if anim then TaskPlayAnim(cache.ped, e.Dict, e.Anim, 3.0, 3.0, 3000, e.Move, 0, false, false, false) end
 	for _, v in pairs(LastEquipped) do
 		if v then
-			if v.Drawable then SetPedComponentVariation(Ped, v.Id, v.Drawable, v.Texture, 0)
-			elseif v.Prop then ClearPedProp(Ped, v.Id) SetPedPropIndex(Ped, v.Id, v.Prop, v.Texture, true) end
+			if v.Drawable then SetPedComponentVariation(cache.ped, v.Id, v.Drawable, v.Texture, 0)
+			elseif v.Prop then ClearPedProp(cache.ped, v.Id) SetPedPropIndex(cache.ped, v.Id, v.Prop, v.Texture, true) end
 		end
 	end
 	LastEquipped = {}
@@ -805,14 +803,13 @@ function ToggleClothing(data)
 	end
 	if Cooldown then return end
 	local Toggle = drawables[which] if extra then Toggle = Extras[which] end
-	local Ped = PlayerPedId()
 	local Cur = { -- Lets check what we are currently wearing.
-		Drawable = GetPedDrawableVariation(Ped, Toggle.Drawable),
+		Drawable = GetPedDrawableVariation(cache.ped, Toggle.Drawable),
 		Id = Toggle.Drawable,
-		Ped = Ped,
-		Texture = GetPedTextureVariation(Ped, Toggle.Drawable),
+		Ped = cache.ped,
+		Texture = GetPedTextureVariation(cache.ped, Toggle.Drawable),
 	}
-	local Gender = IsMpPed(Ped)
+	local Gender = IsMpPed(cache.ped)
 	if which ~= "Mask" then
 		if not Gender then Notify(Lang:t("info.wrong_ped")) return false end -- We cancel the command here if the person is not using a multiplayer model.
 	end
@@ -821,16 +818,16 @@ function ToggleClothing(data)
 		for k,v in pairs(Table) do
 			if not Toggle.Remember then
 				if k == Cur.Drawable then
-					PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+					PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
 				end
 			else
 				if not LastEquipped[which] then
 					if k == Cur.Drawable then
-						PlayToggleEmote(Toggle.Emote, function() LastEquipped[which] = Cur SetPedComponentVariation(Ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
+						PlayToggleEmote(Toggle.Emote, function() LastEquipped[which] = Cur SetPedComponentVariation(cache.ped, Toggle.Drawable, v, Cur.Texture, 0) end) return true
 					end
 				else
 					local Last = LastEquipped[which]
-					PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(Ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0) LastEquipped[which] = false end) return true
+					PlayToggleEmote(Toggle.Emote, function() SetPedComponentVariation(cache.ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0) LastEquipped[which] = false end) return true
 				end
 			end
 		end
@@ -840,12 +837,12 @@ function ToggleClothing(data)
 			if Cur.Drawable ~= Table then
 				PlayToggleEmote(Toggle.Emote, function()
 					LastEquipped[which] = Cur
-					SetPedComponentVariation(Ped, Toggle.Drawable, Table, 0, 0)
+					SetPedComponentVariation(cache.ped, Toggle.Drawable, Table, 0, 0)
 					if Toggle.Table.Extra then
 						local extraToggled = Toggle.Table.Extra
 						for _, v in pairs(extraToggled) do
-							local ExtraCur = {Drawable = GetPedDrawableVariation(Ped, v.Drawable),  Texture = GetPedTextureVariation(Ped, v.Drawable), Id = v.Drawable}
-							SetPedComponentVariation(Ped, v.Drawable, v.Id, v.Tex, 0)
+							local ExtraCur = {Drawable = GetPedDrawableVariation(cache.ped, v.Drawable),  Texture = GetPedTextureVariation(cache.ped, v.Drawable), Id = v.Drawable}
+							SetPedComponentVariation(cache.ped, v.Drawable, v.Id, v.Tex, 0)
 							LastEquipped[v.Name] = ExtraCur
 						end
 					end
@@ -855,14 +852,14 @@ function ToggleClothing(data)
 		else
 			local Last = LastEquipped[which]
 			PlayToggleEmote(Toggle.Emote, function()
-				SetPedComponentVariation(Ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0)
+				SetPedComponentVariation(cache.ped, Toggle.Drawable, Last.Drawable, Last.Texture, 0)
 				LastEquipped[which] = false
 				if Toggle.Table.Extra then
 					local extraToggled = Toggle.Table.Extra
 					for _, v in pairs(extraToggled) do
 						if LastEquipped[v.Name] then
 							Last = LastEquipped[v.Name]
-							SetPedComponentVariation(Ped, Last.Id, Last.Drawable, Last.Texture, 0)
+							SetPedComponentVariation(cache.ped, Last.Id, Last.Drawable, Last.Texture, 0)
 							LastEquipped[v.Name] = false
 						end
 					end
@@ -879,30 +876,29 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 function ToggleProps(id)
 	if Cooldown then return end
 	local Prop = Props[id]
-	local Ped = PlayerPedId()
 	local Cur = { -- Lets get out currently equipped prop.
 		Id = Prop.Prop,
-		Ped = Ped,
-		Prop = GetPedPropIndex(Ped, Prop.Prop),
-		Texture = GetPedPropTextureIndex(Ped, Prop.Prop),
+		Ped = cache.ped,
+		Prop = GetPedPropIndex(cache.ped, Prop.Prop),
+		Texture = GetPedPropTextureIndex(cache.ped, Prop.Prop),
 	}
 	if not Prop.Variants then
 		if Cur.Prop ~= -1 then -- If we currently are wearing this prop, remove it and save the one we were wearing into the LastEquipped table.
-			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[id] = Cur ClearPedProp(Ped, Prop.Prop) end) return true
+			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[id] = Cur ClearPedProp(cache.ped, Prop.Prop) end) return true
 		else
 			local Last = LastEquipped[id] -- Detect that we have already taken our prop off, lets put it back on.
 			if Last then
-				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[id] = false return true
+				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(cache.ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[id] = false return true
 			end
 		end
 		Notify(Lang:t("info.nothing_to_remove")) return false
 	else
-		local Gender = IsMpPed(Ped)
+		local Gender = IsMpPed(cache.ped)
 		if not Gender then Notify(Lang:t("info.wrong_ped")) return false end -- We dont really allow for variants on ped models, Its possible, but im pretty sure 95% of ped models dont really have variants.
 		variations = Prop.Variants[Gender]
 		for k,v in pairs(variations) do
 			if Cur.Prop == k then
-				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(Ped, Prop.Prop, v, Cur.Texture, true) end) return true
+				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(cache.ped, Prop.Prop, v, Cur.Texture, true) end) return true
 			end
 		end
 		Notify(Lang:t("info.no_variants")) return false
@@ -948,11 +944,10 @@ function IsMpPed(ped)
 end
 
 RegisterNetEvent('dpc:EquipLast', function()
-	local Ped = PlayerPedId()
 	for _, v in pairs(LastEquipped) do
 		if v then
-			if v.Drawable then SetPedComponentVariation(Ped, v.ID, v.Drawable, v.Texture, 0)
-			elseif v.Prop then ClearPedProp(Ped, v.ID) SetPedPropIndex(Ped, v.ID, v.Prop, v.Texture, true) end
+			if v.Drawable then SetPedComponentVariation(cache.ped, v.ID, v.Drawable, v.Texture, 0)
+			elseif v.Prop then ClearPedProp(cache.ped, v.ID) SetPedPropIndex(cache.ped, v.ID, v.Prop, v.Texture, true) end
 		end
 	end
 	LastEquipped = {}
