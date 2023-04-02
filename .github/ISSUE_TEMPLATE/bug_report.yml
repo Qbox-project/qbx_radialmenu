@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thank you for taking the time to fill out a bug report!
-        Please use our Discord Server to ask questions and receive support: https://discord.gg/qbox
+        Please use our Discord Server to ask questions and receive support: https://discord.gg/Z6Whda5hHA
   - type: input
     id: summary
     attributes:
@@ -59,13 +59,13 @@ body:
     attributes:
       label: Custom Resources
       description: Are you using custom resources? Which ones?
-      placeholder: e.g. zdiscord, ox_target
+      placeholder: e.g. zdiscord, qb-target
     validations:
       required: true
   - type: input
     id: renamed
     attributes:
       label: Resource Rename
-      description: Have you renamed this resource from `qbx-` to something custom?
+      description: Have you renamed this resource from `qb-` to something custom?
     validations:
       required: true
