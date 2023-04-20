@@ -175,7 +175,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Hair', extra = false},
+                        arg = {id = 'Hair'},
                         shouldClose = true
                     }, {
                         id = 'Ear',
@@ -191,7 +191,7 @@ Config.MenuItems = {
                         icon = 'user-tie',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Neck', extra = false},
+                        arg = {id = 'Neck'},
                         shouldClose = true
                     }, {
                         id = 'Top',
@@ -199,7 +199,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Top', extra = false},
+                        arg = {id = 'Top'},
                         shouldClose = true
                     }, {
                         id = 'Shirt',
@@ -207,7 +207,7 @@ Config.MenuItems = {
                         icon = 'shirt',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Shirt', extra = false},
+                        arg = {id = 'Shirt'},
                         shouldClose = true
                     }, {
                         id = 'Pants',
@@ -215,7 +215,7 @@ Config.MenuItems = {
                         icon = 'user',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Pants', extra = false},
+                        arg = {id = 'Pants'},
                         shouldClose = true
                     }, {
                         id = 'Shoes',
@@ -223,7 +223,7 @@ Config.MenuItems = {
                         icon = 'shoe-prints',
                         type = 'client',
                         event = 'qb-radialmenu:ToggleClothing',
-                        arg = {id = 'Shoes', extra = false},
+                        arg = {id = 'Shoes'},
                         shouldClose = true
                     }, {
                         id = 'meer',
@@ -260,7 +260,7 @@ Config.MenuItems = {
                                 icon = 'masks-theater',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
-                                arg = {id = 'Mask', extra = true},
+                                arg = {id = 'Mask'},
                                 shouldClose = true
                             }, {
                                 id = 'Vest',
@@ -268,7 +268,7 @@ Config.MenuItems = {
                                 icon = 'vest',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
-                                arg = {id = 'Vest', extra = true},
+                                arg = {id = 'Vest'},
                                 shouldClose = true
                             }, {
                                 id = 'Bag',
@@ -276,7 +276,7 @@ Config.MenuItems = {
                                 icon = 'bag-shopping',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
-                                arg = {id = 'Bag', extra = true},
+                                arg = {id = 'Bag'},
                                 shouldClose = true
                             }, {
                                 id = 'Bracelet',
@@ -300,7 +300,7 @@ Config.MenuItems = {
                                 icon = 'mitten',
                                 type = 'client',
                                 event = 'qb-radialmenu:ToggleClothing',
-                                arg = {id = 'Gloves', extra = true},
+                                arg = {id = 'Gloves'},
                                 shouldClose = true
                             }
                         }
