@@ -33,9 +33,8 @@ local function convert(table)
     end
     local onSelect = table.onSelect or function()
         if action then action() end
-        if table.shouldClose then lib.hideRadial() end
     end
-    return { id = table.id, label = table.title or table.label, icon = table.icon, onSelect = onSelect }
+    return { id = table.id, label = table.title or table.label, icon = table.icon, onSelect = onSelect, keepOpen = not table.shouldClose or false }
 end
 
 local function AddVehicleSeats()
