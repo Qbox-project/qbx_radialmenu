@@ -655,7 +655,7 @@ local drawables = {
 		Table = variations.jackets,
 		Emote = {Dict = "missmic4", Anim = "michael_tux_fidget", Move = 51, Dur = 1500}
 	},
-	["gloves"] = {
+	["Gloves"] = {
 		Drawable = 3,
 		Table = variations.gloves,
 		Remember = true,
@@ -686,7 +686,7 @@ local drawables = {
 		Table = {Standalone = true, male = 0, female = 0 },
 		Emote = {Dict = "mp_masks@standard_car@ds@", Anim = "put_on_mask", Move = 51, Dur = 800}
 	},
-	["hair"] = {
+	["Hair"] = {
 		Drawable = 2,
 		Table = variations.hair,
 		Remember = true,
@@ -720,7 +720,7 @@ local Extras = {
 }
 
 local Props = {
-	["visor"] = {
+	["Visor"] = {
 		Prop = 0,
 		Variants = variations.visor,
 		Emote = {
@@ -802,7 +802,8 @@ function ToggleClothing(data)
 		extra = true
 	end
 	if Cooldown then return end
-	local Toggle = drawables[which] if extra then Toggle = Extras[which] end
+	local Toggle = drawables[which]
+	if extra then Toggle = Extras[which] end
 	local Cur = { -- Lets check what we are currently wearing.
 		Drawable = GetPedDrawableVariation(cache.ped, Toggle.Drawable),
 		Id = Toggle.Drawable,
