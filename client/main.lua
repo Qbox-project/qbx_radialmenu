@@ -2,39 +2,39 @@ QBCore = exports['qbx-core']:GetCoreObject()
 PlayerData = QBCore.Functions.GetPlayerData()
 
 -- Functions
-local function convert(table)
-    if table.items then
+local function convert(tbl)
+    if tbl.items then
         local items = {}
-        for _, v in pairs(table.items) do
+        for _, v in pairs(tbl.items) do
             items[#items+1] = convert(v)
         end
         lib.registerRadial({
-            id = table.id..'_menu',
+            id = tbl.id..'_menu',
             items = items
         })
-        return { id = table.id, label = table.title or table.label, icon = table.icon, menu = table.id..'_menu' }
+        return { id = tbl.id, label = tbl.title or tbl.label, icon = tbl.icon, menu = tbl.id..'_menu' }
     end
     local action
-    if table.event then
-        if table.type == 'client' then
-            action = function() TriggerEvent(table.event, table.arg or nil) end
-        elseif table.type == 'server' then
-            action = function() TriggerServerEvent(table.event, table.arg or nil) end
-        elseif table.action then
-            action = function() table.action(table.arg) end
+    if tbl.event then
+        if tbl.type == 'client' then
+            action = function() TriggerEvent(tbl.event, tbl.arg or nil) end
+        elseif tbl.type == 'server' then
+            action = function() TriggerServerEvent(tbl.event, tbl.arg or nil) end
+        elseif tbl.action then
+            action = function() tbl.action(tbl.arg) end
         end
     end
-    if table.command then
-        if table.type == 'command' then
-            action = function() ExecuteCommand(table.event) end
-        elseif table.type == 'qbcommand' then
-            action = function() TriggerServerEvent('QBCore:CallCommand', table.event, table.arg or nil) end
+    if tbl.command then
+        if tbl.type == 'command' then
+            action = function() ExecuteCommand(tbl.event) end
+        elseif tbl.type == 'qbcommand' then
+            action = function() TriggerServerEvent('QBCore:CallCommand', tbl.event, tbl.arg or nil) end
         end
     end
-    local onSelect = table.onSelect or function()
+    local onSelect = tbl.onSelect or function()
         if action then action() end
     end
-    return { id = table.id, label = table.title or table.label, icon = table.icon, onSelect = onSelect, keepOpen = not table.shouldClose or false }
+    return { id = tbl.id, label = tbl.title or tbl.label, icon = tbl.icon, onSelect = onSelect, keepOpen = not tbl.shouldClose or false }
 end
 
 local function AddVehicleSeats()
