@@ -20,11 +20,10 @@ local function convert(tbl)
             action = function() TriggerEvent(tbl.event, tbl.arg or nil) end
         elseif tbl.type == 'server' then
             action = function() TriggerServerEvent(tbl.event, tbl.arg or nil) end
-        elseif tbl.action then
-            action = function() tbl.action(tbl.arg) end
         end
-    end
-    if tbl.command then
+    elseif tbl.action then
+        action = tbl.action(tbl.arg)
+    elseif tbl.command then
         if tbl.type == 'command' then
             action = function() ExecuteCommand(tbl.event) end
         elseif tbl.type == 'qbcommand' then
