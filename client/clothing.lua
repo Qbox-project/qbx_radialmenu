@@ -796,11 +796,11 @@ end
 RegisterNetEvent('qb-radialmenu:ResetClothing', ResetClothing)
 
 function ToggleClothing(data)
-	local which = data.id
+	local which = data.id or data[1]
 	local extra = data.extra
-	if which == "Shirt" or which == "Pants" or which == "Bagoff" then
-		extra = true
-	end
+    if which == "Shirt" or which == "Pants" or which == "Bagoff" then
+        extra = true
+    end
 	if Cooldown then return end
 	local Toggle = drawables[which]
 	if extra then Toggle = Extras[which] end
@@ -876,7 +876,7 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
 function ToggleProps(id)
 	if Cooldown then return end
-	local Prop = Props[id]
+	local Prop = Props[id] or Props[id[1]]
 	local Cur = { -- Lets get out currently equipped prop.
 		Id = Prop.Prop,
 		Ped = cache.ped,

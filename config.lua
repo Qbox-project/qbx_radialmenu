@@ -827,14 +827,14 @@ Config.Commands = {
         Name = "Torso"
     },
     ["gloves"] = {
-        Func = function() ToggleClothing({"gloves"}) end,
+        Func = function() ToggleClothing({"Gloves"}) end,
         Sprite = "gloves",
         Desc = "Take your gloves off/on",
         Button = 2,
         Name = "Gloves"
     },
     ["visor"] = {
-        Func = function() ToggleProps({"visor"}) end,
+        Func = function() ToggleProps({"Visor"}) end,
         Sprite = "visor",
         Desc = "Toggle hat variation",
         Button = 3,
@@ -862,7 +862,7 @@ Config.Commands = {
         Name = "Vest"
     },
     ["hair"] = {
-        Func = function() ToggleClothing({"hair"}) end,
+        Func = function() ToggleClothing({"Hair"}) end,
         Sprite = "hair",
         Desc = "Put your hair up/down/in a bun/ponytail.",
         Button = 7,
