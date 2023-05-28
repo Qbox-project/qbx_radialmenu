@@ -27,7 +27,7 @@ local function convert(tbl)
         if tbl.type == 'command' then
             action = function() ExecuteCommand(tbl.event) end
         elseif tbl.type == 'qbcommand' then
-            action = function() TriggerServerEvent('QBCore:CallCommand', tbl.event, tbl.arg or nil) end
+            action = function() ExecuteCommand(tbl.event .. " " .. (tbl.arg or nil)) end
         end
     end
     local onSelect = tbl.onSelect or function()
