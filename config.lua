@@ -956,7 +956,7 @@ Config.ExtraCommands = {
         Func = function() ToggleClothing({"Bagoff", true}) end,
         Sprite = "bagoff",
         SpriteFunc = function()
-            local Bag = GetPedDrawableVariation(PlayerPedId(), 5)
+            local Bag = GetPedDrawableVariation(cache.ped, 5)
             local BagOff = LastEquipped["Bagoff"]
             if LastEquipped["Bagoff"] then
                 if bags[BagOff.Drawable] then
