@@ -13,15 +13,15 @@ local allowedStretcherVehicles = {
 local function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
-    SetTextProportional(1)
+    SetTextProportional(true)
     SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
+    BeginTextCommandDisplayText("STRING")
     SetTextCentre(true)
-    AddTextComponentString(text)
+    AddTextComponentSubstringPlayerName(text)
     SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    EndTextCommandDisplayText(0.0, 0.0)
+    local factor = string.len(text) / 370
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
 
@@ -44,19 +44,12 @@ local function setClosestStretcher()
     stretcherObject = object
 end
 
-local function loadAnim(dict)
-    RequestAnimDict(dict)
-    while not HasAnimDictLoaded(dict) do
-        Wait(0)
-    end
-end
-
 local function GetClosestPlayer()
     local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
     local coords = GetEntityCoords(cache.ped)
-    for i=1, #closestPlayers, 1 do
+    for i = 1, #closestPlayers, 1 do
         if closestPlayers[i] ~= cache.ped then
             local pos = GetEntityCoords(GetPlayerPed(closestPlayers[i]))
             local distance = #(pos - coords)
@@ -75,20 +68,20 @@ local function LayOnStretcher()
     local coords = GetEntityCoords(cache.ped)
     local player, distance = GetClosestPlayer()
     if player == -1 then
-        loadAnim(inBedDicts)
+        lib.requestAnimDict(inBedDicts)
         if stretcherObject and #(coords - GetEntityCoords(stretcherObject)) <= 3.0 then
             TaskPlayAnim(cache.ped, inBedDicts, inBedAnims, 8.0, 8.0, -1, 69, 1, false, false, false)
-            AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.0, 0.0, 0.0, 180.0, 0.0, false, false, false, false, 2)
+            AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.0, 0.0, 0.0, 180.0, false, false, false, false, 2, false)
             isLayingOnBed = true
         end
     else
         if distance < 2.0 then
             TriggerServerEvent('qb-radialmenu:Stretcher:BusyCheck', GetPlayerServerId(player), "lay")
         else
-            loadAnim(inBedDicts)
+            lib.requestAnimDict(inBedDicts)
             if stretcherObject and #(coords - GetEntityCoords(stretcherObject)) <= 3.0 then
                 TaskPlayAnim(cache.ped, inBedDicts, inBedAnims, 8.0, 8.0, -1, 69, 1, false, false, false)
-                AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, 0.0, false, false, false, false, 2)
+                AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, false, false, false, false, 2, false)
                 isLayingOnBed = true
             end
         end
@@ -99,7 +92,7 @@ local function getOffStretcher()
     local coords = GetOffsetFromEntityInWorldCoords(stretcherObject, 0.85, 0.0, 0)
     ClearPedTasks(cache.ped)
     DetachEntity(cache.ped, false, true)
-    SetEntityCoords(cache.ped, coords.x, coords.y, coords.z)
+    SetEntityCoords(cache.ped, coords.x, coords.y, coords.z, false, false, false, false)
     isLayingOnBed = false
 end
 
@@ -108,10 +101,10 @@ local function attachToStretcher()
     if stretcherObject then
         if closestPlayer == -1 then
             NetworkRequestControlOfEntity(stretcherObject)
-            loadAnim("anim@heists@box_carry@")
+            lib.requestAnimDict("anim@heists@box_carry@")
             TaskPlayAnim(cache.ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
             SetTimeout(150, function()
-                AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -0.50, 195.0, 180.0, 180.0, 90.0, false, false, true, false, 2)
+                AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -0.50, 195.0, 180.0, 180.0, false, false, false, true, 2, false)
             end)
             FreezeEntityPosition(stretcherObject, false)
         else
@@ -119,10 +112,10 @@ local function attachToStretcher()
                 TriggerServerEvent('qb-radialmenu:Stretcher:BusyCheck', GetPlayerServerId(closestPlayer), "attach")
             else
                 NetworkRequestControlOfEntity(stretcherObject)
-                loadAnim("anim@heists@box_carry@")
+                lib.requestAnimDict("anim@heists@box_carry@")
                 TaskPlayAnim(cache.ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
                 SetTimeout(150, function()
-                    AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -1.0, 195.0, 180.0, 180.0, 90.0, false, false, true, false, 2)
+                    AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -1.0, 195.0, 180.0, 180.0, false, false, false, true, 2, false)
                 end)
                 FreezeEntityPosition(stretcherObject, false)
             end
@@ -145,9 +138,10 @@ RegisterNetEvent('qb-radialmenu:client:TakeStretcher', function()
         while not HasModelLoaded("prop_ld_binbag_01") do
             Wait(0)
         end
-        local obj = CreateObject(`prop_ld_binbag_01`, GetEntityCoords(cache.ped), true)
+        local coords = GetEntityCoords(cache.ped)
+        local obj = CreateObject(`prop_ld_binbag_01`, coords.x, coords.y, coords.z, true, false, false)
         if obj ~= 0 then
-            SetEntityRotation(obj, 0.0, 0.0, GetEntityHeading(vehicle), false, false)
+            SetEntityRotation(obj, 0.0, 0.0, GetEntityHeading(vehicle), 0, false)
             FreezeEntityPosition(obj, true)
             PlaceObjectOnGroundProperly(obj)
             stretcherObject = obj
@@ -189,14 +183,14 @@ RegisterNetEvent('qb-radialmenu:client:RemoveStretcherFromArea', function(player
         if stretcherObject then
             if stretcherObject == bObject then
                 if #(pos - playerPos) < 10 then
-                    if IsEntityPlayingAnim(cache.ped, 'anim@heists@box_carry@', 'idle', false) then
+                    if IsEntityPlayingAnim(cache.ped, 'anim@heists@box_carry@', 'idle', 3) then
                         detachStretcher()
                     end
-                    if IsEntityPlayingAnim(cache.ped, "anim@gangops@morgue@table@", "ko_front", false) then
+                    if IsEntityPlayingAnim(cache.ped, "anim@gangops@morgue@table@", "ko_front", 3) then
                         local coords = GetOffsetFromEntityInWorldCoords(cache.ped, 0.85, 0.0, 0)
                         ClearPedTasks(cache.ped)
                         DetachEntity(cache.ped, false, true)
-                        SetEntityCoords(cache.ped, coords.x, coords.y, coords.z)
+                        SetEntityCoords(cache.ped, coords.x, coords.y, coords.z, false, false, false, false)
                         isLayingOnBed = false
                     end
                 end
@@ -207,14 +201,14 @@ end)
 
 RegisterNetEvent('qb-radialmenu:Stretcher:client:BusyCheck', function(otherId, type)
     if type == "lay" then
-        loadAnim("anim@gangops@morgue@table@")
+        lib.requestAnimDict("anim@gangops@morgue@table@")
         if IsEntityPlayingAnim(cache.ped, "anim@gangops@morgue@table@", "ko_front", 3) then
             TriggerServerEvent('qb-radialmenu:server:BusyResult', true, otherId, type)
         else
             TriggerServerEvent('qb-radialmenu:server:BusyResult', false, otherId, type)
         end
     else
-        loadAnim('anim@heists@box_carry@')
+        lib.requestAnimDict('anim@heists@box_carry@')
         if IsEntityPlayingAnim(cache.ped, 'anim@heists@box_carry@', 'idle', 3) then
             TriggerServerEvent('qb-radialmenu:server:BusyResult', true, otherId, type)
         else
@@ -229,9 +223,9 @@ RegisterNetEvent('qb-radialmenu:client:Result', function(isBusy, type)
     if type == "lay" then
         if not isBusy then
             NetworkRequestControlOfEntity(stretcherObject)
-            loadAnim(inBedDicts)
+            lib.requestAnimDict(inBedDicts)
             TaskPlayAnim(cache.ped, inBedDicts, inBedAnims, 8.0, 8.0, -1, 69, 1, false, false, false)
-            AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, 0.0, false, false, false, false, 2)
+            AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, false, false, false, false, 2, false)
             isLayingOnBed = true
         else
             QBCore.Functions.Notify(Lang:t("error.stretcher_in_use"), "error")
@@ -240,10 +234,10 @@ RegisterNetEvent('qb-radialmenu:client:Result', function(isBusy, type)
     else
         if not isBusy then
             NetworkRequestControlOfEntity(stretcherObject)
-            loadAnim("anim@heists@box_carry@")
+            lib.requestAnimDict("anim@heists@box_carry@")
             TaskPlayAnim(cache.ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
             SetTimeout(150, function()
-                AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -1.0, 195.0, 180.0, 180.0, 90.0, false, false, true, false, 2)
+                AttachEntityToEntity(stretcherObject, cache.ped, GetPedBoneIndex(cache.ped, 28422), 0.0, -1.0, -1.0, 195.0, 180.0, 180.0, false, false, false, true, 2, false)
             end)
             FreezeEntityPosition(stretcherObject, false)
             isAttached = true
