@@ -27,15 +27,15 @@ local disabledTrunk = {
 local function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
-    SetTextProportional(1)
+    SetTextProportional(true)
     SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
+    BeginTextCommandDisplayText("STRING")
     SetTextCentre(true)
-    AddTextComponentString(text)
+    AddTextComponentSubstringPlayerName(text)
     SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    EndTextCommandDisplayText(0.0, 0.0)
+    local factor = string.len(text) / 370
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
 
@@ -44,7 +44,7 @@ local function TrunkCam(bool)
     local drawPos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.5, 0)
     local vehHeading = GetEntityHeading(vehicle)
     if bool then
-        RenderScriptCams(false, false, 0, 1, 0)
+        RenderScriptCams(false, false, 0, true, false)
         DestroyCam(cam, false)
         if not DoesCamExist(cam) then
             cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
@@ -54,7 +54,7 @@ local function TrunkCam(bool)
             RenderScriptCams(true, false, 0, true, true)
         end
     else
-        RenderScriptCams(false, false, 0, 1, 0)
+        RenderScriptCams(false, false, 0, true, false)
         DestroyCam(cam, false)
         cam = nil
     end
@@ -88,59 +88,55 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
     local vehClass = GetVehicleClass(closestVehicle)
     local plate = QBCore.Functions.GetPlate(closestVehicle)
     if Config.TrunkClasses[vehClass].allowed then
-        QBCore.Functions.TriggerCallback('qb-trunk:server:getTrunkBusy', function(isBusy)
-            if not disabledTrunk[GetEntityModel(closestVehicle)] then
-                if not inTrunk then
-                    if not isBusy then
-                        if not isKidnapped then
-                            if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
-                                local offset = {
-                                    x = Config.TrunkClasses[vehClass].x,
-                                    y = Config.TrunkClasses[vehClass].y,
-                                    z = Config.TrunkClasses[vehClass].z,
-                                }
-                                RequestAnimDict("fin_ext_p1-7")
-                                while not HasAnimDictLoaded("fin_ext_p1-7") do
-                                    Wait(0)
-                                end
-                                TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
-                                AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
-                                TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
-                                inTrunk = true
-                                Wait(500)
-                                SetVehicleDoorShut(closestVehicle, 5, false)
-                                QBCore.Functions.Notify(Lang:t("success.entered_trunk"), 'success', 4000)
-                                TrunkCam(true)
-                                isKidnapped = true
-                            else
-                                QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
-                            end
+        local isBusy = lib.callback.await('qb-trunk:server:getTrunkBusy', false, plate)
+        if not disabledTrunk[GetEntityModel(closestVehicle)] then
+            if not inTrunk then
+                if not isBusy then
+                    if not isKidnapped then
+                        if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
+                            local offset = {
+                                x = Config.TrunkClasses[vehClass].x,
+                                y = Config.TrunkClasses[vehClass].y,
+                                z = Config.TrunkClasses[vehClass].z,
+                            }
+                            lib.requestAnimDict("fin_ext_p1-7")
+                            TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, false, false, false)
+                            AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, true, true, true, true, 1, true)
+                            TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
+                            inTrunk = true
+                            Wait(500)
+                            SetVehicleDoorShut(closestVehicle, 5, false)
+                            QBCore.Functions.Notify(Lang:t("success.entered_trunk"), 'success', 4000)
+                            TrunkCam(true)
+                            isKidnapped = true
                         else
-                            local vehicle = GetEntityAttachedTo(cache.ped)
-                            plate = QBCore.Functions.GetPlate(vehicle)
-                            if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
-                                local vehCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.0, 0)
-                                DetachEntity(cache.ped, true, true)
-                                ClearPedTasks(cache.ped)
-                                inTrunk = false
-                                TriggerServerEvent('qb-smallresources:trunk:server:setTrunkBusy', plate, nil)
-                                SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z)
-                                SetEntityCollision(cache.ped, true, true)
-                                TrunkCam(false)
-                            else
-                                QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
-                            end
+                            QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
                         end
                     else
-                        QBCore.Functions.Notify(Lang:t("error.someone_in_trunk"), 'error', 2500)
+                        local vehicle = GetEntityAttachedTo(cache.ped)
+                        plate = QBCore.Functions.GetPlate(vehicle)
+                        if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
+                            local vehCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.0, 0)
+                            DetachEntity(cache.ped, true, true)
+                            ClearPedTasks(cache.ped)
+                            inTrunk = false
+                            TriggerServerEvent('qb-smallresources:trunk:server:setTrunkBusy', plate, nil)
+                            SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z, false, false, false, false)
+                            SetEntityCollision(cache.ped, true, true)
+                            TrunkCam(false)
+                        else
+                            QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
+                        end
                     end
                 else
-                    QBCore.Functions.Notify(Lang:t("error.already_in_trunk"), 'error', 2500)
+                    QBCore.Functions.Notify(Lang:t("error.someone_in_trunk"), 'error', 2500)
                 end
             else
-                QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
+                QBCore.Functions.Notify(Lang:t("error.already_in_trunk"), 'error', 2500)
             end
-        end, plate)
+        else
+            QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
+        end
     else
         QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
     end
@@ -152,41 +148,37 @@ RegisterNetEvent('qb-trunk:client:GetIn', function()
         local vehClass = GetVehicleClass(closestVehicle)
         local plate = QBCore.Functions.GetPlate(closestVehicle)
         if Config.TrunkClasses[vehClass].allowed then
-            QBCore.Functions.TriggerCallback('qb-trunk:server:getTrunkBusy', function(isBusy)
-                if not disabledTrunk[GetEntityModel(closestVehicle)] then
-                    if not inTrunk then
-                        if not isBusy then
-                            if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
-                                local offset = {
-                                    x = Config.TrunkClasses[vehClass].x,
-                                    y = Config.TrunkClasses[vehClass].y,
-                                    z = Config.TrunkClasses[vehClass].z,
-                                }
-                                RequestAnimDict("fin_ext_p1-7")
-                                while not HasAnimDictLoaded("fin_ext_p1-7") do
-                                    Wait(0)
-                                end
-                                TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, 0, 0, 0)
-                                AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, 1, 1, 1, 1, 1, 1)
-                                TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
-                                inTrunk = true
-                                Wait(500)
-                                SetVehicleDoorShut(closestVehicle, 5, false)
-                                QBCore.Functions.Notify(Lang:t("success.entered_trunk"), 'success', 4000)
-                                TrunkCam(true)
-                            else
-                                QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
-                            end
+            local isBusy = lib.callback.await('qb-trunk:server:getTrunkBusy', false, plate)
+            if not disabledTrunk[GetEntityModel(closestVehicle)] then
+                if not inTrunk then
+                    if not isBusy then
+                        if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
+                            local offset = {
+                                x = Config.TrunkClasses[vehClass].x,
+                                y = Config.TrunkClasses[vehClass].y,
+                                z = Config.TrunkClasses[vehClass].z,
+                            }
+                            lib.requestAnimDict("fin_ext_p1-7")
+                            TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, false, false, false)
+                            AttachEntityToEntity(cache.ped, closestVehicle, 0, offset.x, offset.y, offset.z, 0, 0, 40.0, true, true, true, true, 1, true)
+                            TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, true)
+                            inTrunk = true
+                            Wait(500)
+                            SetVehicleDoorShut(closestVehicle, 5, false)
+                            QBCore.Functions.Notify(Lang:t("success.entered_trunk"), 'success', 4000)
+                            TrunkCam(true)
                         else
-                            QBCore.Functions.Notify(Lang:t("error.someone_in_trunk"), 'error', 2500)
+                            QBCore.Functions.Notify(Lang:t("error.trunk_closed"), 'error', 2500)
                         end
                     else
-                        QBCore.Functions.Notify(Lang:t("error.already_in_trunk"), 'error', 2500)
+                        QBCore.Functions.Notify(Lang:t("error.someone_in_trunk"), 'error', 2500)
                     end
                 else
-                    QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
+                    QBCore.Functions.Notify(Lang:t("error.already_in_trunk"), 'error', 2500)
                 end
-            end, plate)
+            else
+                QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
+            end
         else
             QBCore.Functions.Notify(Lang:t("error.cant_enter_trunk"), 'error', 2500)
         end
@@ -230,7 +222,7 @@ CreateThread(function()
                             ClearPedTasks(cache.ped)
                             inTrunk = false
                             TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, false)
-                            SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z)
+                            SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z, false, false, false, false)
                             SetEntityCollision(cache.ped, true, true)
                             TrunkCam(false)
                         else
