@@ -143,7 +143,7 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
 end)
 
 RegisterNetEvent('qb-trunk:client:GetIn', function()
-    local closestVehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
+    local closestVehicle = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
     if closestVehicle ~= 0 then
         local vehClass = GetVehicleClass(closestVehicle)
         local plate = QBCore.Functions.GetPlate(closestVehicle)
