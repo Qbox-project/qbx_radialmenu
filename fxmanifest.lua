@@ -4,13 +4,12 @@ game 'gta5'
 description 'Qbx-radialmenu'
 version '1.0.0'
 
-
 shared_scripts {
-    'config.lua',
+    '@ox_lib/init.lua',
     '@qb-core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    '@ox_lib/init.lua'
+    'config.lua'
 }
 
 client_scripts {
@@ -23,3 +22,4 @@ server_scripts {
 
 provide 'qb-radialmenu'
 lua54 'yes'
+use_experimental_fxv2_oal 'yes'
