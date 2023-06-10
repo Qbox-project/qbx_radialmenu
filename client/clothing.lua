@@ -769,10 +769,11 @@ LastEquipped = {}
 Cooldown = false
 
 local function PlayToggleEmote(e, cb)
-	while not HasAnimDictLoaded(e.Dict) do RequestAnimDict(e.Dict) Wait(100) end
-	if IsPedInAnyVehicle(cache.ped) then e.Move = 51 end
+	lib.requestAnimDict(e.Dict)
+	if IsPedInAnyVehicle(cache.ped, false) then e.Move = 51 end
 	TaskPlayAnim(cache.ped, e.Dict, e.Anim, 3.0, 3.0, e.Dur, e.Move, 0, false, false, false)
-	local Pause = e.Dur-500 if Pause < 500 then Pause = 500 end
+	local Pause = e.Dur - 500
+	Pause = Pause < 500 and 500 or Pause
 	IncurCooldown(Pause)
 	Wait(Pause) -- Lets wait for the emote to play for a bit then do the callback.
 	cb()
@@ -909,14 +910,14 @@ end
 RegisterNetEvent('qb-radialmenu:ToggleProps', ToggleProps)
 
 for k,v in pairs(Config.Commands) do
-	RegisterCommand(k, v.Func)
+	RegisterCommand(k, v.Func, false)
 	--log("Created /"..k.." ("..v.Desc..")") -- Useful for translation checking.
 	TriggerEvent("chat:addSuggestion", "/"..k, v.Desc)
 end
 
 if Config.ExtrasEnabled then
 	for k,v in pairs(Config.ExtraCommands) do
-		RegisterCommand(k, v.Func)
+		RegisterCommand(k, v.Func, false)
 		--log("Created /"..k.." ("..v.Desc..")") -- Useful for translation checking.
 		TriggerEvent("chat:addSuggestion", "/"..k, v.Desc)
 	end
