@@ -12,9 +12,8 @@ RegisterNetEvent('qb-trunk:server:KidnapTrunk', function(targetId, closestVehicl
     TriggerClientEvent('qb-trunk:client:KidnapGetIn', targetId, closestVehicle)
 end)
 
-QBCore.Functions.CreateCallback('qb-trunk:server:getTrunkBusy', function(_, cb, plate)
-    if trunkBusy[plate] then cb(true) return end
-    cb(false)
+lib.callback.register('qb-trunk:server:getTrunkBusy', function(_, plate)
+    return trunkBusy[plate]
 end)
 
 lib.addCommand('getintrunk', {
