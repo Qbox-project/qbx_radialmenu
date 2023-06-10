@@ -2,6 +2,7 @@ QBCore = exports['qbx-core']:GetCoreObject()
 PlayerData = QBCore.Functions.GetPlayerData()
 
 -- Functions
+
 local function convert(tbl)
     if tbl.items then
         local items = {}
@@ -24,11 +25,7 @@ local function convert(tbl)
     elseif tbl.action then
         action = tbl.action(tbl.arg)
     elseif tbl.command then
-        if tbl.type == 'command' then
-            action = function() ExecuteCommand(tbl.event) end
-        elseif tbl.type == 'qbcommand' then
-            action = function() ExecuteCommand(tbl.event .. " " .. (tbl.arg or nil)) end
-        end
+        action = function() ExecuteCommand(tbl.event .. " " .. tbl.arg) end
     end
     local onSelect = tbl.onSelect or function()
         if action then action() end
@@ -41,7 +38,7 @@ local function AddVehicleSeats()
         while true do
             Wait(50)
             if IsControlJustPressed(0, 23) and not cache.vehicle then
-                local vehicle, _ = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
+                local vehicle = QBCore.Functions.GetClosestVehicle(GetEntityCoords(cache.ped))
                 if vehicle then
                     local vehicleseats = {}
                     local seatTable = {
@@ -84,7 +81,7 @@ local function SetupVehicleMenu()
         icon = 'car',
         menu = 'vehiclemenu'
     }
-    
+
     local vehicleitems = {{
         id = 'vehicle-flip',
         label = Lang:t("options.flip"),
@@ -94,10 +91,10 @@ local function SetupVehicleMenu()
             lib.hideRadial()
         end,
     }}
-    
+
     vehicleitems[#vehicleitems+1] = convert(Config.VehicleDoors)
     if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
-    
+
     if Config.VehicleSeats then
         AddVehicleSeats()
         vehicleitems[#vehicleitems+1] = Config.VehicleSeats
@@ -115,7 +112,7 @@ local function SetupRadialMenu()
     for _, v in pairs(Config.MenuItems) do
         lib.addRadialItem(convert(v))
     end
-    
+
     if Config.GangInteractions[PlayerData.gang.name] then
         lib.addRadialItem(convert({
             id = 'ganginteractions',
@@ -137,11 +134,11 @@ local function SetupRadialMenu()
 end
 
 local function IsPolice()
-    return (PlayerData.job.type == "leo" and PlayerData.job.onduty)
+    return PlayerData.job.type == "leo" and PlayerData.job.onduty
 end
 
 local function IsEMS()
-    return (PlayerData.job.type == "medic" and PlayerData.job.onduty)
+    return PlayerData.job.type == "medic" and PlayerData.job.onduty
 end
 
 -- Events
@@ -154,7 +151,7 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
             id = 'emergencybutton2',
             label = Lang:t("options.emergency_button"),
             icon = 'circle-exclamation',
-            onSelect = function (_, _)
+            onSelect = function ()
                 if ispolice then
                     TriggerEvent('police:client:SendPoliceEmergencyAlert')
                 elseif isems then
@@ -180,15 +177,15 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
     end
 
     if not IsSeatFree then
-       return QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
+        return QBCore.Functions.Notify(Lang:t("error.seat_occupied"), 'error')
     end
-    
+
     local kmh = speed * 3.6
-    
+
     if kmh > 100.0 then
-       return QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
+        return QBCore.Functions.Notify(Lang:t("error.vehicle_driving_fast"), 'error')
     end
-    
+
     SetPedIntoVehicle(cache.ped, Veh, id - 2)
     QBCore.Functions.Notify(Lang:t("info.switched_seats", {seat = label}))
 end)
@@ -196,10 +193,10 @@ end)
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
     local veh = cache.vehicle
     if not veh then return end
-    
+
     local pl = QBCore.Functions.GetPlate(veh)
     if pl ~= plate then return end
-    
+
     if open then
         SetVehicleDoorOpen(veh, door, false, false)
     else
@@ -250,10 +247,10 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
             SetVehicleAutoRepairDisabled(veh, true) -- Forces Auto Repair off when Toggling Extra [GTA 5 Niche Issue]
             if DoesExtraExist(veh, extra) then
                 if IsVehicleExtraTurnedOn(veh, extra) then
-                    SetVehicleExtra(veh, extra, 1)
+                    SetVehicleExtra(veh, extra, true)
                     QBCore.Functions.Notify(Lang:t("error.extra_deactivated", {extra = extra}), 'error', 2500)
                 else
-                    SetVehicleExtra(veh, extra, 0)
+                    SetVehicleExtra(veh, extra, false)
                     QBCore.Functions.Notify(Lang:t("success.extra_activated", {extra = extra}), 'success', 2500)
                 end
             else
@@ -292,9 +289,9 @@ AddEventHandler('onResourceStart', function(resource)
 end)
 
 AddEventHandler('onResourceStop', function(resource)
-   if resource == GetCurrentResourceName() then
+    if resource == GetCurrentResourceName() then
         lib.clearRadialItems()
-   end
+    end
 end)
 
 -- Sets the metadata when the player spawns
@@ -317,7 +314,7 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobinteractions')
     PlayerData.job = job
     if job.onduty and Config.JobInteractions[job.name] then
-       lib.addRadialItem(convert({
+        lib.addRadialItem(convert({
             id = 'jobinteractions',
             label = Lang:t("general.job_radial"),
             icon = 'briefcase',
@@ -329,7 +326,7 @@ end)
 RegisterNetEvent('QBCore:Client:SetDuty', function(onduty)
     lib.removeRadialItem('jobinteractions')
     if onduty and Config.JobInteractions[PlayerData.job.name] then
-       lib.addRadialItem(convert({
+        lib.addRadialItem(convert({
             id = 'jobinteractions',
             label = Lang:t("general.job_radial"),
             icon = 'briefcase',
