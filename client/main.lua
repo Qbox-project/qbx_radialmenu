@@ -25,7 +25,7 @@ local function convert(tbl)
     elseif tbl.action then
         action = tbl.action(tbl.arg)
     elseif tbl.command then
-        action = function() ExecuteCommand(tbl.event .. " " .. tbl.arg) end
+        action = function() ExecuteCommand(tbl.command .. " " .. tbl.arg) end
     end
     local onSelect = tbl.onSelect or function()
         if action then action() end
