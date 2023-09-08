@@ -82,15 +82,7 @@ local function SetupVehicleMenu()
         menu = 'vehiclemenu'
     }
 
-    local vehicleitems = {{
-        id = 'vehicle-flip',
-        label = Lang:t("options.flip"),
-        icon = 'car-burst',
-        onSelect = function()
-            TriggerEvent('radialmenu:flipVehicle')
-            lib.hideRadial()
-        end,
-    }}
+    local vehicleitems = {}
 
     vehicleitems[#vehicleitems+1] = convert(Config.VehicleDoors)
     if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
@@ -103,7 +95,24 @@ local function SetupVehicleMenu()
         id = 'vehiclemenu',
         items = vehicleitems
     })
-    lib.addRadialItem(VehicleMenu)
+
+    CreateThread(function()
+        local isMenuAdded = false
+
+        while true do
+            Wait(500)
+
+            local newIsPedInVehicle = GetVehiclePedIsIn(cache.ped, false)
+
+            if newIsPedInVehicle ~= 0 and not isMenuAdded then
+                lib.addRadialItem(VehicleMenu)
+                isMenuAdded = true
+            elseif newIsPedInVehicle == 0 and isMenuAdded then
+                lib.removeRadialItem('vehicle')
+                isMenuAdded = false
+            end
+        end
+    end)
 end
 
 local function SetupRadialMenu()

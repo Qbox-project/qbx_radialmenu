@@ -43,6 +43,14 @@ Config.MenuItems = {
                 icon = 'triangle-exclamation',
                 items = {
                     {
+                        id = 'flipvehicle',
+                        title = 'Flip Vehicle',
+                        icon = 'car',
+                        type = 'client',
+                        event = 'radialmenu:flipVehicle',
+                        shouldClose = true
+                    },
+                    {
                         id = 'handcuff',
                         title = 'Cuff',
                         icon = 'user-lock',
