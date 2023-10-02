@@ -45,7 +45,7 @@ local function setClosestStretcher()
 end
 
 local function GetClosestPlayer()
-    local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
+    local closestPlayers = GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
     local coords = GetEntityCoords(cache.ped)
@@ -150,10 +150,10 @@ RegisterNetEvent('qb-radialmenu:client:TakeStretcher', function()
                 isAttached = true
             end)
         else
-            QBCore.Functions.Notify(Lang:t("error.obj_not_found"), 'error')
+            exports.qbx_core:Notify(Lang:t("error.obj_not_found"), 'error')
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.not_near_ambulance"), 'error')
+        exports.qbx_core:Notify(Lang:t("error.not_near_ambulance"), 'error')
     end
 end)
 
@@ -172,7 +172,7 @@ RegisterNetEvent('qb-radialmenu:client:RemoveStretcher', function()
                 isLayingOnBed = false
             end
         else
-            QBCore.Functions.Notify(Lang:t("error.far_away"), 'error')
+            exports.qbx_core:Notify(Lang:t("error.far_away"), 'error')
         end
     end
 end)
@@ -228,7 +228,7 @@ RegisterNetEvent('qb-radialmenu:client:Result', function(isBusy, type)
             AttachEntityToEntity(cache.ped, stretcherObject, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, false, false, false, false, 2, false)
             isLayingOnBed = true
         else
-            QBCore.Functions.Notify(Lang:t("error.stretcher_in_use"), "error")
+            exports.qbx_core:Notify(Lang:t("error.stretcher_in_use"), "error")
             isLayingOnBed = false
         end
     else
@@ -242,7 +242,7 @@ RegisterNetEvent('qb-radialmenu:client:Result', function(isBusy, type)
             FreezeEntityPosition(stretcherObject, false)
             isAttached = true
         else
-            QBCore.Functions.Notify(Lang:t("error.stretcher_in_use"), "error")
+            exports.qbx_core:Notify(Lang:t("error.stretcher_in_use"), "error")
             isAttached = false
         end
     end
