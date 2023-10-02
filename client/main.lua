@@ -322,7 +322,6 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     lib.removeRadialItem('ganginteractions')
-    QBX.PlayerData.gang = gang
     if Config.GangInteractions[gang.name] and next(Config.GangInteractions[gang.name]) then
         lib.addRadialItem(convert({
             id = 'ganginteractions',

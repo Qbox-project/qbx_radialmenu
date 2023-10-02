@@ -18,12 +18,12 @@ end)
 
 lib.addCommand('getintrunk', {
     help = Lang:t("general.getintrunk_command_desc"),
-}, function(source, args, raw)
+}, function(source)
     TriggerClientEvent('qb-trunk:client:GetIn', source)
 end)
 
 lib.addCommand('putintrunk', {
     help = Lang:t("general.putintrunk_command_desc"),
-}, function(source, args, raw)
+}, function(source)
     TriggerClientEvent('qb-trunk:server:KidnapTrunk', source)
 end)
