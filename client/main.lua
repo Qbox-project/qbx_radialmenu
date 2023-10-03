@@ -281,7 +281,9 @@ end)
 
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
-        SetupRadialMenu()
+        if LocalPlayer.state.isLoggedIn then
+            SetupRadialMenu()
+        end
     end
 end)
 
