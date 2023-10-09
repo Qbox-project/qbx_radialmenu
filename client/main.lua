@@ -261,7 +261,7 @@ end)
 
 RegisterNetEvent('radialmenu:flipVehicle', function()
     if cache.vehicle then return end
-    TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    exports.scully_emotemenu:playEmoteByCommand('mechanic')
     exports.qbx_core:Progressbar("flipping_car", Lang:t("progress.flipping_car"), Config.Fliptime, false, true, {
         disableMovement = true,
         disableCarMovement = true,
@@ -272,10 +272,10 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
         if distance <= 15 then
             SetVehicleOnGroundProperly(vehicle)
         end
-        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+        exports.scully_emotemenu:playEmoteByCommand('c')
     end, function() -- Cancel
         exports.qbx_core:Notify(Lang:t("error.cancel_task"), "error")
-        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+        exports.scully_emotemenu:playEmoteByCommand('c')
     end)
 end)
 
