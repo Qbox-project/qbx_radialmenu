@@ -262,11 +262,18 @@ end)
 RegisterNetEvent('radialmenu:flipVehicle', function()
     if cache.vehicle then return end
     exports.scully_emotemenu:playEmoteByCommand('mechanic')
-    exports.qbx_core:Progressbar("flipping_car", Lang:t("progress.flipping_car"), Config.Fliptime, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
+    lib.progressBar({
+        label = Lang:t("progress.flipping_car"),
+        duration = Config.Fliptime,
+        position = 'bottom',
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            movement = true,
+            carMovement = true,
+            mouse = false,
+            combat = true
+        },
     }, {}, {}, {}, function() -- Done
         local vehicle, distance = GetClosestVehicle()
         if distance <= 15 then
