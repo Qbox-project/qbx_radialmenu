@@ -285,7 +285,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
             exports.qbx_core:Notify(Lang:t("error.no_vehicle_nearby"), 'error')
         end
     end, function() -- Cancel
-        exports.qbx_core:Notify(Lang:t("error.cancel_task"), "error")
+        exports.qbx_core:Notify(Lang:t("error.cancel_task"), 'error')
     end)
 end)
 AddEventHandler('onResourceStart', function(resource)
