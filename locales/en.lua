@@ -52,6 +52,11 @@ local Translations = {
         flip = 'Flip Vehicle',
         vehicle = 'Vehicle',
         emergency_button = "Emergency Button",
+        driver_seat = "Drivers Seat",
+        passenger_seat = "Passenger Seat",
+        other_seats = "Other Seat",
+        rear_left_seat = "Rear Left Seat",
+        rear_right_seat = "Rear Right Seat"
     },
 }
 
