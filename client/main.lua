@@ -277,7 +277,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
             clip = 'fixing_a_ped'
         },
     }, {}, {}, {}, function() -- Done
-        local vehicle, distance = lib.GetClosestVehicle()
+        local vehicle, distance = lib.getClosestVehicle()
         if distance <= 15 then
             SetVehicleOnGroundProperly(vehicle)
             exports.qbx_core:Notify(Lang:t("success.flipped_car"), 'success')
