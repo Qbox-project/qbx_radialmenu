@@ -525,28 +525,7 @@ Config.JobInteractions = {
             type = 'client',
             event = 'police:client:EscortPlayer',
             shouldClose = true
-        }, {
-            id = 'stretcheroptions',
-            title = 'Stretcher',
-            icon = 'bed-pulse',
-            items = {
-                {
-                    id = 'spawnstretcher',
-                    title = 'Spawn Stretcher',
-                    icon = 'plus',
-                    type = 'client',
-                    event = 'qb-radialmenu:client:TakeStretcher',
-                    shouldClose = false
-                }, {
-                    id = 'despawnstretcher',
-                    title = 'Remove Stretcher',
-                    icon = 'minus',
-                    type = 'client',
-                    event = 'qb-radialmenu:client:RemoveStretcher',
-                    shouldClose = false
-                }
-            }
-        }
+        },
     },
     ["taxi"] = {
         {
