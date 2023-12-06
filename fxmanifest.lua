@@ -3,7 +3,7 @@ game 'gta5'
 
 description 'QBX_Radialmenu'
 repository 'https://github.com/Qbox-project/qbx_radialmenu'
-version '1.0.0'
+version '0.1.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
