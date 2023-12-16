@@ -37,7 +37,7 @@ local Translations = {
         putintrunk_command_desc = "Stop iemand in de kofferbak"
     },
     options = {
-        flip = 'Voertuig omduwen',
+        flip = 'Flip voertuig',
         vehicle = 'Voertuig',
         emergency_button = "Noodknop",
         driver_seat = "Bestuurders stoel",
