@@ -31,44 +31,42 @@ local function convert(tbl)
 end
 
 local function AddVehicleSeats()
-    CreateThread(function()
-        while true do
-            Wait(50)
-            if IsControlJustPressed(0, 23) and not cache.vehicle then
-                local vehicle = GetClosestVehicle()
-                if vehicle then
-                    local vehicleseats = {}
-                    local seatTable = {
-                        [1] = Lang:t("options.driver_seat"),
-                        [2] = Lang:t("options.passenger_seat"),
-                        [3] = Lang:t("options.rear_left_seat"),
-                        [4] = Lang:t("options.rear_right_seat"),
+    while true do
+        if IsPedInAnyVehicle(PlayerPedId(), true) and not cache.vehicle then
+            local coords = GetEntityCoords(PlayerPedId())
+            local vehicle = lib.getClosestVehicle(coords)
+            if vehicle then
+                local vehicleseats = {}
+                local seatTable = {
+                    [1] = Lang:t("options.driver_seat"),
+                    [2] = Lang:t("options.passenger_seat"),
+                    [3] = Lang:t("options.rear_left_seat"),
+                    [4] = Lang:t("options.rear_right_seat"),
+                }
+                local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+                for i = 1, AmountOfSeats do
+                    vehicleseats[#vehicleseats+1] = {
+                        id = 'vehicleseat'..i,
+                        label = seatTable[i] or Lang:t("options.other_seats"),
+                        icon = 'caret-up',
+                        onSelect = function()
+                            if cache.vehicle then
+                                TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
+                            else
+                                exports.qbx_core:Notify(Lang:t('error.not_in_vehicle'), 'error')
+                            end
+                            lib.hideRadial()
+                        end,
                     }
-
-                    local AmountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
-                    for i = 1, AmountOfSeats do
-                        vehicleseats[#vehicleseats+1] = {
-                            id = 'vehicleseat'..i,
-                            label = seatTable[i] or Lang:t("options.other_seats"),
-                            icon = 'caret-up',
-                            onSelect = function()
-                                if cache.vehicle then
-                                    TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or Lang:t("options.other_seats"))
-                                else
-                                    exports.qbx_core:Notify(Lang:t('error.not_in_vehicle'), 'error')
-                                end
-                                lib.hideRadial()
-                            end,
-                        }
-                    end
-                    lib.registerRadial({
-                        id = 'vehicleseatsmenu',
-                        items = vehicleseats
-                    })
                 end
+                lib.registerRadial({
+                    id = 'vehicleseatsmenu',
+                    items = vehicleseats
+                })
             end
         end
-    end)
+        Wait(1000)
+    end
 end
 
 local function SetupVehicleMenu()
@@ -93,7 +91,7 @@ local function SetupVehicleMenu()
     if Config.EnableExtraMenu then vehicleitems[#vehicleitems+1] = convert(Config.VehicleExtras) end
 
     if Config.VehicleSeats then
-        AddVehicleSeats()
+        CreateThread(AddVehicleSeats)
         vehicleitems[#vehicleitems+1] = Config.VehicleSeats
     end
     lib.registerRadial({
