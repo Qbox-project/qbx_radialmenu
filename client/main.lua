@@ -261,7 +261,10 @@ end)
 
 RegisterNetEvent('radialmenu:flipVehicle', function()
     if cache.vehicle then return end
-    lib.progressBar({
+    local coords = GetEntityCoords(PlayerPedId())
+    local vehicle = lib.getClosestVehicle(coords)
+    if not vehicle then return exports.qbx_core:Notify(Lang:t("error.no_vehicle_nearby"), 'error') end
+    if lib.progressBar({
         label = Lang:t("progress.flipping_car"),
         duration = Config.Fliptime,
         useWhileDead = false,
@@ -269,25 +272,22 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
         disable = {
             move = true,
             car = true,
-            mouse = true,
+            mouse = false,
             combat = true
         },
         anim = {
             dict = 'mini@repair',
             clip = 'fixing_a_ped'
         },
-    }, {}, {}, {}, function() -- Done
-        local vehicle, distance = lib.getClosestVehicle()
-        if distance <= 15 then
-            SetVehicleOnGroundProperly(vehicle)
-            exports.qbx_core:Notify(Lang:t("success.flipped_car"), 'success')
-        else
-            exports.qbx_core:Notify(Lang:t("error.no_vehicle_nearby"), 'error')
-        end
-    end, function() -- Cancel
+    })
+    then
+        SetVehicleOnGroundProperly(vehicle)
+        exports.qbx_core:Notify(Lang:t("success.flipped_car"), 'success')
+    else
         exports.qbx_core:Notify(Lang:t("error.cancel_task"), 'error')
-    end)
+    end
 end)
+
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         if LocalPlayer.state.isLoggedIn then
