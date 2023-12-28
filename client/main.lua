@@ -157,17 +157,17 @@ end
 -- Events
 RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
     if isDead then
-        local isPolice, isEMS = isPolice(), isEMS()
-        if not isPolice or isEMS then return lib.disableRadial(true) end
+        local ispolice, isems = isPolice(), isEMS()
+        if not ispolice or isems then return lib.disableRadial(true) end
         lib.clearRadialItems()
         lib.addRadialItem({
             id = 'emergencybutton2',
             label = Lang:t('options.emergency_button'),
             icon = 'circle-exclamation',
             onSelect = function ()
-                if isPolice then
+                if ispolice then
                     TriggerEvent('police:client:SendPoliceEmergencyAlert')
-                elseif isEMS then
+                elseif isems then
                     TriggerEvent('ambulance:client:SendAmbulanceEmergencyAlert')
                 end
                 lib.hideRadial()
