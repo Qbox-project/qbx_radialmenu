@@ -48,7 +48,7 @@ local function convert(tbl)
     }
 end
 
-local function addVehicleSeats()
+local function addVehicleSeats() -- luacheck: ignore
     while true do
         if IsPedInAnyVehicle(cache.ped, true) and not cache.vehicle then
             local coords = GetEntityCoords(cache.ped)
@@ -330,7 +330,7 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
             id = 'jobinteractions',
             label = Lang:t('general.job_radial'),
             icon = 'briefcase',
-            items = Config.JobInteractions[job.name]
+            items = config.jobItems[job.name]
         }))
     end
 end)
