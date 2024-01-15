@@ -309,6 +309,28 @@ Config.MenuItems = {
             }
         }
     },
+    [3] = {
+        id = 'hud',
+        title = 'HUD',
+        icon = 'tachometer-alt',
+        items = {
+            {
+                id = 'togglehud',
+                title = 'Show/Hide HUD',
+                icon = 'eye-slash',
+                type = 'client',
+                event = 'qbx_hud:client:togglehud',
+                shouldClose = true
+            }, {
+                id = 'cinematicMode',
+                title = 'Cinematic mode',
+                icon = 'film',
+                type = 'client',
+                event = 'qbx_hud:client:toggleCinematicMode',
+                shouldClose = true
+            }
+        }
+    },
 }
 
 Config.VehicleDoors = {
