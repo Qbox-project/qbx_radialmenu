@@ -183,7 +183,7 @@ end)
 RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
     local isSeatFree = IsVehicleSeatFree(cache.vehicle, id - 2)
     local speed = GetEntitySpeed(cache.vehicle)
-    local hasHarness = exports.qbx_smallresources:HasHarness()
+    local hasHarness = exports.qbx_seatbelt:HasHarness()
     if hasHarness then
         return exports.qbx_core:Notify(Lang:t('error.race_harness_on'), 'error')
     end
