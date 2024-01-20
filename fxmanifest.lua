@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QBX_Radialmenu'
+description 'qbx_radialmenu'
 repository 'https://github.com/Qbox-project/qbx_radialmenu'
 version '0.1.0'
 
@@ -11,7 +11,6 @@ shared_scripts {
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'config.lua'
 }
 
 client_scripts {
@@ -23,6 +22,9 @@ server_scripts {
     'server/*.lua',
 }
 
-provide 'qb-radialmenu'
+files {
+    'config/client.lua'
+}
+
 lua54 'yes'
 use_experimental_fxv2_oal 'yes'

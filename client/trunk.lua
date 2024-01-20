@@ -1,3 +1,4 @@
+local config = require 'config.client'
 local inTrunk = false
 local isKidnapped = false
 local isKidnapping = false
@@ -87,7 +88,7 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
     local closestVehicle = veh
     local vehClass = GetVehicleClass(closestVehicle)
     local plate = GetPlate(closestVehicle)
-    if Config.TrunkClasses[vehClass].allowed then
+    if config.trunkClasses[vehClass].allowed then
         local isBusy = lib.callback.await('qb-trunk:server:getTrunkBusy', false, plate)
         if not disabledTrunk[GetEntityModel(closestVehicle)] then
             if not inTrunk then
@@ -95,9 +96,9 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
                     if not isKidnapped then
                         if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
                             local offset = {
-                                x = Config.TrunkClasses[vehClass].x,
-                                y = Config.TrunkClasses[vehClass].y,
-                                z = Config.TrunkClasses[vehClass].z,
+                                x = config.trunkClasses[vehClass].x,
+                                y = config.trunkClasses[vehClass].y,
+                                z = config.trunkClasses[vehClass].z,
                             }
                             lib.requestAnimDict("fin_ext_p1-7")
                             TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, false, false, false)
@@ -147,16 +148,16 @@ RegisterNetEvent('qb-trunk:client:GetIn', function()
     if closestVehicle ~= 0 then
         local vehClass = GetVehicleClass(closestVehicle)
         local plate = GetPlate(closestVehicle)
-        if Config.TrunkClasses[vehClass].allowed then
+        if config.trunkClasses[vehClass].allowed then
             local isBusy = lib.callback.await('qb-trunk:server:getTrunkBusy', false, plate)
             if not disabledTrunk[GetEntityModel(closestVehicle)] then
                 if not inTrunk then
                     if not isBusy then
                         if GetVehicleDoorAngleRatio(closestVehicle, 5) > 0 then
                             local offset = {
-                                x = Config.TrunkClasses[vehClass].x,
-                                y = Config.TrunkClasses[vehClass].y,
-                                z = Config.TrunkClasses[vehClass].z,
+                                x = config.trunkClasses[vehClass].x,
+                                y = config.trunkClasses[vehClass].y,
+                                z = config.trunkClasses[vehClass].z,
                             }
                             lib.requestAnimDict("fin_ext_p1-7")
                             TaskPlayAnim(cache.ped, "fin_ext_p1-7", "cs_devin_dual-7", 8.0, 8.0, -1, 1, 999.0, false, false, false)
