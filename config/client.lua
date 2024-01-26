@@ -14,7 +14,10 @@ return {
                     id = 'givenum',
                     icon = 'address-book',
                     label = 'Give Contact Details',
-                    event = 'qb-phone:client:GiveContactDetails'
+                    event = 'qb-phone:client:GiveContactDetails',
+                    enableMenu = function()
+                        return true
+                    end,
                 },
                 {
                     id = 'getintrunk',

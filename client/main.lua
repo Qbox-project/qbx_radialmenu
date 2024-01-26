@@ -1,51 +1,54 @@
 local config = require 'config.client'
 
 local function convert(tbl)
-    if tbl.items then
-        local items = {}
-        for _, v in pairs(tbl.items) do
-            items[#items + 1] = convert(v)
+    local s, e = pcall(tbl.enableMenu)
+    if type(e) == "string" or e then
+        if tbl.items then
+            local items = {}
+            for _, v in pairs(tbl.items) do
+                items[#items + 1] = convert(v)
+            end
+
+            lib.registerRadial({
+                id = tbl.id..'Menu',
+                items = items
+            })
+
+            return {
+                id = tbl.id,
+                label = tbl.label,
+                icon = tbl.icon,
+                menu = tbl.id..'Menu'
+            }
         end
 
-        lib.registerRadial({
-            id = tbl.id..'Menu',
-            items = items
-        })
+        local action
+        if tbl.event then
+            action = function()
+                TriggerEvent(tbl.event, tbl.args or nil)
+            end
+        elseif tbl.serverEvent then
+            action = function()
+                TriggerServerEvent(tbl.serverEvent, tbl.args or nil)
+            end
+        elseif tbl.action then
+            action = tbl.action(tbl.arg)
+        elseif tbl.command then
+            action = function()
+                ExecuteCommand(tbl.command .. ' ' .. tbl.args)
+            end
+        end
 
         return {
             id = tbl.id,
             label = tbl.label,
             icon = tbl.icon,
-            menu = tbl.id..'Menu'
+            onSelect = tbl.onSelect or function()
+                if action then action() end
+            end,
+            keepOpen = not tbl.keepOpen or false
         }
     end
-
-    local action
-    if tbl.event then
-        action = function()
-            TriggerEvent(tbl.event, tbl.args or nil)
-        end
-    elseif tbl.serverEvent then
-        action = function()
-            TriggerServerEvent(tbl.serverEvent, tbl.args or nil)
-        end
-    elseif tbl.action then
-        action = tbl.action(tbl.arg)
-    elseif tbl.command then
-        action = function()
-            ExecuteCommand(tbl.command .. ' ' .. tbl.args)
-        end
-    end
-
-    return {
-        id = tbl.id,
-        label = tbl.label,
-        icon = tbl.icon,
-        onSelect = tbl.onSelect or function()
-            if action then action() end
-        end,
-        keepOpen = not tbl.keepOpen or false
-    }
 end
 
 local function addVehicleSeats() -- luacheck: ignore
