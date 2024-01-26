@@ -1,7 +1,7 @@
 local config = require 'config.client'
 
 local function convert(tbl)
-    local s, e = pcall(tbl.enableMenu)
+    local _, e = pcall(tbl.enableMenu)
     if type(e) == "string" or e then
         if tbl.items then
             local items = {}
