@@ -315,6 +315,18 @@ return {
                         event = 'police:client:SearchPlayer',
                     },
                     {
+                        id = 'checkBank',
+                        icon = 'piggy-bank',
+                        label = 'Check Bank',
+                        event = 'police:client:checkBank',
+                    },
+                    {
+                        id = 'checkLicenses',
+                        icon = 'address-card',
+                        label = 'Check Licenses',
+                        event = 'police:client:checkLicenses',
+                    },
+                    {
                         id = 'jail',
                         icon = 'user-lock',
                         label = 'Jail',
