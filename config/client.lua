@@ -400,7 +400,7 @@ return {
                 id = 'emergencyButton',
                 icon = 'bell',
                 label = 'Emergency Button',
-                event = 'police:client:SendPoliceEmergencyAlert',
+                serverEvent = 'hospital:server:emergencyAlert',
             },
             {
                 id = 'escort',

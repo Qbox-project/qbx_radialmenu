@@ -173,7 +173,7 @@ RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
                 if ispolice then
                     TriggerEvent('police:client:SendPoliceEmergencyAlert')
                 elseif isems then
-                    TriggerEvent('ambulance:client:SendAmbulanceEmergencyAlert')
+                    TriggerServerEvent('hospital:server:emergencyAlert')
                 end
                 lib.hideRadial()
             end
