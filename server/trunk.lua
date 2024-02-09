@@ -17,13 +17,13 @@ lib.callback.register('qb-trunk:server:getTrunkBusy', function(_, plate)
 end)
 
 lib.addCommand('getintrunk', {
-    help = Lang:t("general.getintrunk_command_desc"),
+    help = locale("general.getintrunk_command_desc"),
 }, function(source)
     TriggerClientEvent('qb-trunk:client:GetIn', source)
 end)
 
 lib.addCommand('putintrunk', {
-    help = Lang:t("general.putintrunk_command_desc"),
+    help = locale("general.putintrunk_command_desc"),
 }, function(source)
     TriggerClientEvent('qb-trunk:server:KidnapTrunk', source)
 end)

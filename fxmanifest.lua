@@ -7,11 +7,10 @@ version '0.1.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/modules/utils.lua',
-    '@qbx_core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
+    '@qbx_core/modules/lib.lua',
 }
+
+ox_lib 'locale'
 
 client_scripts {
     '@qbx_core/modules/playerdata.lua',
@@ -24,6 +23,7 @@ server_scripts {
 
 files {
     'config/client.lua'
+    'locales/*.json',
 }
 
 lua54 'yes'
