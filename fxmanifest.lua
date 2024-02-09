@@ -23,7 +23,7 @@ server_scripts {
 }
 
 files {
-    'config/client.lua'
+    'config/client.lua',
     'locales/*.json',
 }
 
