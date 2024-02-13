@@ -61,6 +61,16 @@ local function TrunkCam(bool)
     end
 end
 
+local function getClosestPlayer(distance)
+    local coords = GetEntityCoords(cache.ped)
+    local player, playerPed = lib.getClosestPlayer(coords, (distance or 2.5))
+    if not player then
+        exports.qbx_core:Notify(locale('error.no_people_nearby'), 'error')
+        return
+    end
+    return player, playerPed
+end
+
 -- Events
 
 RegisterNetEvent('qb-kidnapping:client:SetKidnapping', function(bool)
@@ -68,20 +78,14 @@ RegisterNetEvent('qb-kidnapping:client:SetKidnapping', function(bool)
 end)
 
 RegisterNetEvent('qb-trunk:client:KidnapTrunk', function()
-    local closestPlayer, distance = GetClosestPlayer()
-    if distance ~= -1 and distance < 2 then
-        if isKidnapping then
-            local closestVehicle, _ = GetClosestVehicle()
-            if closestVehicle ~= 0 then
+    local closestPlayer = getClosestPlayer()
+    if not closestPlayer then return end
+    local closestVehicle = lib.getClosestVehicle(GetEntityCoords(cache.ped))
+    if not isKidnapping or not closestVehicle then return exports.qbx_core:Notify(locale("error.not_kidnapped"), 'error') end
                 TriggerEvent('police:client:KidnapPlayer')
                 TriggerServerEvent("police:server:CuffPlayer", GetPlayerServerId(closestPlayer), false)
                 Wait(50)
                 TriggerServerEvent("qb-trunk:server:KidnapTrunk", GetPlayerServerId(closestPlayer), closestVehicle)
-            end
-        else
-            exports.qbx_core:Notify(locale("error.not_kidnapped"), 'error')
-        end
-    end
 end)
 
 RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
