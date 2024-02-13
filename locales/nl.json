@@ -2,8 +2,8 @@
     "error": {
       "no_people_nearby": "Geen spelers in de buurt",
       "no_vehicle_found": "Geen voertuig gevonden",
-      "extra_deactivated": "Extra %{extra} is gedeactiveerd",
-      "extra_not_present": "Extra %{extra} was niet gevonden op het voertuig",
+      "extra_deactivated": "Extra %s is gedeactiveerd",
+      "extra_not_present": "Extra %s was niet gevonden op het voertuig",
       "not_driver": "Je bent niet de bestuurder van het voertuig",
       "vehicle_driving_fast": "Het voertuig rijd te snel",
       "seat_occupied": "De stoel is bezet",
@@ -18,7 +18,7 @@
       "someone_in_trunk": "Er zit al iemand in de kofferbak"
     },
     "success": {
-      "extra_activated": "Extra %{extra} is geactiveerd",
+      "extra_activated": "Extra %s is geactiveerd",
       "entered_trunk": "Je ligt nu in de kofferbak"
     },
     "info": {
@@ -26,7 +26,7 @@
       "wrong_ped": "Dit ped model heeft hier geen opties voor",
       "nothing_to_remove": "Je hebt niks om af te zetten",
       "already_wearing": "Je draagt dat al",
-      "switched_seats": "Je zit nu op de %{seat}"
+      "switched_seats": "Je zit nu op de %s"
     },
     "general": {
       "command_description": "Radial menu openen",
