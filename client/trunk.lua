@@ -2,7 +2,7 @@ local config = require 'config.client'
 local inTrunk = false
 local isKidnapped = false
 local isKidnapping = false
-local cam = nil
+local cam = 0
 local disabledTrunk = {
     [`penetrator`] = "penetrator",
     [`vacca`] = "vacca",
@@ -46,18 +46,22 @@ local function TrunkCam(bool)
     local vehHeading = GetEntityHeading(vehicle)
     if bool then
         RenderScriptCams(false, false, 0, true, false)
-        DestroyCam(cam, false)
-        if not DoesCamExist(cam) then
-            cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-            SetCamActive(cam, true)
-            SetCamCoord(cam, drawPos.x, drawPos.y, drawPos.z + 2)
-            SetCamRot(cam, -2.5, 0.0, vehHeading, 0.0)
-            RenderScriptCams(true, false, 0, true, true)
+        if DoesCamExist(cam) then
+            DestroyCam(cam, false)
+            cam = 0
         end
+
+        cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+        SetCamActive(cam, true)
+        SetCamCoord(cam, drawPos.x, drawPos.y, drawPos.z + 2)
+        SetCamRot(cam, -2.5, 0.0, vehHeading, 0.0)
+        RenderScriptCams(true, false, 0, true, true)
     else
         RenderScriptCams(false, false, 0, true, false)
-        DestroyCam(cam, false)
-        cam = nil
+        if DoesCamExist(cam) then
+            DestroyCam(cam, false)
+            cam = 0
+        end
     end
 end
 
@@ -80,12 +84,14 @@ end)
 RegisterNetEvent('qb-trunk:client:KidnapTrunk', function()
     local closestPlayer = getClosestPlayer()
     if not closestPlayer then return end
+
     local closestVehicle = lib.getClosestVehicle(GetEntityCoords(cache.ped))
     if not isKidnapping or not closestVehicle then return exports.qbx_core:Notify(locale("error.not_kidnapped"), 'error') end
-                TriggerEvent('police:client:KidnapPlayer')
-                TriggerServerEvent("police:server:CuffPlayer", GetPlayerServerId(closestPlayer), false)
-                Wait(50)
-                TriggerServerEvent("qb-trunk:server:KidnapTrunk", GetPlayerServerId(closestPlayer), closestVehicle)
+
+    TriggerEvent('police:client:KidnapPlayer')
+    TriggerServerEvent("police:server:CuffPlayer", GetPlayerServerId(closestPlayer), false)
+    Wait(50)
+    TriggerServerEvent("qb-trunk:server:KidnapTrunk", GetPlayerServerId(closestPlayer), closestVehicle)
 end)
 
 RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
@@ -148,7 +154,8 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
 end)
 
 RegisterNetEvent('qb-trunk:client:GetIn', function()
-    local closestVehicle = GetClosestVehicle()
+    local coords = GetEntityCoords(cache.ped)
+    local closestVehicle = lib.getClosestVehicle(coords, 5.0, false)
     if closestVehicle ~= 0 then
         local vehClass = GetVehicleClass(closestVehicle)
         local plate = qbx.getVehiclePlate(closestVehicle)
@@ -200,7 +207,7 @@ CreateThread(function()
         local vehicle = GetEntityAttachedTo(cache.ped)
         local drawPos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.5, 0)
         local vehHeading = GetEntityHeading(vehicle)
-        if cam then
+        if DoesCamExist(cam) then
             sleep = 0
             SetCamRot(cam, -2.5, 0.0, vehHeading, 0.0)
             SetCamCoord(cam, drawPos.x, drawPos.y, drawPos.z + 2)
@@ -220,7 +227,7 @@ CreateThread(function()
                 if DoesEntityExist(vehicle) then
                     sleep = 0
                     DrawText3Ds(drawPos.x, drawPos.y, drawPos.z + 0.75, locale("general.get_out_trunk_button"))
-                    
+
                     if IsControlJustPressed(0, 38) then
                         if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
                             local vehCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0, -5.0, 0)

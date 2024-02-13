@@ -204,7 +204,7 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
     end
 
     SetPedIntoVehicle(cache.ped, cache.vehicle, id - 2)
-    exports.qbx_core:Notify(locale('info.switched_seats', {seat = label}))
+    exports.qbx_core:Notify(locale('info.switched_seats', label))
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
@@ -226,7 +226,8 @@ end)
 
 RegisterNetEvent('qb-radialmenu:client:openDoor', function(id)
     local door = id
-    local closestVehicle = cache.vehicle or GetClosestVehicle()
+    local coords = GetEntityCoords(cache.ped)
+    local closestVehicle = cache.vehicle or lib.getClosestVehicle(coords, 5.0, false)
     if closestVehicle ~= 0 then
         if closestVehicle ~= cache.vehicle then
             local plate = qbx.getVehiclePlate(closestVehicle)
@@ -263,13 +264,13 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
             if DoesExtraExist(cache.vehicle, extra) then
                 if IsVehicleExtraTurnedOn(cache.vehicle, extra) then
                     qbx.setVehicleExtra(cache.vehicle, extra, true)
-                    exports.qbx_core:Notify(locale('error.extra_deactivated', {extra = extra}), 'error', 2500)
+                    exports.qbx_core:Notify(locale('error.extra_deactivated', extra), 'error', 2500)
                 else
                     qbx.setVehicleExtra(cache.vehicle, extra, false)
-                    exports.qbx_core:Notify(locale('success.extra_activated', {extra = extra}), 'success', 2500)
+                    exports.qbx_core:Notify(locale('success.extra_activated', extra), 'success', 2500)
                 end
             else
-                exports.qbx_core:Notify(locale('error.extra_not_present', {extra = extra}), 'error', 2500)
+                exports.qbx_core:Notify(locale('error.extra_not_present', extra), 'error', 2500)
             end
         else
             exports.qbx_core:Notify(locale('error.not_driver'), 'error', 2500)
