@@ -1,7 +1,7 @@
 local bags = {[40] = true, [41] = true, [44] = true, [45] = true}
 
 return {
-    enableExtraMenu = true,
+    enableExtraMenu = false,
     flipTime = 15000,
 
     menuItems = {
