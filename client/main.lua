@@ -1,10 +1,10 @@
-Config = require 'config.client'
+local config = require 'config.client'
 
-function Convert(tbl)
+local function convert(tbl)
     if tbl.items then
         local items = {}
         for _, v in pairs(tbl.items) do
-            items[#items + 1] = Convert(v)
+            items[#items + 1] = convert(v)
         end
 
         lib.registerRadial({
@@ -87,32 +87,67 @@ local function addVehicleSeats() -- luacheck: ignore
     end
 end
 
+local function setupVehicleMenu()
+    local vehicleMenu = {
+        id = 'vehicle',
+        label = locale('options.vehicle'),
+        icon = 'car',
+        menu = 'vehicleMenu'
+    }
+
+    local vehicleItems = {{
+        id = 'vehicle-flip',
+        label = locale('options.flip'),
+        icon = 'car-burst',
+        onSelect = function()
+            TriggerEvent('radialmenu:flipVehicle')
+            lib.hideRadial()
+        end,
+    }}
+
+    vehicleItems[#vehicleItems + 1] = convert(config.vehicleDoors)
+
+    if config.enableExtraMenu then
+        vehicleItems[#vehicleItems + 1] = convert(config.vehicleExtras)
+    end
+
+    --[[if config.vehicleSeats then
+        CreateThread(addVehicleSeats)
+        vehicleItems[#vehicleItems + 1] = config.vehicleSeats
+    end]]--
+
+    lib.registerRadial({
+        id = 'vehicleMenu',
+        items = vehicleItems
+    })
+
+    lib.addRadialItem(vehicleMenu)
+end
+
 local function setupRadialMenu()
-    if cache.vehicle ~= false then
-        SetupVehicleMenu()
+    setupVehicleMenu()
+
+    for _, v in pairs(config.menuItems) do
+        lib.addRadialItem(convert(v))
     end
 
-    for _, v in pairs(Config.menuItems) do
-        lib.addRadialItem(Convert(v))
-    end
-
-    if Config.gangItems[QBX.PlayerData.gang.name] then
-        lib.addRadialItem(Convert({
+    if config.gangItems[QBX.PlayerData.gang.name] then
+        lib.addRadialItem(convert({
             id = 'ganginteractions',
             label = locale('general.gang_radial'),
             icon = 'skull-crossbones',
-            items = Config.gangItems[QBX.PlayerData.gang.name]
+            items = config.gangItems[QBX.PlayerData.gang.name]
         }))
     end
 
     if not QBX.PlayerData.job.onduty then return end
-    if not Config.jobItems[QBX.PlayerData.job.name] then return end
+    if not config.jobItems[QBX.PlayerData.job.name] then return end
 
-    lib.addRadialItem(Convert({
+    lib.addRadialItem(convert({
         id = 'jobinteractions',
         label = locale('general.job_radial'),
         icon = 'briefcase',
-        items = Config.jobItems[QBX.PlayerData.job.name]
+        items = config.jobItems[QBX.PlayerData.job.name]
     }))
 end
 
@@ -250,7 +285,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
     if not vehicle then return exports.qbx_core:Notify(locale('error.no_vehicle_nearby'), 'error') end
     if lib.progressBar({
         label = locale('progress.flipping_car'),
-        duration = Config.fliptime,
+        duration = config.fliptime,
         useWhileDead = false,
         canCancel = true,
         disable = {
@@ -291,43 +326,43 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobinteractions')
-    if job.onduty and Config.jobItems[job.name] then
-        lib.addRadialItem(Convert({
+    if job.onduty and config.jobItems[job.name] then
+        lib.addRadialItem(convert({
             id = 'jobinteractions',
             label = locale('general.job_radial'),
             icon = 'briefcase',
-            items = Config.jobItems[job.name]
+            items = config.jobItems[job.name]
         }))
     end
 end)
 
 RegisterNetEvent('QBCore:Client:SetDuty', function(onDuty)
     lib.removeRadialItem('jobInteractions')
-    if onDuty and Config.jobItems[QBX.PlayerData.job.name] then
-        lib.addRadialItem(Convert({
+    if onDuty and config.jobItems[QBX.PlayerData.job.name] then
+        lib.addRadialItem(convert({
             id = 'jobInteractions',
             label = locale('general.job_radial'),
             icon = 'briefcase',
-            items = Config.jobItems[QBX.PlayerData.job.name]
+            items = config.jobItems[QBX.PlayerData.job.name]
         }))
     end
 end)
 
 RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     lib.removeRadialItem('gangInteractions')
-    if Config.gangItems[gang.name] and next(Config.gangItems[gang.name]) then
-        lib.addRadialItem(Convert({
+    if config.gangItems[gang.name] and next(config.gangItems[gang.name]) then
+        lib.addRadialItem(convert({
             id = 'gangInteractions',
             label = locale('general.gang_radial'),
             icon = 'skull-crossbones',
-            items = Config.gangItems[gang.name]
+            items = config.gangItems[gang.name]
         }))
     end
 end)
 
 local function addOption(data, id)
     data.id = data.id or id and id
-    lib.addRadialItem(Convert(data))
+    lib.addRadialItem(convert(data))
     return data.id
 end
 
