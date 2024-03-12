@@ -140,8 +140,9 @@ local function setupRadialMenu()
         }))
     end
 
-    if not QBX.PlayerData.job.onduty then return end
     if not config.jobItems[QBX.PlayerData.job.name] then return end
+
+	if not onduty then return end
 
     lib.addRadialItem(convert({
         id = 'jobinteractions',
@@ -326,6 +327,7 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobinteractions')
+	if not onduty then return end
     if job.onduty and config.jobItems[job.name] then
         lib.addRadialItem(convert({
             id = 'jobinteractions',
