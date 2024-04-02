@@ -284,7 +284,7 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
     if not vehicle then return exports.qbx_core:Notify(locale('error.no_vehicle_nearby'), 'error') end
     if lib.progressBar({
         label = locale('progress.flipping_car'),
-        duration = config.fliptime,
+        duration = config.flipTime,
         useWhileDead = false,
         canCancel = true,
         disable = {
