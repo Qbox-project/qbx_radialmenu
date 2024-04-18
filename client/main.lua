@@ -44,7 +44,7 @@ local function convert(tbl)
         onSelect = tbl.onSelect or function()
             if action then action() end
         end,
-        keepOpen = not tbl.keepOpen or false
+        keepOpen = tbl.keepOpen or false
     }
 end
 
