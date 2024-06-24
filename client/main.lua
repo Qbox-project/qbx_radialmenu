@@ -262,10 +262,10 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
             SetVehicleAutoRepairDisabled(cache.vehicle, true) -- Forces Auto Repair off when Toggling Extra [GTA 5 Niche Issue]
             if DoesExtraExist(cache.vehicle, extra) then
                 if IsVehicleExtraTurnedOn(cache.vehicle, extra) then
-                    qbx.setVehicleExtra(cache.vehicle, extra, true)
+                    qbx.setVehicleExtra(cache.vehicle, extra, false)
                     exports.qbx_core:Notify(locale('error.extra_deactivated', extra), 'error', 2500)
                 else
-                    qbx.setVehicleExtra(cache.vehicle, extra, false)
+                    qbx.setVehicleExtra(cache.vehicle, extra, true)
                     exports.qbx_core:Notify(locale('success.extra_activated', extra), 'success', 2500)
                 end
             else
