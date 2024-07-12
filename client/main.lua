@@ -325,14 +325,6 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobInteractions')
-    if job.onduty and config.jobItems[job.name] then
-        lib.addRadialItem(convert({
-            id = 'jobInteractions',
-            label = locale('general.job_radial'),
-            icon = 'briefcase',
-            items = config.jobItems[job.name]
-        }))
-    end
 end)
 
 RegisterNetEvent('QBCore:Client:SetDuty', function(onDuty)
