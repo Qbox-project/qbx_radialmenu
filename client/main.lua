@@ -351,6 +351,12 @@ RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     end
 end)
 
+local function createQBExport(name, cb)
+    AddEventHandler(('__cfx_export_qb-radialmenu_%s'):format(name), function(setCB)
+        setCB(cb)
+    end)
+end
+
 local function addOption(data, id)
     data.id = data.id or id and id
     lib.addRadialItem(convert(data))
@@ -358,9 +364,11 @@ local function addOption(data, id)
 end
 
 exports('AddOption', addOption)
+createQBExport('AddOption', addOption)
 
 local function removeOption(id)
     lib.removeRadialItem(id)
 end
 
 exports('RemoveOption', removeOption)
+createQBExport('RemoveOption', removeOption)
