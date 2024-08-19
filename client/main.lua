@@ -351,7 +351,7 @@ RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     end
 end)
 
-local function createQBExport(name. cb)
+local function createQBExport(name, cb)
     AddEventHandler(('__cfx_export_qb-radialmenu_%s'):format(name), function(setCB)
         setCB(cb)
     end)
