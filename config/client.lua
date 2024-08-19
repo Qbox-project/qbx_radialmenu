@@ -85,63 +85,6 @@ return {
             label = 'General',
             items = {
                 {
-                    id = 'house',
-                    icon = 'home',
-                    label = 'House Interaction',
-                    items = {
-                        {
-                            id = 'givehousekey',
-                            icon = 'key',
-                            label = 'Give House Keys',
-                            event = 'qb-houses:client:giveHouseKey',
-                        },
-                        {
-                            id = 'removehousekey',
-                            icon = 'key',
-                            label = 'Remove House Keys',
-                            event = 'qb-houses:client:removeHouseKey',
-                        },
-                        {
-                            id = 'togglelock',
-                            icon = 'door-closed',
-                            label = 'Toggle Door Lock',
-                            event = 'qb-houses:client:toggleDoorlock',
-                        },
-                        {
-                            id = 'decorate',
-                            icon = 'box',
-                            label = 'Decorate',
-                            event = 'qb-houses:client:decorate',
-                        },
-                        {
-                            id = 'houseLocations',
-                            icon = 'home',
-                            label = 'House Locations',
-                            event = 'qb-houses:client:manageHouses',
-                            items = {
-                                {
-                                    id = 'setStash',
-                                    icon = 'box-open',
-                                    label = 'Set Stash',
-                                    event = 'qb-houses:client:setLocation',
-                                },
-                                {
-                                    id = 'setWardrobe',
-                                    icon = 'shirt',
-                                    label = 'Set Wardrobe',
-                                    event = 'qb-houses:client:setLocation',
-                                },
-                                {
-                                    id = 'setLogout',
-                                    icon = 'door-open',
-                                    label = 'Set Logout',
-                                    event = 'qb-houses:client:setLocation',
-                                },
-                            },
-                        },
-                    },
-                },
-                {
                     id = 'clothesMenu',
                     icon = 'shirt',
                     label = 'Clothing',
