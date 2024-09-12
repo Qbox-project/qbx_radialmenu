@@ -155,7 +155,7 @@ local function isPolice()
 end
 
 local function isEMS()
-    return QBX.PlayerData.job.type == 'medic' and QBX.PlayerData.job.onduty
+    return QBX.PlayerData.job.type == 'ems' and QBX.PlayerData.job.onduty
 end
 
 -- Events
