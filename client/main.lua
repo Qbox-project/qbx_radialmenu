@@ -325,6 +325,7 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     lib.removeRadialItem('jobInteractions')
+    setupRadialMenu()
 end)
 
 RegisterNetEvent('QBCore:Client:SetDuty', function(onDuty)
