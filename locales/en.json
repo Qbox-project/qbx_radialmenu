@@ -6,6 +6,7 @@
       "extra_not_present": "Extra %s Is Not Present on This Vehicle",
       "not_driver": "You Are Not the Driver of the Vehicle",
       "vehicle_driving_fast": "This Vehicle Is Moving Too Fast",
+      "seat_occupied": "This seat is occupied.",
       "race_harness_on": "You Have a Race Harness On; You Can't Switch",
       "obj_not_found": "Could Not Create the Requested Object",
       "not_near_ambulance": "You Are Not Near an Ambulance",
