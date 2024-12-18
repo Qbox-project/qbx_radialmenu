@@ -1,5 +1,56 @@
 local config = require 'config.client'
 
+-----------------------
+------- Events --------
+-----------------------
+
+if config.vehicleSeats then
+    RegisterNetEvent('QBCore:Client:VehicleInfo', function(data)
+        if LocalPlayer.state.isLoggedIn and data.event == 'Entered' then
+            setupVehicleMenu(true)
+            local vehicleSeats ={}
+            local veh = data.vehicle
+            local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(veh))
+
+            local seatTable = {
+                [1] = locale('options.driver_seat'),
+                [2] = locale('options.passenger_seat'),
+                [3] = locale('options.rear_left_seat'),
+                [4] = locale('options.rear_right_seat')
+            }
+
+            for i = 1, amountOfSeats do
+                vehicleSeats[#vehicleSeats + 1] = {
+                    id = 'vehicleSeat' .. i,
+                    label = seatTable[i] or locale('options.other_seats'),
+                    icon = 'caret-up',
+                    onSelect = function()
+                        if cache.vehicle then
+                            TriggerEvent('radialmenu:client:ChangeSeat', i,
+                                seatTable[i] or locale('options.other_seats'))
+                        else
+                            exports.qbx_core:Notify(locale('error.not_in_vehicle'), 'error')
+                        end
+                        lib.hideRadial()
+                    end
+                }
+            end
+
+            lib.registerRadial({
+                id = 'vehicleSeatsMenu',
+                items = vehicleSeats
+            })
+
+        else
+            setupVehicleMenu(false)
+        end
+    end)
+end
+
+-----------------------
+------ Functions ------
+-----------------------
+
 local function convert(tbl)
     if tbl.items then
         local items = {}
@@ -48,46 +99,7 @@ local function convert(tbl)
     }
 end
 
-local function addVehicleSeats() -- luacheck: ignore
-    while true do
-        if IsPedInAnyVehicle(cache.ped, true) and not cache.vehicle then
-            local coords = GetEntityCoords(cache.ped)
-            local vehicle = lib.getClosestVehicle(coords)
-            if vehicle then
-                local vehicleSeats = {}
-                local seatTable = {
-                    [1] = locale('options.driver_seat'),
-                    [2] = locale('options.passenger_seat'),
-                    [3] = locale('options.rear_left_seat'),
-                    [4] = locale('options.rear_right_seat'),
-                }
-                local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
-                for i = 1, amountOfSeats do
-                    vehicleSeats[#vehicleSeats + 1] = {
-                        id = 'vehicleSeat'..i,
-                        label = seatTable[i] or locale('options.other_seats'),
-                        icon = 'caret-up',
-                        onSelect = function()
-                            if cache.vehicle then
-                                TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or locale('options.other_seats'))
-                            else
-                                exports.qbx_core:Notify(locale('error.not_in_vehicle'), 'error')
-                            end
-                            lib.hideRadial()
-                        end,
-                    }
-                end
-                lib.registerRadial({
-                    id = 'vehicleSeatsMenu',
-                    items = vehicleSeats
-                })
-            end
-        end
-        Wait(1000)
-    end
-end
-
-local function setupVehicleMenu()
+function setupVehicleMenu(seat)
     local vehicleMenu = {
         id = 'vehicle',
         label = locale('options.vehicle'),
@@ -111,10 +123,9 @@ local function setupVehicleMenu()
         vehicleItems[#vehicleItems + 1] = convert(config.vehicleExtras)
     end
 
-    --[[if config.vehicleSeats then
-        CreateThread(addVehicleSeats)
+    if config.vehicleSeats and seat then
         vehicleItems[#vehicleItems + 1] = config.vehicleSeats
-    end]]--
+    end
 
     lib.registerRadial({
         id = 'vehicleMenu',
