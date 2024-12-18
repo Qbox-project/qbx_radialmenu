@@ -1,5 +1,56 @@
 local config = require 'config.client'
 
+-----------------------
+------- Events --------
+-----------------------
+
+if config.vehicleSeats then
+    lib.onCache('vehicle', function(vehicle)
+        if vehicle then
+            setupVehicleMenu(true)
+            local vehicleSeats = {}
+            local veh = vehicle
+            local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(veh))
+
+            local seatTable = {
+                [1] = locale('options.driver_seat'),
+                [2] = locale('options.passenger_seat'),
+                [3] = locale('options.rear_left_seat'),
+                [4] = locale('options.rear_right_seat')
+            }
+
+            for i = 1, amountOfSeats do
+                vehicleSeats[#vehicleSeats + 1] = {
+                    id = 'vehicleSeat' .. i,
+                    label = seatTable[i] or locale('options.other_seats'),
+                    icon = 'caret-up',
+                    onSelect = function()
+                        if cache.vehicle then
+                            TriggerEvent('radialmenu:client:ChangeSeat', i,
+                                seatTable[i] or locale('options.other_seats'))
+                        else
+                            exports.qbx_core:Notify(locale('error.not_in_vehicle'), 'error')
+                        end
+                        lib.hideRadial()
+                    end
+                }
+            end
+
+            lib.registerRadial({
+                id = 'vehicleSeatsMenu',
+                items = vehicleSeats
+            })
+        else
+            setupVehicleMenu(false)
+        end
+    end)
+
+end
+
+-----------------------
+------ Functions ------
+-----------------------
+
 local function convert(tbl)
     if tbl.items then
         local items = {}
@@ -8,7 +59,7 @@ local function convert(tbl)
         end
 
         lib.registerRadial({
-            id = tbl.id..'Menu',
+            id = tbl.id .. 'Menu',
             items = items
         })
 
@@ -16,7 +67,7 @@ local function convert(tbl)
             id = tbl.id,
             label = tbl.label,
             icon = tbl.icon,
-            menu = tbl.id..'Menu'
+            menu = tbl.id .. 'Menu'
         }
     end
 
@@ -42,52 +93,15 @@ local function convert(tbl)
         label = tbl.label,
         icon = tbl.icon,
         onSelect = tbl.onSelect or function()
-            if action then action() end
+            if action then
+                action()
+            end
         end,
         keepOpen = tbl.keepOpen
     }
 end
 
-local function addVehicleSeats() -- luacheck: ignore
-    while true do
-        if IsPedInAnyVehicle(cache.ped, true) and not cache.vehicle then
-            local coords = GetEntityCoords(cache.ped)
-            local vehicle = lib.getClosestVehicle(coords)
-            if vehicle then
-                local vehicleSeats = {}
-                local seatTable = {
-                    [1] = locale('options.driver_seat'),
-                    [2] = locale('options.passenger_seat'),
-                    [3] = locale('options.rear_left_seat'),
-                    [4] = locale('options.rear_right_seat'),
-                }
-                local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
-                for i = 1, amountOfSeats do
-                    vehicleSeats[#vehicleSeats + 1] = {
-                        id = 'vehicleSeat'..i,
-                        label = seatTable[i] or locale('options.other_seats'),
-                        icon = 'caret-up',
-                        onSelect = function()
-                            if cache.vehicle then
-                                TriggerEvent('radialmenu:client:ChangeSeat', i, seatTable[i] or locale('options.other_seats'))
-                            else
-                                exports.qbx_core:Notify(locale('error.not_in_vehicle'), 'error')
-                            end
-                            lib.hideRadial()
-                        end,
-                    }
-                end
-                lib.registerRadial({
-                    id = 'vehicleSeatsMenu',
-                    items = vehicleSeats
-                })
-            end
-        end
-        Wait(1000)
-    end
-end
-
-local function setupVehicleMenu()
+function setupVehicleMenu(seat)
     local vehicleMenu = {
         id = 'vehicle',
         label = locale('options.vehicle'),
@@ -102,7 +116,7 @@ local function setupVehicleMenu()
         onSelect = function()
             TriggerEvent('radialmenu:flipVehicle')
             lib.hideRadial()
-        end,
+        end
     }}
 
     vehicleItems[#vehicleItems + 1] = convert(config.vehicleDoors)
@@ -111,10 +125,9 @@ local function setupVehicleMenu()
         vehicleItems[#vehicleItems + 1] = convert(config.vehicleExtras)
     end
 
-    --[[if config.vehicleSeats then
-        CreateThread(addVehicleSeats)
+    if config.vehicleSeats and seat then
         vehicleItems[#vehicleItems + 1] = config.vehicleSeats
-    end]]--
+    end
 
     lib.registerRadial({
         id = 'vehicleMenu',
@@ -140,7 +153,9 @@ local function setupRadialMenu()
         }))
     end
 
-    if not config.jobItems[QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then return end
+    if not config.jobItems[QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
+        return
+    end
 
     lib.addRadialItem(convert({
         id = 'jobInteractions',
@@ -162,13 +177,15 @@ end
 RegisterNetEvent('radialmenu:client:deadradial', function(isDead)
     if isDead then
         local ispolice, isems = isPolice(), isEMS()
-        if not ispolice or isems then return lib.disableRadial(true) end
+        if not ispolice or isems then
+            return lib.disableRadial(true)
+        end
         lib.clearRadialItems()
         lib.addRadialItem({
             id = 'emergencybutton2',
             label = locale('options.emergency_button'),
             icon = 'circle-exclamation',
-            onSelect = function ()
+            onSelect = function()
                 if ispolice then
                     TriggerEvent('police:client:SendPoliceEmergencyAlert')
                 elseif isems then
@@ -207,10 +224,14 @@ RegisterNetEvent('radialmenu:client:ChangeSeat', function(id, label)
 end)
 
 RegisterNetEvent('qb-radialmenu:trunk:client:Door', function(plate, door, open)
-    if not cache.vehicle then return end
+    if not cache.vehicle then
+        return
+    end
 
     local pl = qbx.getVehiclePlate(cache.vehicle)
-    if pl ~= plate then return end
+    if pl ~= plate then
+        return
+    end
 
     if open then
         SetVehicleDoorOpen(cache.vehicle, door, false, false)
@@ -278,10 +299,14 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
 end)
 
 RegisterNetEvent('radialmenu:flipVehicle', function()
-    if cache.vehicle then return end
+    if cache.vehicle then
+        return
+    end
     local coords = GetEntityCoords(cache.ped)
     local vehicle = lib.getClosestVehicle(coords)
-    if not vehicle then return exports.qbx_core:Notify(locale('error.no_vehicle_nearby'), 'error') end
+    if not vehicle then
+        return exports.qbx_core:Notify(locale('error.no_vehicle_nearby'), 'error')
+    end
     if lib.progressBar({
         label = locale('progress.flipping_car'),
         duration = config.flipTime,
@@ -296,9 +321,8 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
         anim = {
             dict = 'mini@repair',
             clip = 'fixing_a_ped'
-        },
-    })
-    then
+        }
+    }) then
         SetVehicleOnGroundProperly(vehicle)
         exports.qbx_core:Notify(locale('success.flipped_car'), 'success')
     else
@@ -307,14 +331,18 @@ RegisterNetEvent('radialmenu:flipVehicle', function()
 end)
 
 AddEventHandler('onResourceStart', function(resource)
-    if cache.resource ~= resource then return end
+    if cache.resource ~= resource then
+        return
+    end
     if LocalPlayer.state.isLoggedIn then
         setupRadialMenu()
     end
 end)
 
 AddEventHandler('onResourceStop', function(resource)
-    if cache.resource ~= resource then return end
+    if cache.resource ~= resource then
+        return
+    end
     lib.clearRadialItems()
 end)
 

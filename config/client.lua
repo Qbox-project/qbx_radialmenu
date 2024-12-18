@@ -451,7 +451,7 @@ return {
     vehicleSeats = {
         id = 'vehicleSeats',
         icon = 'chair',
-        title = 'Vehicle Seats',
+        label = 'Vehicle Seats',
         menu = 'vehicleSeatsMenu'
     },
 
