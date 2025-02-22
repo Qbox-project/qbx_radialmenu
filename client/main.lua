@@ -250,7 +250,7 @@ RegisterNetEvent('qb-radialmenu:client:openDoor', function(id)
     local door = id
     local coords = GetEntityCoords(cache.ped)
     local closestVehicle = cache.vehicle or lib.getClosestVehicle(coords, 5.0, false)
-    if closestVehicle ~= 0 then
+    if closestVehicle and closestVehicle ~= 0 then
         if closestVehicle ~= cache.vehicle then
             local plate = qbx.getVehiclePlate(closestVehicle)
             if GetVehicleDoorAngleRatio(closestVehicle, door) > 0.0 then
