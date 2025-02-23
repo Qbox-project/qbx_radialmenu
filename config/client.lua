@@ -448,6 +448,42 @@ return {
         },
     },
 
+    vehicleWindows = {
+        id = 'vehicleWindows',
+        icon = 'car-side',
+        label = 'Vehicle Windows',
+        items = {
+            {
+                id = 'window0',
+                icon = 'car-side',
+                label = 'Driver\'s Window',
+                event = 'qbx_radialmenu:client:toggleWindows',
+                args = 0,
+            },
+            {
+                id = 'window1',
+                icon = 'car-side',
+                label = 'Passenger\'s Window',
+                event = 'qbx_radialmenu:client:toggleWindows',
+                args = 1,
+            },
+            {
+                id = 'window2',
+                icon = 'car-side',
+                label = 'Back Left Window',
+                event = 'qbx_radialmenu:client:toggleWindows',
+                args = 2,
+            },
+            {
+                id = 'window3',
+                icon = 'car-side',
+                label = 'Back Right Window',
+                event = 'qbx_radialmenu:client:toggleWindows',
+                args = 3,
+            },
+        },
+    },
+
     vehicleSeats = {
         id = 'vehicleSeats',
         icon = 'chair',
