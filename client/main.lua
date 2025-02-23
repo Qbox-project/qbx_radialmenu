@@ -278,7 +278,7 @@ RegisterNetEvent('qb-radialmenu:client:openDoor', function(id)
     end
 end)
 
-RegisterNetEvent('qb-radialmenu:client:toggleWindows', function(id)
+RegisterNetEvent('qbx_radialmenu:client:toggleWindows', function(id)
     local window = id
     local vehicle = cache.vehicle
 
