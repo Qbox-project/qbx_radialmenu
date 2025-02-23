@@ -1,0 +1,55 @@
+{
+  "error": {
+    "no_people_nearby": "W pobliżu nie ma graczy.",
+    "no_vehicle_found": "Nie znaleziono pojazdu.",
+    "extra_deactivated": "Dodatek %s został dezaktywowany.",
+    "extra_not_present": "Dodatek %s nie jest dostępny w tym pojeździe.",
+    "not_driver": "Nie jesteś kierowcą tego pojazdu.",
+    "vehicle_driving_fast": "Ten pojazd jedzie zbyt szybko.",
+    "seat_occupied": "To miejsce jest zajęte.",
+    "race_harness_on": "Masz pasy bezpieczeństwa wyścigowe. Nie możesz się przesiadać.",
+    "obj_not_found": "Nie można utworzyć żądanego obiektu.",
+    "not_near_ambulance": "Nie jesteś w pobliżu karetki.",
+    "far_away": "Jesteś zbyt daleko.",
+    "not_kidnapped": "Nie porwano tej osoby.",
+    "trunk_closed": "Bagażnik jest zamknięty.",
+    "cant_enter_trunk": "Nie możesz wejść do tego bagażnika.",
+    "already_in_trunk": "Jesteś już w bagażniku.",
+    "someone_in_trunk": "Ktoś już jest w bagażniku.",
+    "cancel_task": "Anulowano"
+  },
+  "progress": {
+    "flipping_car": "Przewracanie pojazdu..."
+  },
+  "success": {
+    "extra_activated": "Dodatek %s został aktywowany.",
+    "entered_trunk": "Jesteś w bagażniku."
+  },
+  "info": {
+    "no_variants": "Wygląda na to, że nie ma żadnych wariantów dla tego.",
+    "wrong_ped": "Ten model postaci nie pozwala na tę opcję.",
+    "nothing_to_remove": "Nie masz nic do usunięcia.",
+    "already_wearing": "Już to nosisz.",
+    "switched_seats": "Jesteś teraz na miejscu %s."
+  },
+  "general": {
+    "command_description": "Otwórz menu radialne",
+    "get_out_trunk_button": "[E] Wyjdź z bagażnika",
+    "close_trunk_button": "[G] Zamknij bagażnik",
+    "open_trunk_button": "[G] Otwórz bagażnik",
+    "getintrunk_command_desc": "Wejdź do bagażnika",
+    "putintrunk_command_desc": "Włóż gracza do bagażnika",
+    "gang_radial": "Gang",
+    "job_radial": "Praca"
+  },
+  "options": {
+    "flip": "Przewróć pojazd",
+    "vehicle": "Pojazd",
+    "emergency_button": "Przycisk awaryjny",
+    "driver_seat": "Miejsce kierowcy",
+    "passenger_seat": "Miejsce pasażera",
+    "other_seats": "Inne miejsce",
+    "rear_left_seat": "Tylne lewe miejsce",
+    "rear_right_seat": "Tylne prawe miejsce"
+  }
+}
