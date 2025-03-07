@@ -1,6 +1,7 @@
 {
   "error": {
     "no_people_nearby": "No players nearby.",
+    "no_vehicle_nearby": "No vehicle nearby to flip.",
     "no_vehicle_found": "No vehicle found.",
     "extra_deactivated": "Extra %s has been deactivated.",
     "extra_not_present": "Extra %s is not present on this vehicle.",
