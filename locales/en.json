@@ -24,7 +24,8 @@
   },
   "success": {
     "extra_activated": "Extra %s has been activated.",
-    "entered_trunk": "You are in the trunk."
+    "entered_trunk": "You are in the trunk.",
+    "flipped_car": "Vehicle successfully flipped!"
   },
   "info": {
     "no_variants": "There don't seem to be any variants for this.",
