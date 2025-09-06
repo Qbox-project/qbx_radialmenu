@@ -24,7 +24,8 @@
   },
   "success": {
     "extra_activated": "Ekstra %s etkinleştirildi.",
-    "entered_trunk": "Bagajdasın."
+    "entered_trunk": "Bagajdasın.",
+    "flipped_car": "Araç başarıyla çevrildi!"
   },
   "info": {
     "no_variants": "Bunun için herhangi bir varyant bulunmuyor.",
