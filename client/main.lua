@@ -1,8 +1,28 @@
 local config = require 'config.client'
 
+local lastOutSideVehicle = false
+local lastNearVehicle = false
+local onVehicle = false
+local lastNearPlayer = false
+local vehicleFlipped = false
+
+local toggleableBlips = {}
+local categoryVisible = {}
+local metadataLoaded = false
+
 -----------------------
 ------- Events --------
 -----------------------
+
+lib.onCache('vehicle', function(vehicle)
+    if vehicle then
+        onVehicle = true
+        setupVehicleMenu(true)
+    else
+        onVehicle = false
+        setupVehicleMenu(false)
+    end
+end)
 
 if config.vehicleSeats then
     lib.onCache('vehicle', function(vehicle)
@@ -52,11 +72,27 @@ end
 -----------------------
 
 local function convert(tbl)
+    if tbl.onVehicleOnly and not onVehicle then
+        return
+    end
+    if tbl.outSideVehicleOnly and not lastOutSideVehicle then
+        return
+    end
+    if tbl.nearByVehicleOnly and not lastNearVehicle then
+        return
+    end
+    if tbl.nearByPlayerOnly and not lastNearPlayer then
+        return
+    end
     if tbl.items then
         local items = {}
         for _, v in pairs(tbl.items) do
-            items[#items + 1] = convert(v)
+            local converted<const> = convert(v)
+            if converted then
+                items[#items + 1] = converted
+            end
         end
+        if #items == 0 then return end
 
         lib.registerRadial({
             id = tbl.id .. 'Menu',
@@ -97,7 +133,11 @@ local function convert(tbl)
                 action()
             end
         end,
-        keepOpen = tbl.keepOpen
+        keepOpen = tbl.keepOpen,
+        onVehicleOnly = tbl.onVehicleOnly,
+        outSideVehicleOnly = tbl.outSideVehicleOnly,
+        nearByVehicleOnly = tbl.nearByVehicleOnly,
+        nearByPlayerOnly = tbl.nearByPlayerOnly
     }
 end
 
@@ -109,19 +149,32 @@ function setupVehicleMenu(seat)
         menu = 'vehicleMenu'
     }
 
-    local vehicleItems = {{
-        id = 'vehicle-flip',
-        label = locale('options.flip'),
-        icon = 'car-burst',
-        onSelect = function()
-            TriggerEvent('radialmenu:flipVehicle')
-            lib.hideRadial()
+    local vehicleItems = {}
+    if vehicleFlipped then
+      vehicleItems[#vehicleItems + 1] = {
+          id = 'vehicle-flip',
+          label = locale('options.flip'),
+          icon = 'car-burst',
+          onSelect = function()
+              TriggerEvent('radialmenu:flipVehicle')
+              lib.hideRadial()
+          end
+      }
+    end
+
+    if config.vehicleItems then
+        for i = 1, #config.vehicleItems do
+            vehicleItems[#vehicleItems + 1] = convert(config.vehicleItems[i])
         end
-    }}
+    end
 
-    vehicleItems[#vehicleItems + 1] = convert(config.vehicleDoors)
+    if config.vehicleWindows then
+        vehicleItems[#vehicleItems + 1] = convert(config.vehicleWindows)
+    end
 
-    vehicleItems[#vehicleItems + 1] = convert(config.vehicleWindows)
+    if config.vehicleDoors then
+        vehicleItems[#vehicleItems + 1] = convert(config.vehicleDoors)
+    end
 
     if config.enableExtraMenu then
         vehicleItems[#vehicleItems + 1] = convert(config.vehicleExtras)
@@ -143,7 +196,10 @@ local function setupRadialMenu()
     setupVehicleMenu()
 
     for _, v in pairs(config.menuItems) do
-        lib.addRadialItem(convert(v))
+        local converted<const> = convert(v)
+        if converted then
+            lib.addRadialItem(converted)
+        end
     end
 
     if config.gangItems[QBX.PlayerData.gang.name] then
@@ -173,6 +229,29 @@ end
 
 local function isEMS()
     return QBX.PlayerData.job.type == 'ems' and QBX.PlayerData.job.onduty
+end
+
+local loadBlipPreferences<const> = function()
+    if metadataLoaded then return end
+
+    local playerData<const> = QBX.PlayerData
+    if playerData and playerData.metadata then
+        local blipPreferences = playerData.metadata.blipPreferences or {}
+
+        for category, isVisible in pairs(blipPreferences) do
+            categoryVisible[category] = isVisible
+
+            if toggleableBlips[category] then
+                for blipId, _ in pairs(toggleableBlips[category]) do
+                    if DoesBlipExist(blipId) then
+                        SetBlipAlpha(blipId, isVisible and 255 or 0)
+                    end
+                end
+            end
+        end
+
+        metadataLoaded = true
+    end
 end
 
 -- Events
@@ -366,6 +445,7 @@ end)
 -- Sets the metadata when the player spawns
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     setupRadialMenu()
+    loadBlipPreferences()
 end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
@@ -397,6 +477,117 @@ RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
     end
 end)
 
+local saveBlipPreferences<const> = function ()
+  TriggerServerEvent('radialmenu:server:saveBlipPreferences', categoryVisible)
+end
+
+---@param category string
+local toggleBlipsForCategory<const> = function(category)
+    if not category then
+        lib.print.warn("No category provided for toggling blips.")
+        return
+    end
+    local toggledCount = 0
+    local blipCategoryName = string.gsub(category, "_", " ") -- Replaces underscores with spaces
+    blipCategoryName = blipCategoryName:sub(1,1):upper() .. blipCategoryName:sub(2) -- Capitalizes the first letter
+
+    if categoryVisible[category] == nil then
+      categoryVisible[category] = true -- Default to visible
+    else
+      categoryVisible[category] = not categoryVisible[category]
+    end
+    local isVisible<const> = categoryVisible[category]
+
+    if toggleableBlips[category] then
+        for blipId, _ in pairs(toggleableBlips[category]) do
+            if DoesBlipExist(blipId) then
+                if isVisible then
+                    SetBlipAlpha(blipId, 255) -- Show blip
+                else
+                    SetBlipAlpha(blipId, 0)   -- Hide blip
+                end
+                toggledCount = toggledCount + 1
+            else
+                if toggleableBlips[category] then
+                    toggleableBlips[category][blipId] = nil
+                end
+            end
+        end
+    end
+
+    saveBlipPreferences()
+
+    local status<const> = isVisible and locale('general.blip_shown') or locale('general.blip_hidden')
+    exports.qbx_core:Notify(("%s %s"):format(blipCategoryName, status), 'info')
+    return isVisible
+end
+
+---@param blipHandle number
+---@param category string
+local registerToggleableBlip<const> = function(blipHandle, category)
+    if not category then
+        lib.print.error(("No category provided when registering blipId: %s"):format(tostring(blipHandle)))
+        return
+    end
+    if not blipHandle then
+        lib.print.error(("No blipId provided for registration in category: %s"):format(category))
+        return
+    end
+
+    if DoesBlipExist(blipHandle) then
+        if not toggleableBlips[category] then
+            toggleableBlips[category] = {}
+        end
+        toggleableBlips[category][blipHandle] = true
+
+        if not metadataLoaded then
+            loadBlipPreferences()
+        end
+
+        local isCurrentlyVisible = categoryVisible[category]
+        if isCurrentlyVisible == nil then
+            isCurrentlyVisible = true -- default new categories/blips to visible
+            categoryVisible[category] = true
+            saveBlipPreferences()
+        end
+
+        if isCurrentlyVisible then
+            SetBlipAlpha(blipHandle, 255)
+        else
+            SetBlipAlpha(blipHandle, 0)
+        end
+    else
+        lib.print.warn(("Attempted to register non-existent blip %s for category: %s"):format(tostring(blipHandle), category))
+    end
+end
+
+
+CreateThread(function()
+    while true do
+        local outSideVehicle<const> = lib.getClosestVehicle(GetEntityCoords(cache.ped), 5.0, false) ~= nil
+        local nearByVehicle<const> = lib.getClosestVehicle(GetEntityCoords(cache.ped), 5.0, true) ~= nil
+        local closestPlayer<const>, _<const> = lib.getClosestPlayer(GetEntityCoords(cache.ped))
+        local nearPlayer<const> = closestPlayer ~= nil
+
+        local playerCoords<const> = GetEntityCoords(cache.ped)
+        local closestVehicle<const> = lib.getClosestVehicle(playerCoords, 3.0)
+        local flipableVehicle<const> = closestVehicle and not IsVehicleOnAllWheels(closestVehicle)
+
+        local outsideStatusChanged<const> = outSideVehicle ~= lastOutSideVehicle
+        local nearByVehicleChanged<const> = nearByVehicle ~= lastNearVehicle
+        local nearPlayerChanged<const> = nearPlayer ~= lastNearPlayer
+        local vehicleFlipStateChanged<const> = IsVehicleOnAllWheels(closestVehicle) ~= flipableVehicle
+        if outsideStatusChanged or nearByVehicleChanged or nearPlayerChanged or closestVehicle and not vehicleFlipStateChanged then
+            lastOutSideVehicle = outSideVehicle
+            lastNearVehicle = nearByVehicle
+            lastNearPlayer = nearPlayer
+            vehicleFlipped = flipableVehicle
+            setupRadialMenu()
+        end
+        Wait(1500)
+    end
+end)
+
 local function createQBExport(name, cb)
     AddEventHandler(('__cfx_export_qb-radialmenu_%s'):format(name), function(setCB)
         setCB(cb)
@@ -418,3 +609,6 @@ end
 
 exports('RemoveOption', removeOption)
 createQBExport('RemoveOption', removeOption)
+
+exports('toggleBlip', toggleBlipsForCategory)
+exports('registerToggleableBlip', registerToggleableBlip)

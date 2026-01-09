@@ -42,7 +42,9 @@
     "getintrunk_command_desc": "Enter the Trunk",
     "putintrunk_command_desc": "Put the Player in the Trunk",
     "gang_radial": "Gang",
-    "job_radial": "Job"
+    "job_radial": "Job",
+    "blip_shown": "Blip shown",
+    "blip_hidden": "Blip hidden"
   },
   "options": {
     "flip": "Flip the Vehicle",
@@ -52,6 +54,7 @@
     "passenger_seat": "Passenger Seat",
     "other_seats": "Other Seat",
     "rear_left_seat": "Rear Left Seat",
-    "rear_right_seat": "Rear Right Seat"
+    "rear_right_seat": "Rear Right Seat",
+    "quickgivekeys": "Quick Give Keys"
   }
 }

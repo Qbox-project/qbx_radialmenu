@@ -7,3 +7,11 @@ end)
 RegisterNetEvent('hospital:server:SetDeathStatus', function(isDead)
     TriggerClientEvent('radialmenu:client:deadradial', source, isDead)
 end)
+
+RegisterNetEvent('qbx_radialmenu:server:saveBlipPreferences', function(blipPreferences)
+    local playerData<const> = exports.qbx_core:GetPlayer(source)
+
+    if playerData then
+        playerData.Functions.SetMetaData("blipPreferences", blipPreferences)
+    end
+end)
