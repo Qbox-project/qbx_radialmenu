@@ -1,0 +1,57 @@
+{
+  "error": {
+    "no_people_nearby": "近くにプレイヤーがいません。",
+    "no_vehicle_nearby": "近くに反転できる車両がありません。",
+    "no_vehicle_found": "車両が見つかりません。",
+    "extra_deactivated": "エクストラ %s が無効化されました。",
+    "extra_not_present": "この車両にはエクストラ %s が存在しません。",
+    "not_driver": "あなたはこの車両の運転手ではありません。",
+    "vehicle_driving_fast": "この車両は速度が速すぎます。",
+    "seat_occupied": "このシートは使用中です。",
+    "race_harness_on": "レーシングハーネスを装着しています。切り替えできません。",
+    "obj_not_found": "要求されたオブジェクトを作成できません。",
+    "not_near_ambulance": "救急車の近くにいません。",
+    "far_away": "遠すぎます。",
+    "not_kidnapped": "この人物を誘拐していません。",
+    "trunk_closed": "トランクは閉まっています。",
+    "cant_enter_trunk": "このトランクには入れません。",
+    "already_in_trunk": "すでにトランクの中にいます。",
+    "someone_in_trunk": "すでに誰かがトランクにいます。",
+    "cancel_task": "キャンセルしました"
+  },
+  "progress": {
+    "flipping_car": "車両を反転中..."
+  },
+  "success": {
+    "extra_activated": "エクストラ %s が有効化されました。",
+    "entered_trunk": "トランクの中にいます。",
+    "flipped_car": "車両を正常に反転しました！"
+  },
+  "info": {
+    "no_variants": "このアイテムにはバリエーションがないようです。",
+    "wrong_ped": "このペッドモデルはこのオプションに対応していません。",
+    "nothing_to_remove": "削除するものがありません。",
+    "already_wearing": "すでに着用しています。",
+    "switched_seats": "%s に移動しました。"
+  },
+  "general": {
+    "command_description": "ラジアルメニューを開く",
+    "get_out_trunk_button": "[E] トランクから出る",
+    "close_trunk_button": "[G] トランクを閉める",
+    "open_trunk_button": "[G] トランクを開ける",
+    "getintrunk_command_desc": "トランクに入る",
+    "putintrunk_command_desc": "プレイヤーをトランクに入れる",
+    "gang_radial": "ギャング",
+    "job_radial": "仕事"
+  },
+  "options": {
+    "flip": "車両を反転する",
+    "vehicle": "車両",
+    "emergency_button": "緊急ボタン",
+    "driver_seat": "運転席",
+    "passenger_seat": "助手席",
+    "other_seats": "その他のシート",
+    "rear_left_seat": "後部左シート",
+    "rear_right_seat": "後部右シート"
+  }
+}
