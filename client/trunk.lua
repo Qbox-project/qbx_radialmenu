@@ -91,11 +91,12 @@ RegisterNetEvent('qb-trunk:client:KidnapTrunk', function()
     TriggerEvent('police:client:KidnapPlayer')
     TriggerServerEvent("police:server:CuffPlayer", GetPlayerServerId(closestPlayer), false)
     Wait(50)
-    TriggerServerEvent("qb-trunk:server:KidnapTrunk", GetPlayerServerId(closestPlayer), closestVehicle)
+    TriggerServerEvent("qb-trunk:server:KidnapTrunk", GetPlayerServerId(closestPlayer), NetworkGetNetworkIdFromEntity(closestVehicle))
 end)
 
-RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
-    local closestVehicle = veh
+RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(vehicleNetId)
+    local closestVehicle = NetworkGetEntityFromNetworkId(vehicleNetId)
+    if closestVehicle == 0 then return end
     local vehClass = GetVehicleClass(closestVehicle)
     local plate = qbx.getVehiclePlate(closestVehicle)
     if config.trunkClasses[vehClass].allowed then
@@ -130,7 +131,7 @@ RegisterNetEvent('qb-trunk:client:KidnapGetIn', function(veh)
                             DetachEntity(cache.ped, true, true)
                             ClearPedTasks(cache.ped)
                             inTrunk = false
-                            TriggerServerEvent('qb-smallresources:trunk:server:setTrunkBusy', plate, nil)
+                            TriggerServerEvent('qb-trunk:server:setTrunkBusy', plate, false)
                             SetEntityCoords(cache.ped, vehCoords.x, vehCoords.y, vehCoords.z, false, false, false, false)
                             SetEntityCollision(cache.ped, true, true)
                             TrunkCam(false)
