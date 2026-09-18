@@ -877,7 +877,8 @@ RegisterNetEvent('qb-radialmenu:ToggleClothing', ToggleClothing)
 
 function ToggleProps(id)
 	if Cooldown then return end
-	local Prop = Props[id] or Props[id[1]]
+	local which = type(id) == 'table' and id[1] or id
+	local Prop = Props[which]
 	local Cur = { -- Lets get out currently equipped prop.
 		Id = Prop.Prop,
 		Ped = cache.ped,
@@ -886,9 +887,9 @@ function ToggleProps(id)
 	}
 	if not Prop.Variants then
 		if Cur.Prop ~= -1 then -- If we currently are wearing this prop, remove it and save the one we were wearing into the LastEquipped table.
-			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[id] = Cur ClearPedProp(cache.ped, Prop.Prop) end) return true
+			PlayToggleEmote(Prop.Emote.Off, function() LastEquipped[which] = Cur ClearPedProp(cache.ped, Prop.Prop) end) return true
 		else
-			local Last = LastEquipped[id] -- Detect that we have already taken our prop off, lets put it back on.
+			local Last = LastEquipped[which] -- Detect that we have already taken our prop off, lets put it back on.
 			if Last then
 				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(cache.ped, Prop.Prop, Last.Prop, Last.Texture, true) end) LastEquipped[id] = false return true
 			end
@@ -897,8 +898,8 @@ function ToggleProps(id)
 	else
 		local Gender = IsMpPed(cache.ped)
 		if not Gender then Notify(locale("info.wrong_ped")) return false end -- We dont really allow for variants on ped models, Its possible, but im pretty sure 95% of ped models dont really have variants.
-		variations = Prop.Variants[Gender]
-		for k,v in pairs(variations) do
+		local variants = Prop.Variants[Gender]
+		for k,v in pairs(variants) do
 			if Cur.Prop == k then
 				PlayToggleEmote(Prop.Emote.On, function() SetPedPropIndex(cache.ped, Prop.Prop, v, Cur.Texture, true) end) return true
 			end
