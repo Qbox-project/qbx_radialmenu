@@ -4,16 +4,20 @@ local trunkBusy = {}
 ---@return string?
 local function normalizePlate(plate)
     if type(plate) ~= 'string' or #plate > 16 then return end
-    return plate:match('^%s*(.-)%s*$')
+    local normalized = plate:match('^%s*(.-)%s*$')
+    return normalized ~= '' and normalized or nil
 end
 
 ---@param source number
 ---@param plate string
 ---@return number?
 local function getNearbyVehicle(source, plate)
-    local playerCoords = GetEntityCoords(GetPlayerPed(source))
+    local ped = GetPlayerPed(source)
+    if ped == 0 then return end
+    local playerCoords = GetEntityCoords(ped)
     for _, vehicle in ipairs(GetAllVehicles()) do
-        if #(playerCoords - GetEntityCoords(vehicle)) <= 8.0
+        if GetEntityRoutingBucket(vehicle) == GetPlayerRoutingBucket(source)
+            and #(playerCoords - GetEntityCoords(vehicle)) <= 8.0
             and normalizePlate(GetVehicleNumberPlateText(vehicle)) == plate
         then
             return vehicle
@@ -43,12 +47,14 @@ RegisterNetEvent('qb-trunk:server:KidnapTrunk', function(targetId, vehicleNetId)
     local player = exports.qbx_core:GetPlayer(source)
     local target = exports.qbx_core:GetPlayer(targetId)
     if not player or not target then return end
+    if GetPlayerRoutingBucket(source) ~= GetPlayerRoutingBucket(targetId) then return end
     local metadata = target.PlayerData.metadata
     if not (metadata.ishandcuffed or metadata.isdead or metadata.inlaststand) then return end
     if #(GetEntityCoords(GetPlayerPed(source)) - GetEntityCoords(GetPlayerPed(targetId))) > 3.0 then return end
     if math.type(vehicleNetId) ~= 'integer' then return end
     local closestVehicle = NetworkGetEntityFromNetworkId(vehicleNetId)
-    if not DoesEntityExist(closestVehicle)
+    if not DoesEntityExist(closestVehicle) or GetEntityType(closestVehicle) ~= 2
+        or GetEntityRoutingBucket(closestVehicle) ~= GetPlayerRoutingBucket(source)
         or #(GetEntityCoords(GetPlayerPed(source)) - GetEntityCoords(closestVehicle)) > 8.0
     then
         return
