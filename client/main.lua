@@ -316,35 +316,8 @@ RegisterNetEvent('radialmenu:client:setExtra', function(id)
 end)
 
 RegisterNetEvent('radialmenu:flipVehicle', function()
-    if cache.vehicle then
-        return
-    end
-    local coords = GetEntityCoords(cache.ped)
-    local vehicle = lib.getClosestVehicle(coords)
-    if not vehicle then
-        return exports.qbx_core:Notify(locale('error.no_vehicle_nearby'), 'error')
-    end
-    if lib.progressBar({
-        label = locale('progress.flipping_car'),
-        duration = config.flipTime,
-        useWhileDead = false,
-        canCancel = true,
-        disable = {
-            move = true,
-            car = true,
-            mouse = false,
-            combat = true
-        },
-        anim = {
-            dict = 'mini@repair',
-            clip = 'fixing_a_ped'
-        }
-    }) then
-        SetVehicleOnGroundProperly(vehicle)
-        exports.qbx_core:Notify(locale('success.flipped_car'), 'success')
-    else
-        exports.qbx_core:Notify(locale('error.cancel_task'), 'error')
-    end
+    if GetResourceState('qbx_smallresources') ~= 'started' then return end
+    exports.qbx_smallresources:FlipVehicle()
 end)
 
 AddEventHandler('onResourceStart', function(resource)
